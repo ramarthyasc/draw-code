@@ -4,6 +4,9 @@ exports.refreshTokenGenerateService = (crypto) => {
 }
 
 //add refresh token in database with schema - id (primarykey, default = uuid), userid, token, expires_at, revoked (db default = false), rotated_from
+/**
+* @param {any} [detailRefreshToken=null]
+*/
 exports.addAndRevokeRTService = async (addRefreshToken, { userid, token,
   expiresIn = process.env.RT_EXPIRES_IN, rotated_from, absoluteExpiresIn = process.env.RT_ABSOLUTE_EXPIRES_IN },
   revokeRefreshToken = async () => { },
@@ -54,7 +57,7 @@ exports.verifyValidityExpiryRevokeRTService = async (token, searchRefreshToken, 
     //then, he gets signed out, but not the Hacker. He can impersonate the user until Absolute Expiry. So to prevent that - whenever Revoked RT
     //is sent, then invalidate that chain's all RTs.
 
-    // Revoke all RTs ahead of this Revoked RT (ie; RTs having the same absolute_expires_at (when you choose - same userid, then it would
+    // Revoke all RTs ahead of this Revoked RT (ie; RTs having the same absolute_expires_at (But when you choose - same userid, then it would
     // revoke all RT chains (all browsers) of the User, and whenever after RT expiry, when you refresh the browser 2 times, then in the 2nd time,
     // the Revoked RT is send - which kills all RT chains of the User unnecessarily))
     await revokeOneRefreshTokenChain(detailRefreshToken[0]);

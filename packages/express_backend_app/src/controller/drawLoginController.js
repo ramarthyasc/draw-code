@@ -14,54 +14,55 @@ const path = require('path');
 
 exports.googleJwtVerifyPost = async (req, res, next) => {
 
-  const token = req.body.credential;
-  let userPayload;
-  try {
-    // userPayload is the jwt payload from Google authorization library : Check Google authorization for webapp -look at Credentials.
-    userPayload = await verifyGoogleJWTService(client, token);
+    const token = req.body.credential;
+    let userPayload;
+    try {
+        // userPayload is the jwt payload from Google authorization library : Check Google authorization for webapp -look at Credentials.
+            userPayload = await verifyGoogleJWTService(client, token);
 
-  } catch (err) {
-    console.error(err);
-    return res.sendStatus(400);
-  }
+    } catch (err) {
+        console.error(err);
+        return res.sendStatus(400);
+    }
 
-  let userDetail;
-  try {
-    userDetail = await verifyOrAddUserService(userPayload, searchUser, userAddReturn, updatePicture, fs, path); //arguments give
-  } catch (err) {
-    console.error(err);
-    return res.sendStatus(500);
-  }
+    let userDetail;
+    try {
+        userDetail = await verifyOrAddUserService(userPayload, searchUser, userAddReturn, updatePicture, fs, path); //arguments give
+    } catch (err) {
+        console.error(err);
+        return res.sendStatus(500);
+    }
 
-  //userdetail : userid, name, email, picture
-  req.userDetail = userDetail;
-  console.log(userDetail);
-  next();
+    //userdetail : userid, name, email, picture
+    req.userDetail = userDetail;
+    console.log(userDetail);
+    next();
 }
 
 exports.jwtRefreshTokenCreatorPost = async (req, res) => {
 
-  const userDetail = req.userDetail;
-  //create jwt using the userDetail
-  const accessToken = jwtCreatorService(jwt, userDetail);
-  let refreshToken = refreshTokenGenerateService(crypto);
+    const userDetail = req.userDetail;
+    //create jwt using the userDetail
+    const accessToken = jwtCreatorService(jwt, userDetail);
+    let refreshToken = refreshTokenGenerateService(crypto);
 
-  //save refresh token in database with schema - id (primarykey, default = uuid), userid, token, expires_at, revoked (db default = false), rotated_from
-  refreshToken = await addAndRevokeRTService(addRefreshToken,
-    {
-      userid: userDetail.userid,
-      token: refreshToken,
-      rotated_from: null
+    //save refresh token in database with schema - id (primarykey, default = uuid), userid, token, expires_at, revoked (db default = false), rotated_from
+    refreshToken = await addAndRevokeRTService(addRefreshToken,
+        {
+            userid: userDetail.userid,
+            token: refreshToken,
+            rotated_from: null
+        });
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        maxAge: Number(process.env.RT_EXPIRES_IN),
+        secure: false, // As the localserver is not https. Change it to secure when in Production.
+        sameSite: "lax",
+        path: "/refresh-auth",
     });
 
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    maxAge: process.env.RT_EXPIRES_IN,
-    secure: false, // As the localserver is not https. Change it to secure when in Production.
-    sameSite: "lax",
-  });
-
-  res.json({ accessToken });
+    res.json({ accessToken, userDetail });
 }
 
 

@@ -1,66 +1,57 @@
 import '../styles/Userin.css';
-import { useContext } from 'react';
-import { ErrorContext } from '../context/ErrorContext';
+import { ErrorContext } from "../context/ErrorContext";
+import { useContext } from "react";
 
 
-async function signout({ setIsLoggedIn, setJsonWebToken, setUser, setError }) {
-  setIsLoggedIn(false);
-  setJsonWebToken(null);
-  setUser(null);
-  setError(true); // state from JwtFetcher util component
+async function signout({ setIsLoggedIn, setJsonWebToken, setUser, setRtError }) {
+    setIsLoggedIn(false);
+    setJsonWebToken(null);
+    setUser(null);
+    setRtError(true);
 
-  //Revoke refresh token
-  const res = await fetch('/draw-secure', {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ revokeRefreshToken: true }),
-  })
+    try {
+        //Revoke refresh token
+        const res = await fetch('/refresh-auth', {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ revokeRefreshToken: true }),
+        })
 
-  // DO THIS WHEN THE USER TRIES TO GO TO ANY PATH IN THE WEBSITE.
-  // if there was no refresh token send to server (as due to expiry) - then server sends rtError.
-  // if there was an invalid (revoked/expired/different) refresh token send to server (Hacker) - then server sends a different valued rtError.
+        console.log("HTTP response error: ", res.status);
+        const { code } = await res.json();
 
-  //DO THIS WHEN USER SIGNSOUT : 
-  // if there was a Valid (non revoked, non expired) refresh token send to server - then server REVOKES THE RT, then gives rtError(for simplicity).
-  let data;
-  try {
-    data = await res.json();
-  } catch (err) {
-    // any server error that the server responds with
-    // res.ok == false
-    console.log("HTTP Status: ", res.status);
-    console.log("Status Text: ", res.statusText);
-    return;
-  }
+        if (code === "REFRESH_TOKEN_REVOKED" || code === "NO_REFRESH_TOKEN" || code === "INVALID_REFRESH_TOKEN") {
+            console.log(code);
+            return;
+        }
 
-  if (res.ok) {
-    const { rtError } = data;
-    console.log(`Action upon Refresh Token : ${rtError}`);
-    return;
-  }
+    } catch (err) {
+        console.log("Fetch/Network Error (Header/Metadata fetching or Body fetching): ", err);
+        return;
+    }
 
 }
 
 
 function Userin({ setIsLoggedIn, setJsonWebToken, setUser, user }) {
-  const setError = useContext(ErrorContext);
-  console.log(user);
 
-  return (
+    const setRtError = useContext(ErrorContext);
 
-    <>
-      <ul className='user'>
-        <li className='dropdown'>
-          {/* profile pic is served this way from server as static file */}
-          <img src={'/proPic/' + user.picture} alt="pic" className='profile-pic' />
-          <ul className='profile-menu'>
-            <li onClick={() => { signout({ setIsLoggedIn, setJsonWebToken, setUser, setError }) }}>Signout</li>
-          </ul>
-        </li>
-      </ul>
-    </>
-  )
+    return (
+
+        <>
+            <ul className='user'>
+                <li className='dropdown'>
+                    {/* profile pic is served this way from server as static file */}
+                    <img src={'/proPic/' + user.picture} alt="pic" className='profile-pic' />
+                    <ul className='profile-menu'>
+                        <li onClick={() => { signout({ setIsLoggedIn, setJsonWebToken, setUser, setRtError }) }}>Signout</li>
+                    </ul>
+                </li>
+            </ul>
+        </>
+    )
 }
 
 export default Userin;

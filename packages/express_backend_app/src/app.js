@@ -18,6 +18,8 @@ const { secureRouteGet } = require('./controller/drawSecureRouteController.js')
 const { preflightOptionsSetter, corsAllowResponseSetter } = require('./controller/drawCorsController.js');
 const { questionsGet } = require('./controller/drawQuestionsController.js');
 const { submitPost } = require('./controller/drawCompilerController.js');
+const { uiJwtAuth , jwtAuth, refreshTokenJwtGen, uiRefreshTokenJwtGen } = require('./controller/drawAuthMiddleware');
+const { secureRouter } = require('./routers/drawSecureRouter.ts');
 
 const USERS = [];
 const QUESTIONS = [{
@@ -77,18 +79,28 @@ app.get('/problemset', jwtVerification, userProblemsetGet);
 //DrawLogin App
 app.use('/proPic', express.static(path.join(__dirname, "./public/proPic/")));
 
-app.get('/algogame/:id', gameDetailGet);
+// Lightweight session check for the frontend (not for security) = UI HELPER
+app.use('/jwt-ui-auth', uiJwtAuth);
+
+// auth middleware - refresh-auth for generating RT & JWT - For both USER AND SECURITY
+app.use('/refresh-auth', uiRefreshTokenJwtGen)
 
 app.options('/*splat', preflightOptionsSetter);
 app.post('/draw-login', corsAllowResponseSetter, googleJwtVerifyPost, jwtRefreshTokenCreatorPost);
-app.route('/draw-secure')
-  .get(corsAllowResponseSetter, rotatingRefreshTokenAndJwt, secureRouteGet)
-  .post(corsAllowResponseSetter, rotatingRefreshTokenAndJwt);
+// app.route('/draw-secure')
+//   .get(corsAllowResponseSetter, rotatingRefreshTokenAndJwt, secureRouteGet)
+//   .post(corsAllowResponseSetter, rotatingRefreshTokenAndJwt);
 app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); // {/:question} is optional. ie; / is optional ,and the route param is optional
-app.post("/draw-submit", corsAllowResponseSetter, submitPost);
 
-// app.post("/draw-secure/draw", corsAllowResponseSetter, drawPost);
-//Can use the rotatingRefreshTokenAndJwt controller for any website which needs Rotating Refresh token system
+//Secure routes - Router
+app.use('/api', secureRouter)
+
+//// For after React build
+// app.use(express.static(path.join(__dirname, "dist")))
+/// for all the routes other than that of the backend api - home "/", "/drawcode"
+// app.get('/*splat', (req, res)=> {
+//     res.sendFile(path.join(__dirname, "dist", "index.html"));
+// })
 
 
 //DrawLogin App

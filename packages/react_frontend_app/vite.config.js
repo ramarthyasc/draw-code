@@ -11,12 +11,13 @@ export default defineConfig({
   server: {
     proxy: {
       '/proPic': 'http://localhost:5000',
-      '/algogame/1': 'http://localhost:5000',
-      '/algogame/2': 'http://localhost:5000',
       '/draw-login': 'http://localhost:5000',
       '/draw-secure': 'http://localhost:5000',
       '/draw-question': 'http://localhost:5000',
       '/draw-submit': 'http://localhost:5000',
+      '/refresh-auth': 'http://localhost:5000',
+      '/jwt-ui-auth': 'http://localhost:5000',
+
     },
 
   }

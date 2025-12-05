@@ -36,7 +36,7 @@ exports.executeCodeFile = (spawn, path, fs, codeFolderPath, codeFilePath, codeLa
         compile.on('close', (code) => {
           // Here we know if the subprocess was run correct and exited with status code 0 (universal SUCCESS CODE) or not
           if (code !== 0) {
-            stderr = stderrChunks.concat().toString();
+            stderr = Buffer.concat(stderrChunks).toString();
             reject(stderr);
           }
 
@@ -76,7 +76,7 @@ exports.executeCodeFile = (spawn, path, fs, codeFolderPath, codeFilePath, codeLa
           run.on('close', (code) => {
 
             if (code !== 0) {
-              stderr = stderrChunks.concat().toString();
+              stderr = Buffer.concat(stderrChunks).toString();
               rej(stderr);
             }
             // after the above code, the below code also runs, but resolve() won't have any effect
@@ -114,7 +114,7 @@ exports.executeCodeFile = (spawn, path, fs, codeFolderPath, codeFilePath, codeLa
       })
       run.on('close', (code) => {
         if (code !== 0) {
-          stderr = stderrChunks.concat().toString();
+          stderr = Buffer.concat(stderrChunks).toString();
           rej(stderr);
         }
         // after the above code, the below code also runs, but resolve() won't have any effect
