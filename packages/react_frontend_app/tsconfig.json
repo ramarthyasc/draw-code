@@ -4,6 +4,7 @@
     "module": "esnext",
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
+    "types": ["jest", "react"]
   },
   "include": ["./src", "dist"]
 }
