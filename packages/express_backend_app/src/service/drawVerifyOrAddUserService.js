@@ -7,8 +7,8 @@ exports.verifyOrAddUserService = async (userPayload, searchUser, userAddReturn, 
   let response;
   try {
     response = await fetch(userPayload.picture);
-    const arrayBuffer = await response.arrayBuffer(); // convert to arrayBuffer
-    const buffer = Buffer.from(arrayBuffer); // convert to node Buffer ie; bytes of the image
+    const arrayBuffer = await response.arrayBuffer(); // convert to arrayBuffer (Raw bits)
+    const buffer = Buffer.from(arrayBuffer); // convert to node Buffer ie; bytes of the image in number format (View)
 
     const savePath = path.join(__dirname, "../public/proPic/", userPayload.sub + ".jpg");
     fs.mkdirSync(path.dirname(savePath), { recursive: true });

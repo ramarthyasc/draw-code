@@ -17,6 +17,10 @@ async function updatePicture(userPayload) {
   console.log(`Updated ${res.rowCount} row. Should only be 1 row.`);
 }
 
+/**
+    * @param {Object} userPayload
+    * @returns {Promise<[IUserDetail]>}
+    */
 async function searchUser(userPayload) {
   const text = "SELECT * FROM users WHERE userid = $1";
   const values = [userPayload.sub];

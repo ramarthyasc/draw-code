@@ -80,7 +80,6 @@ function Signin({ setIsLoggedIn, setJsonWebToken, setUser }) {
 
         )
 
-
     }, []);
 
     return (

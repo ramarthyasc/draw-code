@@ -4,6 +4,7 @@ const express = require('express');
     */
     const app = express();
 require('dotenv').config();
+console.log('cwd: ', process.cwd())
 const cookieParser = require('cookie-parser');
 
 
@@ -97,6 +98,11 @@ app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); //
 //Secure routes - Router
 app.use('/api', secureRouter)
 
+//For logging the errors in Production into the terminal(And importantly when testing)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Something broke !!")
+})
 //// For after React build
 // app.use(express.static(path.join(__dirname, "dist")))
 /// for all the routes other than that of the backend api - home "/", "/drawcode"

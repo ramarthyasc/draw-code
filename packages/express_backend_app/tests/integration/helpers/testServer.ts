@@ -1,5 +1,5 @@
 import { Server } from "http";
-import app from "../../src/app.js";
+import app from "../../../src/app";
 
 
 export const startServer = (testport: number): Promise<Server> => {

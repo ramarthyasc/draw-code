@@ -8,6 +8,9 @@ const config: Config = {
     testMatch: [
         "**/__tests__/**/*.?([mc])[jt]s?(x)", "**/tests/**/*.?([mc])[jt]s?(x)"
     ],
+    testPathIgnorePatterns : [
+        '/helpers/'
+    ]
     
 };
 
