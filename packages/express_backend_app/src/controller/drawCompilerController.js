@@ -1,8 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const { v4: uuid } = require('uuid');
 const { spawn } = require('node:child_process');
-const { executeCodeFile } = require('../service/drawExecutionService.js');
+const { executeCodeContainer } = require('../service/drawExecutionService.js');
 const { generateCodeFile } = require('../service/drawFileService.js');
 
 
@@ -10,6 +9,7 @@ exports.submitPost = (req, res) => {
   // take the data in
   const codeLanguage = req.body.language;
   const codeData = req.body.code;
+    const FILENAME = "main";
   console.log(codeData);
   // test cases write for that question ; ie; the arguments that we will be giving to the function
 
@@ -17,18 +17,18 @@ exports.submitPost = (req, res) => {
   // First, without separate container - running in cmd
 
   //// create file path & folder
-  const codeFolderPath = path.join(__dirname, `../public/code/${codeLanguage}`);
+  const codeFolderPath = path.join(__dirname, `../model/sandbox/${codeLanguage}`);
   fs.mkdirSync(codeFolderPath, { recursive: true });
   //// Store the codefile inside that path
-  const codeFilePath = generateCodeFile(fs, path, uuid, codeFolderPath, codeData, codeLanguage);
+  const codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
 
   //// execute the file 
-  executeCodeFile(spawn, path, fs, codeFolderPath, codeFilePath, codeLanguage)
+executeCodeContainer(spawn, path, codeLanguage)
     .then((value) => {
       res.send(value);
     })
     .catch((error) => {
-      res.send(error);
+      console.log("Logging docker compose error: ", error);
     })
     .finally(() => {
       console.log("Child process' Promise settled");
@@ -36,6 +36,8 @@ exports.submitPost = (req, res) => {
 
   //then send the answer cases in a json file to the client
 
+    // delete the user code file
+    fs.rmSync(codeFilePath);
 
   //Side features
   //Give sound to the system - while typing

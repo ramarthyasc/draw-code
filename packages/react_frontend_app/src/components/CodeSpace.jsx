@@ -89,6 +89,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     // implement uneditable numbers along the left side +
     // backend verification
     <div ref={codespaceRef} className="flex flex-col outline-1 outline-green-400 font-(family-name:--jet-brains) ">
+
+      <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
       {/* change language */}
       <div className="text-left ">
         <select name="language" id="drop" className="border border-black hover:cursor-pointer">
@@ -96,19 +98,19 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
           <option value="c" className="hover:cursor-pointer">C</option>
         </select>
       </div>
-      <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
 
         <div className="flex flex-2">
-          <textarea ref={numberAreaRef} disabled id="row-number" className=" text-right border border-black w-10 
-          overflow-hidden resize-none pt-3" cols="1" >
+          <textarea ref={numberAreaRef} disabled id="row-number" cols="1" 
+      className=" text-right border border-black w-10 overflow-hidden resize-none pt-3">
           </textarea>
-          <textarea ref={textAreaRef} onScroll={handleScroll} className="flex-2 border border-black resize-none pl-3 pt-3 "
-            cols="130" name="code" id="code" ></textarea>
+          <textarea ref={textAreaRef} onScroll={handleScroll} cols="130" name="code" id="code" 
+      className="flex-2 border border-black resize-none pl-3 pt-3"></textarea>
         </div>
         <HorizVertSlider resultBoxRef={resultBoxRef} />
         <ResultBox ref={resultBoxRef} result={result} />
-        <button className="px-5 text-blue-700 border rounded " type="submit" >run</button>
+        <button type="submit" className="px-5 text-blue-700 border rounded" >run</button>
       </form>
+
     </div>
   )
 });

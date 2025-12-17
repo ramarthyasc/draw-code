@@ -13,11 +13,11 @@ function JwtAuthorizedRoutes() {
     const [isLoggedIn, setIsLoggedIn, jsonWebToken, setJsonWebToken, setUser, user] = useOutletContext();
     const setRtError = useContext(ErrorContext);
 
-    // NOTE: When a <Link> is clicked, in that moment, the location is changed (pushed to stack). The react router walks through the route-tree from root
+    // NOTE: When a <Link> is clicked, in that moment, the location is changed (pushed to stack). The react router only walks through the route-tree from root
     // to the parent component who has the outlet as the new component of the new path. Here, the outlet only is rendered. That's it - to increase
     // Performance - in REACT ROUTER V6+.
     //
-    //But we need this component to run whenever route changes - verify JWT. So we use useLocation here. To Trigger run this component on Route change.
+    //But we need this component to "run" whenever route changes - verify JWT. So we use useLocation here. To Trigger run this component on Route change.
     //So useLocation state is triggered and the component using the useLocation hook rerenders just when you click the <Link> itself.
     const location = useLocation();
 

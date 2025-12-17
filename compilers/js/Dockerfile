@@ -1,0 +1,14 @@
+FROM node:24.12.0-trixie-slim
+WORKDIR /usr/src/code/js
+
+COPY ./runJs.sh .
+RUN chmod +x runJs.sh
+
+# Create non root user & group - give permission to read & write inside js directory
+RUN addgroup rasc \
+&& adduser --disabled-password --gecos '' --no-create-home rasc \
+&& chown -R rasc:rasc /usr/src/code/js
+
+USER rasc
+
+CMD ["./runJs.sh"]
