@@ -9,6 +9,7 @@ exports.preflightOptionsSetter = (req, res) => {
 }
 
 exports.corsAllowResponseSetter = (req, res, next) => {
+    console.log("OWWOWOOWO")
   res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
   next();
 }

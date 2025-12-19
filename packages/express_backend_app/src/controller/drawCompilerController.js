@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { spawn } = require('node:child_process');
-const { executeCodeContainer } = require('../service/drawExecutionService.js');
+const { executeCodeContainer } = require('../service/drawExecutionService');
 const { generateCodeFile } = require('../service/drawFileService.js');
 
 
@@ -22,22 +22,23 @@ exports.submitPost = (req, res) => {
   //// Store the codefile inside that path
   const codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
 
-  //// execute the file 
-executeCodeContainer(spawn, path, codeLanguage)
-    .then((value) => {
-      res.send(value);
-    })
-    .catch((error) => {
-      console.log("Logging docker compose error: ", error);
-    })
-    .finally(() => {
-      console.log("Child process' Promise settled");
-    })
+    //// execute the file 
+     executeCodeContainer(spawn, path, codeLanguage)
+        .then((value) => {
+            res.send(value);
+        })
+        .catch((error) => {
+            console.log("Logging docker compose error: ", error);
+            res.status(500).send(error.message);
+        })
+        .finally(() => {
+            console.log("Child process' Promise settled");
+            // delete the user code file
+            fs.rmSync(codeFilePath);
+        })
 
   //then send the answer cases in a json file to the client
 
-    // delete the user code file
-    fs.rmSync(codeFilePath);
 
   //Side features
   //Give sound to the system - while typing

@@ -30,7 +30,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     //get piped from docker cli, because, the err in the docker 
                     // container process is piped to docker cli 
                     console.log("docker cli's stderr being collected ...");
-                    stdoutChunks.push(data);
+                    stderrChunks.push(data);
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
@@ -61,6 +61,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                         //user's code ran good
                         //so copy the cApp from container fs
                         console.log("Good code");
+                        // warnings which are stderr chunks are ignored
                         stdout = Buffer.concat(stdoutChunks).toString('utf-8');
                         res(stdout);
                     }
@@ -82,7 +83,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     //get piped from docker cli, because, the err in the docker 
                     // container process is piped to docker cli 
                     console.log("docker cli's stderr being collected ...");
-                    stdoutChunks.push(data);
+                    stderrChunks.push(data);
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
@@ -102,12 +103,14 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                         //user's code ran good
                         //so copy the cApp from container fs
                         console.log("Good code");
+                        // warnings which are stderr chunks are ignored
                         stdout = Buffer.concat(stdoutChunks).toString('utf-8');
                         res(stdout);
                     }
 
                 })
 
+                console.log("UIIIIIIIIIIIIIIIIII")
             }
         })
 

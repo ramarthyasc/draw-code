@@ -1,4 +1,4 @@
-#!/usr/env bash
+#!/usr/bin/env bash
 
 # can have both compile errors and warnings inside err.txt
 # gcc -o compC ./readonly/main.c 2>err.txt || exit 1

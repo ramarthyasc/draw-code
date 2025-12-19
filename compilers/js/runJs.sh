@@ -1,4 +1,4 @@
-#!/usr/env bash
+#!/usr/bin/env bash
 
 # can have both errors and warnings inside err.txt (Both should be in jsApp to be
 # shown to the frontend)

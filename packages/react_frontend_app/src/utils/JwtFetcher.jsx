@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ErrorContext } from '../context/ErrorContext';
 
 
@@ -9,6 +9,7 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
     console.log("Jwtfetcher")
 
     const [rtError, setRtError] = useState(false);
+    const isMountedRef = useRef(false);
 
 
     useEffect(() => {
@@ -54,7 +55,10 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
 
         }
 
-        fetcher();
+        if (!isMountedRef.current) {
+            fetcher();
+        }
+        isMountedRef.current = true;
 
 
     }, []);

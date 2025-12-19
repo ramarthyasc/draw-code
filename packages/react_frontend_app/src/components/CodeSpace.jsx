@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef, forwardRef } from "react";
 import { HorizVertSlider } from "./HorizVertSlider.jsx";
 import { ResultBox } from "./ResultBox.jsx";
+import { QuestionContext } from "../context/QuestionContext.jsx";
+import { useContext } from "react";
 
 // store scrollHeight as localStorage, so that the Height is always there even when changing pages and unmounted
 
@@ -12,26 +14,29 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
   const maxLineNumberRef = useRef();
   const [result, setResult] = useState();
   const resultBoxRef = useRef();
+    const { jsonWebToken } = useContext(QuestionContext);
+    console.log(jsonWebToken)
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const formDataObject = Object.fromEntries(formData.entries());
-    const res = fetch("/draw-submit", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formDataObject),
-    })
+      const formData = new FormData(e.target);
+      const formDataObject = Object.fromEntries(formData.entries());
+      const res = fetch("/api/draw-submit", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${jsonWebToken}`
+          },
+          body: JSON.stringify(formDataObject),
+      })
 
     res
       .then((res) => {
         // res.json is res.text + JSON.parse().
-        // res.text is the promise in which it internally receives buffer streams from the server, and then it concats it, parses to a string,
-        // then sends the resolve
+        // res.text is the promise in which it internally receives buffer streams from the server,
+              // and then it concats it, parses to a string, then sends the resolve
         // ie; the concated string parsed version.
         return res.text();
       })

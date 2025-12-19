@@ -9,4 +9,4 @@ export const secureRouter: Router = Router();
 secureRouter.use(corsAllowResponseSetter)
 secureRouter.use(jwtAuth);
 
-secureRouter.post("/draw-submit", corsAllowResponseSetter, submitPost);
+secureRouter.post("/draw-submit", submitPost);

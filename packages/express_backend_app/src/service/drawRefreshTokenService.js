@@ -59,7 +59,7 @@ exports.verifyValidityExpiryRevokeRTService = async (token, searchRefreshToken, 
 
     // Revoke all RTs ahead of this Revoked RT (ie; RTs having the same absolute_expires_at (But when you choose - same userid, then it would
     // revoke all RT chains (all browsers) of the User, and whenever after RT expiry, when you refresh the browser 2 times, then in the 2nd time,
-    // the Revoked RT is send - which kills all RT chains of the User unnecessarily))
+    // the Revoked RT is send - which kills RT chain of the User unnecessarily))
     await revokeOneRefreshTokenChain(detailRefreshToken[0]);
     return;
   }
@@ -72,6 +72,7 @@ exports.verifyValidityExpiryRevokeRTService = async (token, searchRefreshToken, 
   if (now > expires_at || now > absolute_expires_at) {
     //Expired. ie; REPLAY ATTACK
 
+      console.log("expired ?")
     // Revoke refresh token of the user ie; Logout the user/hacker from the browser. So that he 
     // have to create new Refresh token from start - from the entry point ie; Signin through google.
     await revokeRefreshToken(detailRefreshToken[0])

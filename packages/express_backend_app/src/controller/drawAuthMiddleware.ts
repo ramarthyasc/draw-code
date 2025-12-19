@@ -74,6 +74,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
     if (header && header.startsWith("Bearer")) {
         accessToken = header.split(" ")[1];
     }
+    console.log(accessToken)
 
 
     let response: CodeResponse;
@@ -87,6 +88,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
             status: 401,
         }
         return res.status(response.status).json(response)
+        // send request to /refresh-auth
     }
 
     // Good jwt - then go to the requested route (Secure route)
@@ -108,6 +110,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
         return res.status(response.status).json(response);
     } else {
         // There is refresh token
+        console.log(refreshToken, "helooooo");
 
         const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(refreshToken,
             searchRefreshToken,
@@ -147,6 +150,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
                 rotated_from: detailRefreshToken.id,
             }, revokeRefreshToken, detailRefreshToken);
 
+            console.log(refreshToken, "TWOOOOOO");
 
             // Set new RT in cookie & Send new JWT  
             res.cookie('refreshToken', refreshToken, {

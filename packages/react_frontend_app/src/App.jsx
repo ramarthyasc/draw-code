@@ -32,7 +32,7 @@ function App() {
         <Navbar setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} 
       setJsonWebToken={setJsonWebToken} setUser={setUser} user={user} />
 
-        <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
+        <QuestionContext.Provider value={{ isCoding, setIsCoding, jsonWebToken }} >
           {/* Outlet is Authorization Protected only if isLoggedIn == true (That we did in JwtFetcher). Otherwise, you are free to explore both pages. */}
           <Outlet context={[isLoggedIn, setIsLoggedIn, jsonWebToken, setJsonWebToken, setUser, user]} />
           {/* In the Outlet, we have JwtAuthorizedRoute utils component, and it's Outlet = Pages : Home & Drawboard & CodeSpace*/}
