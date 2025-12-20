@@ -82,11 +82,9 @@ app.get('/problemset', jwtVerification, userProblemsetGet);
 //DrawLogin App
 app.use('/proPic', express.static(path.join(__dirname, "./public/proPic/")));
 
-// Lightweight session check for the frontend (not for security) = UI HELPER
-app.use('/jwt-ui-auth', uiJwtAuth);
+// Lightweight session check for the frontend (not for security) = UI HELPER- DON'T NEED - CONFUSING
+// app.use('/jwt-ui-auth', uiJwtAuth);
 
-// auth middleware - refresh-auth for generating RT & JWT - For both USER AND SECURITY
-app.use('/refresh-auth', refreshTokenJwtGen)
 
 app.options('/*splat', preflightOptionsSetter);
 app.post('/draw-login', corsAllowResponseSetter, googleJwtVerifyPost, jwtRefreshTokenCreatorPost);
@@ -98,9 +96,11 @@ app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); //
 //Secure routes - Router
 app.use('/api', secureRouter)
 
-//For logging the errors in Production into the terminal(And importantly when testing)
+//For logging the errors in Production into the terminal(And importantly when testing) 
+//& Most importantly streamlining the server error flow using next(err) & then handle from Frontend too the 
+//default error.. always
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err);
     res.status(500).send("Something broke !!")
 })
 //// For after React build

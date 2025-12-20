@@ -4,7 +4,8 @@
     "module": "esnext",
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
-    "types": ["jest", "react"]
+    "types": ["jest", "react"],
+    "lib": ["es2020", "dom", "DOM.Iterable"]
   },
-  "include": ["./src", "dist"]
+  "include": ["./**/*.ts" ]
 }

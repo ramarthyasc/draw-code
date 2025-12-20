@@ -19,7 +19,7 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
 
                 try {
 
-                    const res = await fetch('/refresh-auth', {
+                    const res = await fetch('/api/refresh-auth/', {
                         method: "GET",
                         credentials: 'include',
                     })
@@ -36,17 +36,27 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
 
                     } else {
 
-                        console.log("HTTP response error: ", res.status);
-                        const { code } = await res.json();
-
-                        if (code === "NO_REFRESH_TOKEN" || code === "INVALID_REFRESH_TOKEN") {
+                        if (res.status === 401) {
+                            const { code } = await res.json();
+                            console.log("HTTP response error: ", res.status);
+                            console.log(code);
                             setRtError(true);
                             return;
+
+                        } else if (res.status === 500) {
+                            // Error handler default server Error
+                            const defaultServerError = await res.text();
+                            console.log("HTTP response error: ", res.status);
+                            console.log(defaultServerError);
+                            return;
+                        } else {
+                            // unknown server send error
+                            console.log("HTTP response error: ", res.status);
                         }
                     }
 
                 } catch (err) {
-                    console.log("Fetch/Network Error (Header/Metadata fetching or Body fetching): ", err);
+                    console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
                     return;
 
                 }

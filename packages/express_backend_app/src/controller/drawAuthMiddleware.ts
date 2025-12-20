@@ -37,37 +37,6 @@ export interface IJwtVerifiedPayload extends IUserDetail {
     exp: number;
 }
 
-export const uiJwtAuth = (req: Request, res: Response) => {
-    const header: string | undefined = req.get("Authorization");
-    let accessToken: string | undefined;
-    if (header && header.startsWith("Bearer")) {
-        accessToken = header.split(" ")[1];
-    }
-
-
-    let response: CodeResponse;
-    // Invalid/expired jwt
-    let decoded: IJwtVerifiedPayload;
-    try {
-        decoded = jwtVerifierService(jwt, accessToken);
-    } catch (err) {
-        response = {
-            code: "INVALID_OR_EXPIRED_JWT",
-            status: 401,
-        }
-        return res.status(response.status).json(response)
-    }
-
-    // Good jwt - then go to the requested route (Loggedin UI)
-    response = {
-        code: "VALID_JWT",
-        status: 200,
-    }
-    return res.status(response.status).json(response);
-}
-
-
-
 export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
     const header: string | undefined = req.get("Authorization");
     let accessToken: string | undefined;
@@ -88,7 +57,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
             status: 401,
         }
         return res.status(response.status).json(response)
-        // send request to /refresh-auth
+        // send request to /api/refresh-auth/
     }
 
     // Good jwt - then go to the requested route (Secure route)
@@ -158,7 +127,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
                 maxAge: Number(process.env.RT_EXPIRES_IN),
                 secure: false, // As the localserver is not https. Change it to secure when in Production.
                 sameSite: "lax",
-                path: "/refresh-auth",
+                path: "/api/refresh-auth/",
             });
             return res.json({ accessToken, userDetail });
 
@@ -167,3 +136,35 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
     }
 
 }
+
+// export const uiJwtAuth = (req: Request, res: Response) => {
+//     const header: string | undefined = req.get("Authorization");
+//     let accessToken: string | undefined;
+//     if (header && header.startsWith("Bearer")) {
+//         accessToken = header.split(" ")[1];
+//     }
+//
+//
+//     let response: CodeResponse;
+//     // Invalid/expired jwt
+//     let decoded: IJwtVerifiedPayload;
+//     try {
+//         decoded = jwtVerifierService(jwt, accessToken);
+//     } catch (err) {
+//         response = {
+//             code: "INVALID_OR_EXPIRED_JWT",
+//             status: 401,
+//         }
+//         return res.status(response.status).json(response)
+//     }
+//
+//     // Good jwt - then go to the requested route (Loggedin UI)
+//     response = {
+//         code: "VALID_JWT",
+//         status: 200,
+//     }
+//     return res.status(response.status).json(response);
+// }
+//
+
+

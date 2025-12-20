@@ -5,31 +5,31 @@ const { executeCodeContainer } = require('../service/drawExecutionService');
 const { generateCodeFile } = require('../service/drawFileService.js');
 
 
-exports.submitPost = (req, res) => {
-  // take the data in
-  const codeLanguage = req.body.language;
-  const codeData = req.body.code;
+exports.submitPost = (req, res, next) => {
+    // take the data in
+    const codeLanguage = req.body.language;
+    const codeData = req.body.code;
     const FILENAME = "main";
-  console.log(codeData);
-  // test cases write for that question ; ie; the arguments that we will be giving to the function
+    console.log(codeData);
+    // test cases write for that question ; ie; the arguments that we will be giving to the function
 
-  // create a separate container for solving the questions so that even if the answer is malignant, then it wouldn't affect the server application
-  // First, without separate container - running in cmd
+    // create a separate container for solving the questions so that even if the answer is malignant, then it wouldn't affect the server application
+    // First, without separate container - running in cmd
 
-  //// create file path & folder
-  const codeFolderPath = path.join(__dirname, `../model/sandbox/${codeLanguage}`);
-  fs.mkdirSync(codeFolderPath, { recursive: true });
-  //// Store the codefile inside that path
-  const codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
+    //// create file path & folder
+    const codeFolderPath = path.join(__dirname, `../model/sandbox/${codeLanguage}`);
+    fs.mkdirSync(codeFolderPath, { recursive: true });
+    //// Store the codefile inside that path
+    const codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
 
     //// execute the file 
-     executeCodeContainer(spawn, path, codeLanguage)
+    executeCodeContainer(spawn, path, codeLanguage)
         .then((value) => {
             res.send(value);
         })
         .catch((error) => {
             console.log("Logging docker compose error: ", error);
-            res.status(500).send(error.message);
+            next(err);
         })
         .finally(() => {
             console.log("Child process' Promise settled");
@@ -37,9 +37,9 @@ exports.submitPost = (req, res) => {
             fs.rmSync(codeFilePath);
         })
 
-  //then send the answer cases in a json file to the client
+    //then send the answer cases in a json file to the client
 
 
-  //Side features
-  //Give sound to the system - while typing
+    //Side features
+    //Give sound to the system - while typing
 } 

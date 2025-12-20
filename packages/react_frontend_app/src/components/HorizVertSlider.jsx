@@ -45,7 +45,6 @@ export function HorizVertSlider(props) {
 
             requestAnimationFrame(() => {
                 if (props.resultBoxRef) {
-                    console.log(heightRef.current);
                     const resultBoxStyle = getComputedStyle(props.resultBoxRef.current);
                     heightRef.current = parseFloat(resultBoxStyle.height);
 
@@ -57,7 +56,6 @@ export function HorizVertSlider(props) {
 
             //styles
             if (props.resultBoxRef) {
-                console.log("helloooo")
                 document.body.classList.remove("bg-amber-500", "cursor-ns-resize!");
             } else if (props.codespaceRef) {
                 document.body.classList.remove("bg-amber-500", "cursor-ew-resize!");

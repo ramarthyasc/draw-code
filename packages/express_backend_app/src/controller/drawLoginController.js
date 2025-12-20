@@ -22,7 +22,7 @@ exports.googleJwtVerifyPost = async (req, res, next) => {
 
     } catch (err) {
         console.error(err);
-        return res.sendStatus(400);
+        return next(err);
     }
 
     let userDetail;
@@ -30,7 +30,7 @@ exports.googleJwtVerifyPost = async (req, res, next) => {
         userDetail = await verifyOrAddUserService(userPayload, searchUser, userAddReturn, updatePicture, fs, path); //arguments give
     } catch (err) {
         console.error(err);
-        return res.sendStatus(500);
+        return next(err);
     }
 
     //userdetail : userid, name, email, picture
@@ -59,7 +59,7 @@ exports.jwtRefreshTokenCreatorPost = async (req, res) => {
         maxAge: Number(process.env.RT_EXPIRES_IN),
         secure: false, // As the localserver is not https. Change it to secure when in Production.
         sameSite: "lax",
-        path: "/refresh-auth",
+        path: "/api/refresh-auth/",
     });
 
     res.json({ accessToken, userDetail });

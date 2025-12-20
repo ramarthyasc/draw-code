@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 function Home() {
 
-  const user = useOutletContext();
+  const { user } = useOutletContext();
 
   return (
     <div className='home'>

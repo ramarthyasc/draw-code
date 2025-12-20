@@ -3,13 +3,13 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
-    // "outDir": "./dist",
+    "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "allowJs": true,
     "target": "es2020",
-    "lib": ["es2020", "dom"],
+    "lib": ["es2020"],
     "types": [],
     "esModuleInterop": true,
     // For nodejs:

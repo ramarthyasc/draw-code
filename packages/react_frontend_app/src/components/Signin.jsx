@@ -19,41 +19,27 @@ function Signin({ setIsLoggedIn, setJsonWebToken, setUser }) {
 
                 const { accessToken, userDetail } = await loginRes.json();
 
-                // verify the jwt = optional
-                const res = await fetch("/jwt-ui-auth", {
-                    method: "GET",
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                    credentials: "include",
-                })
-
-                const { code } = await res.json();
-                
-                if (res.ok) {
-
-                    if (code === "VALID_JWT") {
-                        setJsonWebToken(accessToken);
-                        setIsLoggedIn(true);
-                        setUser(userDetail);
-                        return;
-                    }
-
-                } else {
-
-                    if (code === "INVALID_OR_EXPIRED_JWT") {
-                        console.log("Verification HTTP Error: ", res.status);
-                        return; //end the function
-                    }
-
-                }
+                setJsonWebToken(accessToken);
+                setIsLoggedIn(true);
+                setUser(userDetail);
+                return;
 
             } else {
-                console.log("Login HTTP Error: ", loginRes.status);
-                return; //end the function
+                if (loginRes.status === 500) {
+                    // Error handler default server Error
+                    const defaultServerError = await res.text();
+                    console.log("HTTP response error: ", res.status);
+                    console.log(defaultServerError);
+                    return;
+                } else {
+                    //unknown server send errors (if someone changed the status from the server)
+                    console.log("HTTP response error: ", res.status);
+                }
             }
 
 
         } catch (err) {
-            console.log("Fetch/Network error: ", err);
+            console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
             return;
         }
 

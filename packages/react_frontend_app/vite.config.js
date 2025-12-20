@@ -15,9 +15,7 @@ export default defineConfig({
       '/draw-secure': 'http://localhost:5000',
       '/draw-question': 'http://localhost:5000',
       '/api/draw-submit': 'http://localhost:5000',
-      '/refresh-auth': 'http://localhost:5000',
-      '/jwt-ui-auth': 'http://localhost:5000',
-
+      '/api/refresh-auth': 'http://localhost:5000',
     },
 
   }

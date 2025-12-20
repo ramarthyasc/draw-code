@@ -14,17 +14,17 @@ const routes = [
     // Children are the things that are presented in the <Outlet/>
     // Children means - The Children prop of the Parent Component. Here, <App />
     children: [
-      {
-        element: <JwtAuthorizedRoutes />,
+      // {
+        // element: <JwtAuthorizedRoutes />,
         //This Children is the Outlet of <JwtAuthorizedRoutes/> component.
-        children: [
+        // children: [
 
           { index: true, element: <Home /> }, //index: true - means it takes the same path as parent App component
           { path: "draw-code", element: <Drawboard /> },
 
-        ]
+        // ]
 
-      }
+      // }
     ]
   },
 ]

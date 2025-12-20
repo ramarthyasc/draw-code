@@ -110,7 +110,6 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
 
                 })
 
-                console.log("UIIIIIIIIIIIIIIIIII")
             }
         })
 
