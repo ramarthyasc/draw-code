@@ -15,6 +15,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const maxLineNumberRef = useRef();
     const resultBoxRef = useRef();
     const { jsonWebToken, setJsonWebToken, setUser } = useOutletContext();
+    // custom hook
     const { data: result, secureDataGetter } = useSecureDataGetter();
     console.log(jsonWebToken)
 

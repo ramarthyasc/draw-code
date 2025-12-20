@@ -72,7 +72,7 @@ export function useSecureDataGetter() {
                 // jwt is expired, so get the refresh token
                 const { code } = await res.json();
                 console.log(code)
-                // now fetch the RT
+                // now fetch the RT & JWT
                 //
                 const jwtFetch = await fetch("/api/refresh-auth/", {
                     method: "GET",
@@ -83,6 +83,26 @@ export function useSecureDataGetter() {
                     const { accessToken, userDetail } = await jwtFetch.json();
                     authState.setJsonWebToken(accessToken);
                     authState.setUser(userDetail);
+
+                    // call the Function once more to do the function request again
+                    try {
+                        if (body) {
+                            await secureDataGetter({
+                                jsonWebToken: accessToken,
+                                setJsonWebToken: authState.setJsonWebToken,
+                                setUser: authState.setUser
+                            }, body);
+                        } else {
+                            await secureDataGetter({
+                                jsonWebToken: accessToken,
+                                setJsonWebToken: authState.setJsonWebToken,
+                                setUser: authState.setUser
+                            });
+                        }
+                    } catch (err) {
+                        console.log(err);
+                        return;
+                    }
                 } else if (jwtFetch.status === 401) {
                     const { code } = await jwtFetch.json();
                     console.log(code);
@@ -95,6 +115,9 @@ export function useSecureDataGetter() {
                     console.log("HTTP error: ", jwtFetch.status);
                 }
 
+            } else {
+                    // unknown error from server (someone changed statuscode from serverside)
+                    console.log("HTTP error: ", res.status);
             }
 
         } catch (err) {
