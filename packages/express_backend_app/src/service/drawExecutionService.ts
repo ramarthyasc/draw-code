@@ -9,7 +9,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
     let stdoutChunks: Buffer[] = [];
     let stderr: string;
     let stdout: string;
-    
+
     try {
         return await new Promise<string>((res, rej) => {
 
@@ -29,8 +29,28 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                 dockercomposeProcess.stderr.on('data', (data) => {
                     //get piped from docker cli, because, the err in the docker 
                     // container process is piped to docker cli 
-                    console.log("docker cli's stderr being collected ...");
-                    stderrChunks.push(data);
+                    //
+                    // Removing docker's warnings and removing unwanted information
+                    let chunk = data.toString();
+                    if (
+                        !(chunk.includes('Container') ||
+                            chunk.includes('Creating') ||
+                            chunk.includes('Created'))
+                    ) {
+                        chunk = chunk.replace(/\sat/g, "<br> at");
+                        data = Buffer.from(chunk, 'utf-8');
+
+                        if (chunk.includes('main')) {
+                            // replace the path containing main - with just main
+                            chunk = chunk.replace(/.(\/[a-z]+)+\/main/g, 'main');
+                            data = Buffer.from(chunk, 'utf-8');
+                        }
+
+                        console.log("docker cli's stderr being collected ...");
+                        stderrChunks.push(data);
+                        return;
+                    }
+                        console.log("docker cli's stderr not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
@@ -82,8 +102,28 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                 dockercomposeProcess.stderr.on('data', (data) => {
                     //get piped from docker cli, because, the err in the docker 
                     // container process is piped to docker cli 
-                    console.log("docker cli's stderr being collected ...");
-                    stderrChunks.push(data);
+                    //
+                    // Removing docker's warnings and removing unwanted information
+                    let chunk = data.toString();
+                    if (
+                        !(chunk.includes('Container') ||
+                            chunk.includes('Creating') ||
+                            chunk.includes('Created'))
+                    ) {
+                        chunk = chunk.replace(/\sat/g, "<br> at");
+                        data = Buffer.from(chunk, 'utf-8');
+
+                        if (chunk.includes('main')) {
+                            // replace the path containing main - with just main
+                            chunk = chunk.replace(/(\/[a-z]+)+\/main/g, 'main');
+                            data = Buffer.from(chunk, 'utf-8');
+                        }
+
+                        console.log("docker cli's stderr being collected ...");
+                        stderrChunks.push(data);
+                        return;
+                    }
+                        console.log("docker cli's stderr not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 

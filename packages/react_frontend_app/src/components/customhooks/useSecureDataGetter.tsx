@@ -104,9 +104,11 @@ export function useSecureDataGetter() {
                         return;
                     }
                 } else if (jwtFetch.status === 401) {
+                    //RT is invalid
                     const { code } = await jwtFetch.json();
                     console.log(code);
                 } else if (jwtFetch.status === 500) {
+                    //any server error
                     const defaultServerError = await jwtFetch.text();
                     console.log("HTTP error: ", jwtFetch.status);
                     console.log(defaultServerError);

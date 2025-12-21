@@ -57,7 +57,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
             maxLineNumberRef.current = 300;
             numberAreaRef.current.value = "";
-            for (let i = 0; i <= maxLineNumberRef.current; i++) {
+            for (let i = 1; i <= maxLineNumberRef.current; i++) {
                 if (i === maxLineNumberRef.current) {
                     numberAreaRef.current.value += i;
                     break;
