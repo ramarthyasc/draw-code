@@ -14,9 +14,13 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const pastScrollHeightRef = useRef();
     const maxLineNumberRef = useRef();
     const resultBoxRef = useRef();
+
     const { jsonWebToken, setJsonWebToken, setUser } = useOutletContext();
     // custom hook
     const { data: result, secureDataGetter } = useSecureDataGetter();
+    const [language, setLanguage] = useState('js');
+    const selectedLangRef = useRef();
+
     console.log(jsonWebToken)
 
     async function handleSubmit(e) {
@@ -71,7 +75,41 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         // numbers showing when scrolling - control the scrolling of numberArea programmatically when i scroll the text area = concept
     }, [])
 
+    //Language
+    useEffect(() => {
+        async function fetcher() {
+            try {
+                const body = { 
+                    language: language,
+                    qid: 1,
+                    // qname: ;
+                }
+                const res = await fetch("/docs/templates", {
+                    method: "POST",
+                    credentials: "include",
+                    // body: 
+                })
 
+                if (res.ok) {
+                    const template = await res.json();
+
+                } else {
+                    console.log("HTTP error: ", res.status);
+                }
+
+            } catch (err) {
+                console.log("Network/Fetch or parsing error",err);
+            }
+        }
+
+        fetcher();
+
+    }, [language]);
+
+
+    function selectOnChange(e) {
+        setLanguage(e.target.value);
+    }
 
     return (
         // implement uneditable numbers along the left side +
@@ -81,7 +119,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
                 {/* change language */}
                 <div className="text-left ">
-                    <select name="language" id="drop" className="border border-black hover:cursor-pointer">
+                    <select name="language" id="drop" onChange={selectOnChange} value={language} 
+                        className="border border-black hover:cursor-pointer">
                         <option value="js" className="hover:cursor-pointer">Javascript</option>
                         <option value="c" className="hover:cursor-pointer">C</option>
                     </select>

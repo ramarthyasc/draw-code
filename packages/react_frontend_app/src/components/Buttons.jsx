@@ -6,7 +6,7 @@ import { QuestionContext } from "../context/QuestionContext";
 export function Buttons() {
   const { isCoding } = useContext(QuestionContext);
   return (
-    <div className="question-buttons">
+    <div className="flex mx-2 py-2 px-5 items-center justify-between border border-solid border-black ">
       <div className="left-buttons">
         <ButtonComponent buttonName="Question" />
         <ButtonComponent buttonName="Solution" />

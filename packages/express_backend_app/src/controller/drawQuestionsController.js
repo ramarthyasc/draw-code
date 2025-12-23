@@ -1,20 +1,23 @@
 const { questionsList, questionDetailsList } = require("../model/drawQuestionsInMemory.js");
 
-exports.questionsGet = (req, res) => {
+exports.questionsGet = (req, res, next) => {
 
-  console.log(JSON.stringify(req.params))
+    console.log(JSON.stringify(req.params))
 
-  if (Object.keys(req.params).length === 0) {
-    // send the questions names list only
-    res.json(JSON.stringify(questionsList));
-  } else {
-    // send the question metadata
-    const question = questionDetailsList[req.params.question];
-    if (!question) {
-      throw new Error("Question not found");
+    const params = req.params;
+
+    if (Object.keys(params).length === 0) {
+        // send the questions names list only
+        return res.json(questionsList);
+    } else {
+        // send the question metadata
+        const questionDetails = questionDetailsList[params.question];
+        if (!questionDetails) {
+            next(new Error("Question not found"));
+        }
+
+        return res.json(questionDetails);
+
     }
-
-    res.json(JSON.stringify(questionDetailsList[req.params.question]));
-  }
 
 }

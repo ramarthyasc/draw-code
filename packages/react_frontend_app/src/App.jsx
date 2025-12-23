@@ -23,7 +23,7 @@ function App() {
   const [isCoding, setIsCoding] = useState(false);
 
   return (
-      <ErrorBoundary fallback = {<p>Something went wrong</p>}>
+      <ErrorBoundary fallback = {<p>Something went wrong !!</p>}>
 
     <JwtFetcher setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} 
       jsonWebToken={jsonWebToken} setJsonWebToken={setJsonWebToken} setUser={setUser}>

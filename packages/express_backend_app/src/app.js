@@ -23,6 +23,7 @@ const { questionsGet } = require('./controller/drawQuestionsController.js');
 const { submitPost } = require('./controller/drawCompilerController.js');
 const { uiJwtAuth , refreshTokenJwtGen} = require('./controller/drawAuthMiddleware');
 const { secureRouter } = require('./routers/drawSecureRouter.ts');
+const { nonSecureRouter } = require('./routers/drawNonSecureRouter.ts');
 
 const USERS = [];
 const QUESTIONS = [{
@@ -94,7 +95,10 @@ app.post('/draw-login', corsAllowResponseSetter, googleJwtVerifyPost, jwtRefresh
 app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); // {/:question} is optional. ie; / is optional ,and the route param is optional
 
 //Secure routes - Router
-app.use('/api', secureRouter)
+app.use('/api', secureRouter);
+
+//Non-secure routes - For Non secure Data
+app.use('/docs', nonSecureRouter);
 
 //For logging the errors in Production into the terminal(And importantly when testing) 
 //& Most importantly streamlining the server error flow using next(err) & then handle from Frontend too the 

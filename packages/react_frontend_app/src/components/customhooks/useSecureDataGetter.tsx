@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 //
 //
@@ -24,7 +24,7 @@ export function useSecureDataGetter() {
 
     const [data, setData] = useState("");
 
-    async function secureDataGetter(authState: IAuthState, body?: FormData) {
+    const secureDataGetter = useCallback(async (authState: IAuthState, body?: FormData) => {
         try {
             let res: Response;
             if (body) {
@@ -127,7 +127,7 @@ export function useSecureDataGetter() {
             return;
         }
 
-    }
+    }, []);
 
     // You can use this result ie; Data state for any Generic use in any component
     return { data, secureDataGetter };
