@@ -2,7 +2,7 @@ const express = require('express');
 /**
     * @type {import('express').Express}
     */
-    const app = express();
+const app = express();
 require('dotenv').config();
 console.log('cwd: ', process.cwd())
 const cookieParser = require('cookie-parser');
@@ -21,7 +21,7 @@ const { secureRouteGet } = require('./controller/drawSecureRouteController.js')
 const { preflightOptionsSetter, corsAllowResponseSetter } = require('./controller/drawCorsController.js');
 const { questionsGet } = require('./controller/drawQuestionsController.js');
 const { submitPost } = require('./controller/drawCompilerController.js');
-const { uiJwtAuth , refreshTokenJwtGen} = require('./controller/drawAuthMiddleware');
+const { uiJwtAuth, refreshTokenJwtGen } = require('./controller/drawAuthMiddleware');
 const { secureRouter } = require('./routers/drawSecureRouter.ts');
 const { nonSecureRouter } = require('./routers/drawNonSecureRouter.ts');
 
@@ -39,7 +39,7 @@ const SUBMISSION = [{}]
 
 
 ///////////////////////////////////////////////////////////////////
-    //DrawLogin App
+//DrawLogin App
 
 
 //DrawLogin App
@@ -57,7 +57,7 @@ app.get('views').forEach(view => {
 })
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); //cookieParser() returns a middleware.
-    app.use(express.json());
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'view/index.html'));
@@ -71,8 +71,8 @@ app.use('/signup', signupRouter);
 //Check if the user with the given email exists in the USERs array
 //Also ensure that the password is the same
 //If pass is same, return 200 status code to client.
-    //If the password not same, return back 401 status code to client.
-    app.route('/login')
+//If the password not same, return back 401 status code to client.
+app.route('/login')
     .get(userLoginGet)
     .post(userLoginAuthPost);
 
@@ -111,12 +111,12 @@ app.use((err, req, res, next) => {
 // app.use(express.static(path.join(__dirname, "dist")))
 /// for all the routes other than that of the backend api - home "/", "/drawcode"
 // app.get('/*splat', (req, res)=> {
-    //     res.sendFile(path.join(__dirname, "dist", "index.html"));
-    // })
+//     res.sendFile(path.join(__dirname, "dist", "index.html"));
+// })
 
 
 //DrawLogin App
 ///////////////////////////////////////////////////////////////////
-    //
+//
 
-    module.exports = app;
+module.exports = app;

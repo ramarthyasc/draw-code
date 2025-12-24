@@ -58,34 +58,34 @@ function Drawboard() {
 
     if (isLoading) {
         return "loading..."
+    }
+
+    if (!isCoding) {
+        return (
+            <>
+                <div className='space'>
+                    <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
+                        <QuestionTab questionDetails={questionDetails} />
+                    </QuestionContext.Provider>
+                    <Slider canvasRef={canvasRef} setCanvasEdgeMotionCoord={setCanvasEdgeMotionCoord} />
+                    <Canvas ref={canvasRef} canvasEdgeMotionCoord={canvasEdgeMotionCoord} />
+                </div>
+            </>
+        )
+
     } else {
-        if (!isCoding) {
-            return (
-                <>
-                    <div className='space'>
-                        <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
-                            <QuestionTab questionDetails={questionDetails} />
-                        </QuestionContext.Provider>
-                        <Slider canvasRef={canvasRef} setCanvasEdgeMotionCoord={setCanvasEdgeMotionCoord} />
-                        <Canvas ref={canvasRef} canvasEdgeMotionCoord={canvasEdgeMotionCoord} />
-                    </div>
-                </>
-            )
+        return (
 
-        } else {
-            return (
-
-                <>
-                    <div className='space'>
-                        <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
-                            <QuestionTab questionDetails={questionDetails} />
-                        </QuestionContext.Provider>
-                        <HorizVertSlider codespaceRef={codespaceRef} />
-                        <CodeSpace ref={codespaceRef} />
-                    </div>
-                </>
-            )
-        }
+            <>
+                <div className='space'>
+                    <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
+                        <QuestionTab questionDetails={questionDetails} />
+                    </QuestionContext.Provider>
+                    <HorizVertSlider codespaceRef={codespaceRef} />
+                    <CodeSpace ref={codespaceRef} />
+                </div>
+            </>
+        )
     }
 
 

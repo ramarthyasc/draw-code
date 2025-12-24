@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { templategetPost } from '../controller/drawNonSecureController';
+import { templateGet } from '../controller/drawNonSecureController';
 
 export const nonSecureRouter = Router();
 
-nonSecureRouter.post('/templates', templategetPost);
+nonSecureRouter.get('/templates/:qname', templateGet);

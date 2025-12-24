@@ -110,8 +110,7 @@ export function HorizVertSlider(props) {
 
     return (
         <div onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp} className={`${props.resultBoxRef ? "h-3 hover:cursor-ns-resize" : "w-3 hover:cursor-ew-resize"} 
-  shrink-0 bg-orange-300 hover:bg-amber-500 border border-solid border-black `} >
+            onMouseUp={handleMouseUp} className={`${props.resultBoxRef ? "h-3 hover:cursor-ns-resize" : "w-3 hover:cursor-ew-resize"} shrink-0 bg-orange-300 hover:bg-amber-500 border border-solid border-black `} >
         </div >
     )
 }

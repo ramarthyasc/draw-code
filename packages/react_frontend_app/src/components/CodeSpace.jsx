@@ -3,6 +3,7 @@ import { HorizVertSlider } from "./HorizVertSlider.jsx";
 import { ResultBox } from "./ResultBox.jsx";
 import { useOutletContext } from "react-router-dom";
 import { useSecureDataGetter } from "./customhooks/useSecureDataGetter";
+import { useParams } from "react-router-dom";
 
 // store scrollHeight as localStorage, so that the Height is always there even when changing pages and unmounted
 
@@ -19,7 +20,11 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     // custom hook
     const { data: result, secureDataGetter } = useSecureDataGetter();
     const [language, setLanguage] = useState('js');
-    const selectedLangRef = useRef();
+    const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const [qTemplate, setQTemplate] = useState();
+    //extract from route params
+    const params = useParams();
 
     console.log(jsonWebToken)
 
@@ -28,11 +33,15 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
-        await secureDataGetter({
-            jsonWebToken,
-            setJsonWebToken,
-            setUser
-        }, formData);
+        try {
+            await secureDataGetter({
+                jsonWebToken,
+                setJsonWebToken,
+                setUser
+            }, formData);
+        } catch (err) {
+            setError(err);
+        }
 
     }
 
@@ -54,11 +63,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         pastScrollHeightRef.current = Math.max(pastScrollHeightRef.current, e.target.scrollHeight);
     }
 
+    // Showing numbers
     useEffect(() => {
         if (textAreaRef.current) {
-
             // When we full zoomout the browser, it accomodates less than 300 numbers. So we can put 300 as the maximum number.
-
             maxLineNumberRef.current = 300;
             numberAreaRef.current.value = "";
             for (let i = 1; i <= maxLineNumberRef.current; i++) {
@@ -69,7 +77,6 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 numberAreaRef.current.value += i + "\n";
             }
         }
-
         pastScrollHeightRef.current = textAreaRef.current.scrollHeight;
 
         // numbers showing when scrolling - control the scrolling of numberArea programmatically when i scroll the text area = concept
@@ -79,26 +86,25 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     useEffect(() => {
         async function fetcher() {
             try {
-                const body = { 
-                    language: language,
-                    qid: 1,
-                    // qname: ;
-                }
-                const res = await fetch("/docs/templates", {
-                    method: "POST",
-                    credentials: "include",
-                    // body: 
+                console.log(params.qname);
+                const res = await fetch(`/docs/templates/${params.qname}?language=${language}`, {
+                    method: "GET",
                 })
 
                 if (res.ok) {
-                    const template = await res.json();
+                    const qtemplate = await res.text();
+                    setIsLoading(false);
+                    setQTemplate(qtemplate);
+                    console.log(qtemplate);
 
                 } else {
                     console.log("HTTP error: ", res.status);
+                    setError(new Error(`Http error: ${res.status}`));
                 }
 
             } catch (err) {
-                console.log("Network/Fetch or parsing error",err);
+                console.log("Network/Fetch or parsing error", err);
+                setError(err);
             }
         }
 
@@ -109,17 +115,26 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
     function selectOnChange(e) {
         setLanguage(e.target.value);
+        setIsLoading(true);
     }
+    function editOnChange(e) {
+        setQTemplate(e.target.value);
+    }
+
+    if (error) {
+        throw error;
+    }
+    // loading state given inside async handling & useEffect's elements only
 
     return (
         // implement uneditable numbers along the left side +
         // backend verification
-        <div ref={codespaceRef} className="flex flex-col outline-1 outline-green-400 font-(family-name:--jet-brains) ">
+        <div ref={codespaceRef} className="flex flex-col outline-1 outline-green-400 font-jet-brains">
 
             <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
                 {/* change language */}
                 <div className="text-left ">
-                    <select name="language" id="drop" onChange={selectOnChange} value={language} 
+                    <select name="language" id="drop" onChange={selectOnChange} value={language}
                         className="border border-black hover:cursor-pointer">
                         <option value="js" className="hover:cursor-pointer">Javascript</option>
                         <option value="c" className="hover:cursor-pointer">C</option>
@@ -130,7 +145,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                     <textarea ref={numberAreaRef} disabled id="row-number" cols="1"
                         className=" text-right border border-black w-10 overflow-hidden resize-none pt-3">
                     </textarea>
-                    <textarea ref={textAreaRef} onScroll={handleScroll} cols="130" name="code" id="code"
+                    <textarea ref={textAreaRef} onScroll={handleScroll} 
+        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange} cols="130" name="code" id="code"
                         className="flex-2 border border-black resize-none pl-3 pt-3"></textarea>
                 </div>
                 <HorizVertSlider resultBoxRef={resultBoxRef} />

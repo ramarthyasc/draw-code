@@ -64,8 +64,7 @@ export function useSecureDataGetter() {
                     return;
                 } else {
                     // server judge container (docker compose error) error - got from default Error handler
-                    console.log(restext);
-                    return;
+                    throw new Error(restext);
                 }
 
             } else if (res.status === 401) {
@@ -101,30 +100,34 @@ export function useSecureDataGetter() {
                         }
                     } catch (err) {
                         console.log(err);
-                        return;
+                        throw err;
                     }
                 } else if (jwtFetch.status === 401) {
                     //RT is invalid
                     const { code } = await jwtFetch.json();
                     console.log(code);
+                    throw new Error(JSON.stringify(code));
                 } else if (jwtFetch.status === 500) {
                     //any server error
                     const defaultServerError = await jwtFetch.text();
                     console.log("HTTP error: ", jwtFetch.status);
                     console.log(defaultServerError);
+                    throw new Error(defaultServerError);
                 } else {
                     // unknown error from server (someone changed statuscode from serverside)
                     console.log("HTTP error: ", jwtFetch.status);
+                    throw new Error(jwtFetch.status.toString());
                 }
 
             } else {
                     // unknown error from server (someone changed statuscode from serverside)
                     console.log("HTTP error: ", res.status);
+                    throw new Error(res.status.toString());
             }
 
         } catch (err) {
             console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
-            return;
+            throw err;
         }
 
     }, []);
