@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
+import type { QuestionName, IBody } from '../types/question';
 //
 //
-type UserDetail = {
+export type UserDetail = {
     userid: string;
     name: string;
     email: string;
@@ -14,9 +15,6 @@ interface IAuthState {
     setUser: Dispatch<SetStateAction<UserDetail>>;
 }
 
-interface IBody {
-    [key: string]: FormDataEntryValue | string
-}
 
 // a “Custom hook” must call at least one Hook at its top level, otherwise it’s just a normal function.That's it
 // Custom hook with side effects for jsonWebToken, user. Returned data ie; data
@@ -24,12 +22,12 @@ export function useSecureDataGetter() {
 
     const [data, setData] = useState("");
 
-    const secureDataGetter = useCallback(async (authState: IAuthState, body?: FormData) => {
+    const secureDataGetter = useCallback(async (authState: IAuthState, qname: QuestionName, body?: FormData) => {
         try {
             let res: Response;
             if (body) {
                 const bodyObject: IBody = Object.fromEntries(body.entries());
-                res = await fetch("/api/draw-submit", {
+                res = await fetch(`/api/draw-submit/${qname}`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -39,7 +37,7 @@ export function useSecureDataGetter() {
                     body: JSON.stringify(bodyObject),
                 })
             } else {
-                res = await fetch("/api/draw-submit", {
+                res = await fetch(`/api/draw-submit/${qname}`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -90,13 +88,13 @@ export function useSecureDataGetter() {
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
                                 setUser: authState.setUser
-                            }, body);
+                            }, qname, body);
                         } else {
                             await secureDataGetter({
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
                                 setUser: authState.setUser
-                            });
+                            }, qname);
                         }
                     } catch (err) {
                         console.log(err);
@@ -120,9 +118,9 @@ export function useSecureDataGetter() {
                 }
 
             } else {
-                    // unknown error from server (someone changed statuscode from serverside)
-                    console.log("HTTP error: ", res.status);
-                    throw new Error(res.status.toString());
+                // unknown error from server (someone changed statuscode from serverside)
+                console.log("HTTP error: ", res.status);
+                throw new Error(res.status.toString());
             }
 
         } catch (err) {

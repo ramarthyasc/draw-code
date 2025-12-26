@@ -47,7 +47,7 @@ afterAll(async (): Promise<void> => {
     // server js object's (Server object) tcp connection with the port is still there. stop it.
     await new Promise<void>((res, rej) => {
         startedServer.close(() => {
-            console.log("Test server has closed from the port: ", TESTPORT);
+            console.log("Test server is closed and has freed the port: ", TESTPORT);
             res();
         });
     })

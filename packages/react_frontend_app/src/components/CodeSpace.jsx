@@ -38,7 +38,12 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 jsonWebToken,
                 setJsonWebToken,
                 setUser
+            },
+            {
+                qname: params.qname,
+                language: language
             }, formData);
+
         } catch (err) {
             setError(err);
         }
@@ -145,8 +150,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                     <textarea ref={numberAreaRef} disabled id="row-number" cols="1"
                         className=" text-right border border-black w-10 overflow-hidden resize-none pt-3">
                     </textarea>
-                    <textarea ref={textAreaRef} onScroll={handleScroll} 
-        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange} cols="130" name="code" id="code"
+                    <textarea ref={textAreaRef} onScroll={handleScroll}
+                        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange} cols="130" name="code" id="code"
                         className="flex-2 border border-black resize-none pl-3 pt-3"></textarea>
                 </div>
                 <HorizVertSlider resultBoxRef={resultBoxRef} />

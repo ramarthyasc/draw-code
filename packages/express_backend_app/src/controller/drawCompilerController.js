@@ -10,6 +10,7 @@ exports.submitPost = (req, res, next) => {
     const codeLanguage = req.body.language;
     const codeData = req.body.code;
     const FILENAME = "main";
+    const { qname } = req.params;
     console.log(codeData);
     // test cases write for that question ; ie; the arguments that we will be giving to the function
 
@@ -19,8 +20,24 @@ exports.submitPost = (req, res, next) => {
     //// create file path & folder
     const codeFolderPath = path.join(__dirname, `../model/sandbox/${codeLanguage}`);
     fs.mkdirSync(codeFolderPath, { recursive: true });
-    //// Store the codefile inside that path
-    const codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
+
+    // Transform the codedata, make it executable (logging / printing - to stdout the user result + problem solution)
+
+    try {
+        generateExecutableCodeFile(codeData, codeLanguage, qname, codeFolderPath, FILENAME, path, fs);
+    } catch (err) {
+        next(err);
+    }
+
+    // //// Store the codefile inside that path
+    // let codeFilePath;
+    // try {
+    //     codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
+    // } catch (err) {
+    //     next(err);
+    // }
+
+
 
     //// execute the file 
     executeCodeContainer(spawn, path, codeLanguage)

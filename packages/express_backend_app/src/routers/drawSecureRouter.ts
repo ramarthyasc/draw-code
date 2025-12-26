@@ -13,4 +13,4 @@ secureRouter.use('/refresh-auth', refreshTokenJwtGen)
 secureRouter.use(corsAllowResponseSetter)
 secureRouter.use(jwtAuth);
 
-secureRouter.post("/draw-submit", submitPost);
+secureRouter.post("/draw-submit/:qname", submitPost);

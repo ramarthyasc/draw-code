@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { generateTemplate } from '../service/drawLangTemplateService';
+import { generateTemplate } from '../service/drawQTemplateService';
 
 export type Language = "js" | "c" ;
 export type QuestionName = "trapping-rain-water" | "is-palindrome" | "three-integer-sum";
