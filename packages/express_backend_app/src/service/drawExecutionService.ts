@@ -1,5 +1,14 @@
 import type { Spawn, PathModule } from "./types/nodeTypes.ts";
 
+interface IExecutionResult {
+    pass: boolean,
+    input: unknown,
+    userOutput: unknown,
+    expOutput: unknown
+}
+type UserLog = string;
+type CaseItems = IExecutionResult | UserLog;
+type EachCaseResult = CaseItems[][];
 exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLanguage: string) => {
     // start the code respective container using dockercompose - which then
     // runs the container with bindmount of the sandbox/c or js, then reads the 
@@ -11,7 +20,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
     let stdout: string;
 
     try {
-        return await new Promise<string>((res, rej) => {
+        return await new Promise<string | EachCaseResult>((res, rej) => {
 
 
             if (codeLanguage === "c") {
@@ -50,7 +59,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                         stderrChunks.push(data);
                         return;
                     }
-                        console.log("docker cli's stderr not collected ...");
+                    console.log("docker cli's stderr not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
@@ -119,11 +128,11 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                             data = Buffer.from(chunk, 'utf-8');
                         }
 
-                        console.log("docker cli's stderr being collected ...");
+                        console.log("docker cli's stderr (piped from the container) being collected ...");
                         stderrChunks.push(data);
                         return;
                     }
-                        console.log("docker cli's stderr not collected ...");
+                    console.log("docker cli's stderr ie; docker warnings not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
@@ -145,7 +154,38 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                         console.log("Good code");
                         // warnings which are stderr chunks are ignored
                         stdout = Buffer.concat(stdoutChunks).toString('utf-8');
-                        res(stdout);
+
+                        // stdout will contain a \n string too as we are doing console.log from container which 
+                        // outputs a \n automatically. So split using \n
+                        //Make it into an array, then send - then we get array of Objects
+                        console.log(stdout);
+                        // casestringArray contains strings - where each contains the userlogs & our resultobject log
+                        const casestringArray: string[] = stdout
+                            .split("_&&_@849\n") // random splitter - so that user logs can't split the string NOTE: BREAKPOINT
+                            .filter((item) => {
+                                return item !== "";
+                            });
+                            console.log(casestringArray);
+                        // Make array of Arrays, where each array is a case - where we have userlogs and our resultobject
+                        const caseArrayArray: EachCaseResult = casestringArray
+                            .map((string: string) => {
+                                return string
+                                    .split("\n")
+                                    .filter((item) => {
+                                        return item !== "";
+                                    })
+                                    .map((str) => {
+                                        try {
+                                            return JSON.parse(str);
+                                        } catch (err) {
+                                            // for normal non parsable strings from user
+                                            return str;
+                                        }
+
+                                    })
+                            })
+                        console.log(caseArrayArray);
+                        res(caseArrayArray);
                     }
 
                 })

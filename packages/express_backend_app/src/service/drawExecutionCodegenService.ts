@@ -17,12 +17,10 @@ function comparer(k, u) {
     function arrayOrObjectOrPrimitiveComparer(known, unknown) {
         if (Array.isArray(known)) {
             if (!Array.isArray(unknown)) {
-                console.log("1")
                 isSame = false;
                 return;
             }
             if (known.length !== unknown.length) {
-                console.log("2")
                 isSame = false;
                 return;
             }
@@ -33,18 +31,15 @@ function comparer(k, u) {
             }
 
             for (let i = 0; i < known.length; i++) {
-                console.log(known[i], unknown[i]);
                 arrayOrObjectOrPrimitiveComparer(known[i], unknown[i]);
                 if (isSame === false) { return; }
             }
         } else if (Object.prototype.toString.call(known) === "[object Object]") {
             if (Object.prototype.toString.call(unknown) !== "[object Object]") {
-                console.log("3")
                 isSame = false;
                 return;
             }
             if (Object.entries(known).length !== Object.entries(unknown).length) {
-                console.log("4")
                 isSame = false;
                 return;
             }
@@ -64,8 +59,6 @@ function comparer(k, u) {
             // BASE CASE
             // From the Array of Array of Array... Arrays, we get the string/number/boolean literals as known & unknown
             if (known !== unknown) {
-                console.log(known, unknown);
-                console.log("5");
                 isSame = false;
                 return;
             }
@@ -77,82 +70,177 @@ function comparer(k, u) {
 `
 }
 
-// create function which returns JSON stringified versions only when Arrays and strings are given. Otherwise, 
-// return the argument value itself 
-// Then put this function wherever template string's variable insertions are given
+// create function which returns JSON stringified versions only when Arrays and Objects are given. Otherwise, 
+// return the argument value itself if not a string. If a string, append "" characters too
+// Then put this function wherever template string's variable insertions are given or inside jsx
+export function stringify(input: unknown) {
+    if (typeof input === "boolean" ||
+        typeof input === "number" ||
+        typeof input === "undefined" ||
+        Object.prototype.toString.call(input) === "[object Null]"
+    ) {
+        return `${input}`;
+    } else if (
+        typeof input === "string"
+    ) {
+        return `"${input}"`;
+    } else if (
+        Object.prototype.toString.call(input) === "[object Array]" ||
+        Object.prototype.toString.call(input) === "[object Object]"
+    ) {
+        // json.stringify removes functions and undefined inside the array or object
+        return JSON.stringify(input);
+    }
+}
 
-function jsExecuterText(testCaseNum: number, caseAndMethod: QuestionMap[QuestionName]) {
+function stringifyText() {
+
     return `
 
-let res;
+function stringify(input) {
+    if ( typeof input === "boolean" ||
+        typeof input === "number" ||
+        typeof input === "undefined" ||
+        Object.prototype.toString.call(input) === "[object Null]"
+    ) {
+        return \`\${input}\`;
+    } else if (
+        typeof input === "string" 
+    ){
+        return \`"\${input}"\`
+    } else if (
+        Object.prototype.toString.call(input) === "[object Array]" ||
+        Object.prototype.toString.call(input) === "[object Object]"
+    ) {
+        // json.stringify removes functions and undefined inside the array or object
+        return JSON.stringify(input);
+    }
+}
+
+`
+}
+
+function jsExecuterText(resName: string, testCaseNum: number, caseAndMethod: QuestionMap[QuestionName]) {
+    return `
+
+let ${resName};
 try {
-     res = solution.${caseAndMethod.method}(${caseAndMethod.caseAndOutput[testCaseNum]?.case});
+     ${resName} = solution.${caseAndMethod.method}(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)});
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
-//res === ${caseAndMethod.caseAndOutput[testCaseNum]?.output} ? console.log("PASS") : console.log("FAIL")
-try {
-    comparer(${caseAndMethod.caseAndOutput[testCaseNum]?.output}, res) ? console.log("PASS") : console.log("FAIL");
-} catch(err) {
-    throw err;
-}
+// try {
+//     comparer(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}, ${resName}) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
 
-    console.log(\`
-Input: 
-${caseAndMethod.caseAndOutput[testCaseNum]?.case}
+// Make a JSON format
+    console.log(\`{ "id": ${testCaseNum},\` + 
+\`"pass": \${comparer(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}, ${resName})},\` +
+\`"input": ${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)},\` +
+\`"userOutput": \${stringify(${resName})},\` +
+\`"expOutput": ${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)} }\`);
 
-Your output:
-\${res}
-
-Expected output:
-${caseAndMethod.caseAndOutput[testCaseNum]?.output}
-
-\`)
-
+    console.log("_&&_@849"); //problem case separator _&&_@849\\n
 `
 }
+///// USE WHEN DOING C CODE JUDGE
+// function cExecuterText(resName: string, testCaseNum: number, caseAndMethod: QuestionMap[QuestionName]) {
+// return `
+//
+//
+// ${resName} = ${caseAndMethod.method}(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)});
+//
+// printf("Input: \\n"
+//       "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)} \\n");
+//
+// printf("Your output: \\n"
+//       "${resName} \\n")
+//
+// printf("Expected output: \\n"
+//       "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)} \\n")
+//
+// `
+// }
 
 export function generateExecutableCodeFile(codeData: string,
     codeLanguage: Language, qname: QuestionName,
-    codeFolderPath: string, filename: string, path: PathModule, fs: FileSystem) {
+    codeFolderPath: string, fileName: string, path: PathModule, fs: FileSystem) {
 
+    let transformedCode: string;
     if (codeLanguage === 'js') {
         // backticks take strings as WYSYG - which means if there are spaces before any string within the ``, then
         // they are taken as is.
-        let transformedCode =
-            `${codeData}
+        transformedCode =
+            `
+
+${codeData}
 
 const solution = new Solution();
+
+
 `
 
         switch (qname) {
 
             case "trapping-rain-water": {
                 const caseAndMethod = questionMap['trapping-rain-water'];
-                transformedCode += jsResultComparerText() + "\n\n First case" + jsExecuterText(0, caseAndMethod);
+                transformedCode += jsResultComparerText() + stringifyText() +
+                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod);
 
                 break;
             }
             case "is-palindrome": {
                 const caseAndMethod = questionMap['is-palindrome'];
 
-                transformedCode += jsResultComparerText() + "\n\n First case" + jsExecuterText(0, caseAndMethod) +
-                    "\n\n Second case" + jsExecuterText(1, caseAndMethod);
+                transformedCode += jsResultComparerText() + stringifyText() +
+                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
+                    "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
                 break;
             }
             case "three-integer-sum": {
                 const caseAndMethod = questionMap['three-integer-sum'];
-                transformedCode += jsResultComparerText() + "\n\n First case" + jsExecuterText(0, caseAndMethod) +
-                    "\n\n Second case" + jsExecuterText(1, caseAndMethod);
+                transformedCode += jsResultComparerText() + stringifyText() +
+                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
+                    "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
 
                 break;
             }
 
         }
+    } else if (codeLanguage === 'c') {
+        // PASS right now 
+        transformedCode =
+            `
+
+#include <stdio.h>
+
+${codeData}
+
+int main(void) {
+    printf("Coming soon ...")
+    return 0;
+}
+
+`
+    } else {
+        // caught using next(err) in the controller
+        throw new Error("Unknown language");
     }
 
+    const codeFilePath = path.join(codeFolderPath, `${fileName}.${codeLanguage}`);
+    try {
+        fs.writeFileSync(codeFilePath, transformedCode);
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+
+    return codeFilePath;
 
 }
 

@@ -47,22 +47,24 @@ export function useSecureDataGetter() {
                 })
             }
 
-            if (res.ok || res.status === 500) {
-                // Server's draw-submit route is reached
-                //
-                // res.json is res.text + JSON.parse().
-                // res.text is the promise in which it internally receives buffer streams from the server,
-                // and then it concats it, parses to a string, then sends the resolve
-                // ie; the concated string parsed version.
+            if (res.ok) {
+                
+                // server judge service 
+                const resJson = await res.json();
+                setData(resJson);
+                return;
 
-                const restext = await res.text();
-                if (res.ok) {
-                    // server judge service 
-                    setData(restext);
+            } else if (res.status === 400 || res.status === 500) {
+
+                const resText = await res.text();
+
+                if (res.status === 400) {
+                    // wrong answer submitted. Error got from inside the container
+                    setData(resText);
                     return;
                 } else {
-                    // server judge container (docker compose error) error - got from default Error handler
-                    throw new Error(restext);
+                    // Server default error
+                    throw new Error(resText);
                 }
 
             } else if (res.status === 401) {

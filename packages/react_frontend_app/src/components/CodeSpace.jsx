@@ -39,10 +39,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 setJsonWebToken,
                 setUser
             },
-            {
-                qname: params.qname,
-                language: language
-            }, formData);
+                params.qname,
+                formData);
 
         } catch (err) {
             setError(err);

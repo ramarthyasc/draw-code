@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { spawn } = require('node:child_process');
 const { executeCodeContainer } = require('../service/drawExecutionService');
-const { generateCodeFile } = require('../service/drawFileService.js');
+const { generateExecutableCodeFile } = require('../service/drawExecutionCodegenService');
 
 
 exports.submitPost = (req, res, next) => {
@@ -23,26 +23,24 @@ exports.submitPost = (req, res, next) => {
 
     // Transform the codedata, make it executable (logging / printing - to stdout the user result + problem solution)
 
+    let codeFilePath;
     try {
-        generateExecutableCodeFile(codeData, codeLanguage, qname, codeFolderPath, FILENAME, path, fs);
+        codeFilePath = generateExecutableCodeFile(codeData, codeLanguage, qname, codeFolderPath, FILENAME, path, fs);
     } catch (err) {
         next(err);
     }
-
-    // //// Store the codefile inside that path
-    // let codeFilePath;
-    // try {
-    //     codeFilePath = generateCodeFile(fs, path, FILENAME, codeFolderPath, codeData, codeLanguage);
-    // } catch (err) {
-    //     next(err);
-    // }
-
 
 
     //// execute the file 
     executeCodeContainer(spawn, path, codeLanguage)
         .then((value) => {
-            res.send(value);
+            if (typeof value === "string") {
+                // for error stack
+                res.status(400).send(value);
+            } else {
+                // for Result ie; Array of objects
+                res.json(value);
+            }
         })
         .catch((error) => {
             console.log("Logging docker compose error: ", error);
@@ -51,7 +49,7 @@ exports.submitPost = (req, res, next) => {
         .finally(() => {
             console.log("Child process' Promise settled");
             // delete the user code file
-            fs.rmSync(codeFilePath);
+            // fs.rmSync(codeFilePath);
         })
 
     //then send the answer cases in a json file to the client

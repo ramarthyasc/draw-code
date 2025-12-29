@@ -18,6 +18,7 @@ exports.addAndRevokeRTService = async (addRefreshToken, { userid, token,
 
   // Create Refresh tokens which are not the First one of the Chain for a user's browser
   if (rotated_from) {
+    // Or you can revoke the Refresh token chain for more security. But now this is enough
     await revokeRefreshToken(detailRefreshToken); //revoke previous RT of user's browser 
 
     // create new RT with the same absolute expiry time as the previous RT
@@ -75,7 +76,7 @@ exports.verifyValidityExpiryRevokeRTService = async (token, searchRefreshToken, 
       console.log("expired ?")
     // Revoke refresh token of the user ie; Logout the user/hacker from the browser. So that he 
     // have to create new Refresh token from start - from the entry point ie; Signin through google.
-    await revokeRefreshToken(detailRefreshToken[0])
+    await revokeOneRefreshTokenChain(detailRefreshToken[0])
 
 
     if (now > expires_at) {
