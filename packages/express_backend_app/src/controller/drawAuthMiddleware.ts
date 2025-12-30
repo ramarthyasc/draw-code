@@ -68,6 +68,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 export const refreshTokenJwtGen = async (req: Request, res: Response) => {
 
     const refreshToken: string | undefined = req.cookies?.refreshToken;
+    console.log(refreshToken);
 
 
     let response: CodeResponse;

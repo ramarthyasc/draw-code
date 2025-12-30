@@ -7,7 +7,7 @@ class Solution {
     * @return {boolean}
     */
     isPalindrome(s) {
-console.log("hello")
+
     }
 }
 

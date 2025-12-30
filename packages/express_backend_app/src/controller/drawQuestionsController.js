@@ -2,6 +2,7 @@ const { questionsList, questionDetailsList } = require("../model/drawQuestionsIn
 
 exports.questionsGet = (req, res, next) => {
 
+    console.log("HELLOOO BOIIII")
     console.log(JSON.stringify(req.params))
 
     const params = req.params;

@@ -42,7 +42,9 @@ function Home() {
             }
         }
         questionsListfetcher();
-
+        return () => {
+            console.log("UNMOUNT HOME");
+        }
 
     }, [])
 

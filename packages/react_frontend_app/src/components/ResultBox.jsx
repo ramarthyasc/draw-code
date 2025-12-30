@@ -1,32 +1,15 @@
 import { forwardRef } from "react";
+import { stringify } from "./helperFunctions/stringify";
+import { QuestionCases } from "./QuestionCases";
 
-export function stringify(input) {
-    if (typeof input === "boolean" ||
-        typeof input === "number" ||
-        typeof input === "undefined" ||
-        Object.prototype.toString.call(input) === "[object Null]"
-    ) {
-        return `${input}`;
-    } else if (
-        typeof input === "string"
-    ) {
-        return `"${input}"`;
-    } else if (
-        Object.prototype.toString.call(input) === "[object Array]" ||
-        Object.prototype.toString.call(input) === "[object Object]"
-    ) {
-        // json.stringify removes functions and undefined inside the array or object
-        return JSON.stringify(input);
-    }
-}
 
 export const ResultBox = forwardRef((props, resultBoxRef) => {
-    console.log(props.result)
 
     if (props.result === "") {
+        // default - show the cases
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
-            default
+                <QuestionCases />
             </div>
         )
     } else if (typeof props.result === "string") {
@@ -79,11 +62,11 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                                                 </div>
                                             )
                                         } else {
-                                            const userlog = result[i-1];
+                                            const userlog = result[i - 1];
                                             return (
-                                                <div key={i-1}>
+                                                <div key={i - 1}>
                                                     <div className="border border-solid rounded-md border-gray-700 bg-gray-200 text-gray-800" >
-                                                        Log {i-1}:
+                                                        Log {i - 1}:
                                                     </div>
                                                     <div>
                                                         {stringify(userlog)}

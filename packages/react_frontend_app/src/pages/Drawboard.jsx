@@ -26,6 +26,7 @@ function Drawboard() {
         async function questionDetailsFetcher() {
 
             try {
+                console.log("HEEEYYYYY")
                 let res = await fetch(`/draw-question/${params.qname}`, {
                     method: "GET",
                     credentials: 'include',
@@ -48,7 +49,9 @@ function Drawboard() {
         }
 
         questionDetailsFetcher();
-
+        return () => {
+            console.log("UNMOUNT");
+        }
 
     }, []);
 
@@ -78,11 +81,11 @@ function Drawboard() {
 
             <>
                 <div className='space'>
-                    <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
+                    <QuestionContext.Provider value={{ isCoding, setIsCoding, questionDetails }} >
                         <QuestionTab questionDetails={questionDetails} />
-                    </QuestionContext.Provider>
                     <HorizVertSlider codespaceRef={codespaceRef} />
                     <CodeSpace ref={codespaceRef} />
+                    </QuestionContext.Provider>
                 </div>
             </>
         )

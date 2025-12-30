@@ -2,20 +2,21 @@ import { useEffect, useState, useRef } from 'react';
 import { ErrorContext } from '../context/ErrorContext';
 
 
-// Used for When you Start the App/ Refresh your page. That's it . That's the only use of this util.
-// (If there is Valid refresh token, then generate new JWT from server. If no Valid RT, then don't give access)
+// Used for Setting the jwt, loggedin state, userstate When you Start the App/ Refresh your page. That's it . That's the only use of this util.
+// (If there is Valid refresh token, then generate new JWT from server. If no Valid RT, then jwt & user is undefined, logged in is false - by default)
 //
-function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJsonWebToken, setUser }) {
+
+function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
     console.log("Jwtfetcher")
 
-    const [rtError, setRtError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState();
     const isMountedRef = useRef(false);
 
 
+    
     useEffect(() => {
         async function fetcher() {
-
-            if (!jsonWebToken) {
 
                 try {
 
@@ -32,7 +33,6 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
                         setJsonWebToken(accessToken);
                         setIsLoggedIn(true);
                         setUser(userDetail);
-                        setRtError(false);
 
                     } else {
 
@@ -40,28 +40,27 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
                             const { code } = await res.json();
                             console.log("HTTP response error: ", res.status);
                             console.log(code);
-                            setRtError(true);
-                            return;
 
                         } else if (res.status === 500) {
                             // Error handler default server Error
                             const defaultServerError = await res.text();
                             console.log("HTTP response error: ", res.status);
                             console.log(defaultServerError);
-                            return;
+                            setError(new Error("Server default error"));
                         } else {
                             // unknown server send error
                             console.log("HTTP response error: ", res.status);
+                            setError(new Error("Server unknown status error"));
                         }
                     }
 
                 } catch (err) {
                     console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
-                    return;
+                    setError(new Error("Network error"));
 
                 }
+                setIsLoading(false);
 
-            }
 
         }
 
@@ -91,23 +90,14 @@ function JwtFetcher({ children, jsonWebToken, isLoggedIn, setIsLoggedIn, setJson
 
     //Runs this only if we refreshed the page 
 
-    //Note here
-    // When there is no jsonWebToken, then it is always noLogged in as they always go together.
-    //NOTE: (Refresh page flow and Signout page flow)
-    if (!isLoggedIn) {
-        if (rtError === true) { return <>{children}</> } // Only return DYNAMIC RENDERS (render the Children) only after
-        //we made sure that useEffects is run fully in here itself.
-        return "...loading"; // block the flow to the children - so that useEffect runs here. (useEffects are prevented from compounding & running last
-        // ie; after all children and things are rendered)
-    }
+    if (error) { throw error; }
+    //we made sure that useEffects is run fully in here itself.
+    if (isLoading) { return "...loading"; }
 
 
     // Return children after we made sure that useEffects ran here itself. Here, it returns if isLoggedIn is true NOTE: (In Normal flow)
     return (
-
-        <ErrorContext.Provider value={setRtError}>
-            <>{children}</>
-        </ErrorContext.Provider>
+        <>{children}</>
         //Render this first in Real DOM, then runs useEfects (only 1 time) - which schedule state change. Then reruns the component.
         // which gives the The main render we need. This all happens fast that you won't see the initial Children (typically, we use "loading.." text) page.
     )
