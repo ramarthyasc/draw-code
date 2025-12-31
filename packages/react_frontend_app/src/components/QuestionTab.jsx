@@ -5,12 +5,12 @@ import { ButtonTab } from './ButtonTab.jsx';
 import { QuestionContext } from '../context/QuestionContext.js';
 
 export function QuestionTab() {
-    const { questionDetails } = useContext(QuestionContext);
+    const { qDetailsQNextPrev } = useContext(QuestionContext);
 
     return (
         <div className="flex flex-col flex-1 font-jet-brains h-[calc(100vh-50px)]" >
             <ButtonTab />
-            <Question questionDetails={questionDetails} />
+            <Question qDetailsQNextPrev={qDetailsQNextPrev} />
         </div>
     )
 }

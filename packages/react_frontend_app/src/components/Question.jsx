@@ -1,7 +1,7 @@
 // import "../styles/Question.css";
 
 export function Question(props) {
-    const question = props.questionDetails;
+    const question = props.qDetailsQNextPrev.questionDetails;
     const colorMap = {
         easy: "text-green-500",
         medium: "text-orange-600",

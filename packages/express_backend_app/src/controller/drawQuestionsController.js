@@ -2,7 +2,6 @@ const { questionsList, questionDetailsList } = require("../model/drawQuestionsIn
 
 exports.questionsGet = (req, res, next) => {
 
-    console.log("HELLOOO BOIIII")
     console.log(JSON.stringify(req.params))
 
     const params = req.params;
@@ -16,8 +15,17 @@ exports.questionsGet = (req, res, next) => {
         if (!questionDetails) {
             next(new Error("Question not found"));
         }
+        // constructing prevNextQuestionsArray 
+        const prevQuestion = questionsList[questionDetails.id - 1];
+        const nextQuestion = questionsList[questionDetails.id + 1];
+        const prevNextQuestionsArray = [];
+        prevQuestion ? prevNextQuestionsArray.push(prevQuestion) : prevNextQuestionsArray.push(null);
+        nextQuestion ? prevNextQuestionsArray.push(nextQuestion) : prevNextQuestionsArray.push(null);
+        // construction end
 
-        return res.json(questionDetails);
+        const qDetailsQNextPrev = { questionDetails, prevNextQuestionsArray}
+        console.log(qDetailsQNextPrev);
+        return res.json(qDetailsQNextPrev);
 
     }
 

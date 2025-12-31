@@ -11,6 +11,7 @@ function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState();
     const [questionsList, setQuestionsList] = useState();
+    console.log(questionsList);
 
     useEffect(() => {
         async function questionsListfetcher() {

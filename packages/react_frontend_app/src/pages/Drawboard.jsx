@@ -19,7 +19,7 @@ function Drawboard() {
     const [isCoding, setIsCoding] = useState(false);
     const params = useParams();
     const [isLoading, setIsLoading] = useState(true);
-    const [questionDetails, setQuestionDetails] = useState();
+    const [qDetailsQNextPrev, setQDetailsQNextPrev] = useState();
     const [error, setError] = useState();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ function Drawboard() {
 
                 if (res.ok) {
                     const qDetails = await res.json();
-                    setQuestionDetails(qDetails);
+                    setQDetailsQNextPrev(qDetails);
                     setIsLoading(false);
                 } else {
                     console.log("HTTP Status: ", res.status);
@@ -52,7 +52,7 @@ function Drawboard() {
             console.log("UNMOUNTING DRAWBOARD");
         }
 
-    }, []);
+    }, [params.qname]);
 
     if (error) {
         throw error;
@@ -65,7 +65,7 @@ function Drawboard() {
     return (
         <>
             <div className='space'>
-                <QuestionContext.Provider value={{ isCoding, setIsCoding, questionDetails }} >
+                <QuestionContext.Provider value={{ isCoding, setIsCoding, qDetailsQNextPrev }} >
                     <QuestionTab />
 
                     {!isCoding ? (

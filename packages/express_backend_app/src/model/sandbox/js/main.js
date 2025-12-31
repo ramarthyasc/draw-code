@@ -3,11 +3,11 @@
 class Solution {
 
     /**
-    * @param {string} s
-    * @return {boolean}
+    * @param {number[]} height
+    * @return {number}
     */
-    isPalindrome(s) {
-
+    waterTrap(height) {
+console.log("hello")
     }
 }
 
@@ -105,14 +105,14 @@ function stringify(input) {
 
 let res0;
 try {
-     res0 = solution.isPalindrome("Was it a car or a cat I saw?");
+     res0 = solution.waterTrap([0,2,0,3,1,0,1,3,2,1]);
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(true, res0) ? 
+//     comparer(9, res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -120,36 +120,9 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer(true, res0)},` +
-`"input": "Was it a car or a cat I saw?",` +
+`"pass": ${comparer(9, res0)},` +
+`"input": [0,2,0,3,1,0,1,3,2,1],` +
 `"userOutput": ${stringify(res0)},` +
-`"expOutput": true }`);
+`"expOutput": 9 }`);
 
-    console.log("_&&_@849"); //problem case separator _&&_@849\n
-
-
- //Second case
-
-let res1;
-try {
-     res1 = solution.isPalindrome("tab a cat");
-} catch(err) {
-    // to be written to FD2
-    throw err;
-}
-
-// try {
-//     comparer(false, res1) ? 
-//         console.log("PASS<br>") : console.log("FAIL<br>");
-// } catch(err) {
-//     throw err;
-// }
-
-// Make a JSON format
-    console.log(`{ "id": 1,` + 
-`"pass": ${comparer(false, res1)},` +
-`"input": "tab a cat",` +
-`"userOutput": ${stringify(res1)},` +
-`"expOutput": false }`);
-
-    console.log("_&&_@849"); //problem case separator _&&_@849\n
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n

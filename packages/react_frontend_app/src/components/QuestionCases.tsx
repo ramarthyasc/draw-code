@@ -1,9 +1,10 @@
 import { useContext } from "react"
 import { QuestionContext } from "../context/QuestionContext"
 import { ActiveOrNotButton } from "./utilityComponents/ActiveOrNotButton";
-import { useIsButtonActive } from "./customhooks/useIsButtonActive";
+import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
 import type { IActiveOrNotButtonProps } from "./utilityComponents/ActiveOrNotButton";
 import type { SetStateAction, Dispatch } from "react";
+import type { QuestionName } from "./types/question";
 
 interface IExample {
     id: number;
@@ -19,16 +20,24 @@ interface ITips {
 }
 interface IQuestionDetails {
     id: number;
-    name: string;
+    name: QuestionName;
     title: string;
     difficulty: string;
     examples: IExample[];
     constraints: string[];
     tips: ITips[];
-
+}
+interface IPrevNextQuestion {
+    id: number;
+    name: QuestionName;
+    difficulty: string;
+}
+interface IQDetailsQNextPrev {
+    questionDetails: IQuestionDetails;
+    prevNextQuestionsArray: IPrevNextQuestion[];
 }
 export interface IQuestionContext {
-    questionDetails: IQuestionDetails;
+    qDetailsQNextPrev: IQDetailsQNextPrev;
     isCoding: boolean;
     setIsCoding: Dispatch<SetStateAction<boolean>>;
 }
@@ -43,7 +52,8 @@ export function QuestionCases() {
     if (!context) {
         throw new Error("QuestionContext must be used")
     }
-    const { questionDetails } = context;
+    const { qDetailsQNextPrev } = context;
+    const questionDetails = qDetailsQNextPrev.questionDetails;
     const { activeButtonId, handleMouseDown, handleMouseUp } = useIsButtonActive("case0");
 
     const case0: IActiveOrNotButtonProps = {
@@ -64,8 +74,8 @@ export function QuestionCases() {
     if (questionDetails.examples.length === 1) {
         return (
             <div>
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }} 
-                buttonProps={case0} />
+                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
+                    buttonProps={case0} />
                 <div> Input: </div>
                 <div> {inputSanitize(questionDetails.examples[activeCaseNum].input)} </div>
                 <div> Output: </div>
@@ -76,12 +86,12 @@ export function QuestionCases() {
 
         return (
             <div>
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }} 
-                buttonProps={case0} />
+                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
+                    buttonProps={case0} />
                 {/* when you put same component multiple times,then they are duplicated like that when you  */}
                 {/* put many divs. So think of the component as many copies. Not same reference. */}
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }} 
-                buttonProps={case1} />
+                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
+                    buttonProps={case1} />
 
                 <div> Input: </div>
                 <div> {inputSanitize(questionDetails.examples[activeCaseNum].input)} </div>

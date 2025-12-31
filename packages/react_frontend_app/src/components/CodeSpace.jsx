@@ -113,7 +113,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
         fetcher();
 
-    }, [language]);
+    }, [params.qname, language]);
 
 
     function selectOnChange(e) {

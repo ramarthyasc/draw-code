@@ -145,7 +145,7 @@ try {
 \`"userOutput": \${stringify(${resName})},\` +
 \`"expOutput": ${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)} }\`);
 
-    console.log("_&&_@849"); //problem case separator _&&_@849\\n
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\\n
 `
 }
 ///// USE WHEN DOING C CODE JUDGE

@@ -6,7 +6,7 @@ import { QuestionCases } from "./QuestionCases";
 export const ResultBox = forwardRef((props, resultBoxRef) => {
 
     if (props.result === "") {
-        // default - show the cases
+        // default - show the cases - when Codespace component rendered initially
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
                 <QuestionCases />
@@ -46,6 +46,7 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
         )
     } else {
         //If prop.result is an Array of Arrays, then it's the Case Result
+        console.log(props.result);
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
                 {
@@ -60,7 +61,9 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                                         if (i === 0) {
                                             // reversing the mapping order
                                             const item = result[result.length - 1]
-                                            console.log(i);
+                                            console.log("item", item);
+                                            console.log(JSON.stringify(item.pass))
+                                            console.log(item.input)
                                             return (
                                                 <div key={i}>
                                                     <div> {item.pass ?
@@ -82,7 +85,7 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                                         } else {
                                             const userlog = result[i - 1];
                                             return (
-                                                <div key={i - 1}>
+                                                <div key={i}>
                                                     <div className="border border-solid rounded-md border-gray-700 bg-gray-200 text-gray-800" >
                                                         Log {i - 1}:
                                                     </div>

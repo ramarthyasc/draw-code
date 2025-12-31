@@ -6,13 +6,13 @@ export interface IOneClickButtonProps {
     color: ButtonColors;
 }
 
-type OneClickButtonClass = {
+export type OneClickButtonClass = {
     [key in ButtonColors]?: {
         normal: string,
     };
 }
 interface IOneClickButtonComponent {
-    interactionFuncs: IInteractionFunctions;
+    interactionFuncs?: IInteractionFunctions;
     buttonProps: IOneClickButtonProps;
 }
 
@@ -30,8 +30,8 @@ export function OneClickButton({ interactionFuncs, buttonProps }: IOneClickButto
 
     return (
 
-        <button id={buttonProps.id} onMouseDown={interactionFuncs.onMouseDown} 
-        onMouseUp={interactionFuncs.onMouseUp}
+        <button id={buttonProps.id} onMouseDown={interactionFuncs?.onMouseDown} 
+        onMouseUp={interactionFuncs?.onMouseUp}
             className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants[buttonProps.color]?.normal}`}
             >{buttonProps.name}</button>
     )
