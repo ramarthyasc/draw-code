@@ -57,7 +57,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
             status: 401,
         }
         return res.status(response.status).json(response)
-        // send request to /api/refresh-auth/
+        // send request to /api/refresh-auth
     }
 
     // Good jwt - then go to the requested route (Secure route)
@@ -128,7 +128,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
                 maxAge: Number(process.env.RT_EXPIRES_IN),
                 secure: false, // As the localserver is not https. Change it to secure when in Production.
                 sameSite: "lax",
-                path: "/api/refresh-auth/",
+                path: "/api/refresh-auth",
             });
             return res.json({ accessToken, userDetail });
 

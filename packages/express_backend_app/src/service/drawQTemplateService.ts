@@ -78,10 +78,10 @@ export const qtemplate: QuestionTemplateList = {
     }
 }`,
         c: `int waterTrap(int *height) {
-
 }
 
-        `
+           C Coming Soon ...
+`
     },
     "is-palindrome": {
         js: `class Solution {
@@ -95,8 +95,10 @@ export const qtemplate: QuestionTemplateList = {
     }
 }`,
         c: `int isPalindrome(const char *s) {
+}
 
-}`
+           C Coming Soon ...
+`
     },
     "three-integer-sum": {
         js: `class Solution {
@@ -109,7 +111,7 @@ export const qtemplate: QuestionTemplateList = {
 
     }
 }`,
-        c: `Coming soon...`
+        c: `C Coming soon...`
 
     }
 }

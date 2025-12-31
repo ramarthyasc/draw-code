@@ -73,7 +73,7 @@ export function useSecureDataGetter() {
                 console.log(code)
                 // now fetch the RT & JWT
                 //
-                const jwtFetch = await fetch("/api/refresh-auth/", {
+                const jwtFetch = await fetch("/api/refresh-auth", {
                     method: "GET",
                     credentials: "include"
                 })
@@ -106,7 +106,8 @@ export function useSecureDataGetter() {
                     //RT is invalid
                     const { code } = await jwtFetch.json();
                     console.log(code);
-                    throw new Error(JSON.stringify(code));
+                    // Show in the ResultBox that You have to signin to submit (Instead of throwing Error)
+                    setData("signin");
                 } else if (jwtFetch.status === 500) {
                     //any server error
                     const defaultServerError = await jwtFetch.text();

@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import { ErrorContext } from '../context/ErrorContext';
 
 
 // Used for Setting the jwt, loggedin state, userstate When you Start the App/ Refresh your page. That's it . That's the only use of this util.
-// (If there is Valid refresh token, then generate new JWT from server. If no Valid RT, then jwt & user is undefined, logged in is false - by default)
+// (If there is Valid refresh token, then generate new JWT from server.
+// If no Valid RT, then jwt & user is undefined, loggedin is false - by default)
 //
 
 function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
@@ -14,52 +14,52 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
     const isMountedRef = useRef(false);
 
 
-    
+
     useEffect(() => {
         async function fetcher() {
 
-                try {
+            try {
 
-                    const res = await fetch('/api/refresh-auth/', {
-                        method: "GET",
-                        credentials: 'include',
-                    })
+                const res = await fetch('/api/refresh-auth', {
+                    method: "GET",
+                    credentials: 'include',
+                })
 
 
-                    if (res.ok) {
+                if (res.ok) {
 
-                        const { accessToken, userDetail } = await res.json();
+                    const { accessToken, userDetail } = await res.json();
 
-                        setJsonWebToken(accessToken);
-                        setIsLoggedIn(true);
-                        setUser(userDetail);
+                    setJsonWebToken(accessToken);
+                    setIsLoggedIn(true);
+                    setUser(userDetail);
 
+                } else {
+
+                    if (res.status === 401) {
+                        const { code } = await res.json();
+                        console.log("HTTP response error: ", res.status);
+                        console.log(code);
+
+                    } else if (res.status === 500) {
+                        // Error handler default server Error
+                        const defaultServerError = await res.text();
+                        console.log("HTTP response error: ", res.status);
+                        console.log(defaultServerError);
+                        setError(new Error("Server default error"));
                     } else {
-
-                        if (res.status === 401) {
-                            const { code } = await res.json();
-                            console.log("HTTP response error: ", res.status);
-                            console.log(code);
-
-                        } else if (res.status === 500) {
-                            // Error handler default server Error
-                            const defaultServerError = await res.text();
-                            console.log("HTTP response error: ", res.status);
-                            console.log(defaultServerError);
-                            setError(new Error("Server default error"));
-                        } else {
-                            // unknown server send error
-                            console.log("HTTP response error: ", res.status);
-                            setError(new Error("Server unknown status error"));
-                        }
+                        // unknown server send error
+                        console.log("HTTP response error: ", res.status);
+                        setError(new Error("Server unknown status error"));
                     }
-
-                } catch (err) {
-                    console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
-                    setError(new Error("Network error"));
-
                 }
-                setIsLoading(false);
+
+            } catch (err) {
+                console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
+                setError(new Error("Network error"));
+
+            }
+            setIsLoading(false);
 
 
         }

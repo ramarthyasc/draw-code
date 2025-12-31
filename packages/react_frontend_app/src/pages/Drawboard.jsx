@@ -26,7 +26,6 @@ function Drawboard() {
         async function questionDetailsFetcher() {
 
             try {
-                console.log("HEEEYYYYY")
                 let res = await fetch(`/draw-question/${params.qname}`, {
                     method: "GET",
                     credentials: 'include',
@@ -50,7 +49,7 @@ function Drawboard() {
 
         questionDetailsFetcher();
         return () => {
-            console.log("UNMOUNT");
+            console.log("UNMOUNTING DRAWBOARD");
         }
 
     }, []);
@@ -63,33 +62,29 @@ function Drawboard() {
         return "loading..."
     }
 
-    if (!isCoding) {
-        return (
-            <>
-                <div className='space'>
-                    <QuestionContext.Provider value={{ isCoding, setIsCoding }} >
-                        <QuestionTab questionDetails={questionDetails} />
-                    </QuestionContext.Provider>
-                    <Slider canvasRef={canvasRef} setCanvasEdgeMotionCoord={setCanvasEdgeMotionCoord} />
-                    <Canvas ref={canvasRef} canvasEdgeMotionCoord={canvasEdgeMotionCoord} />
-                </div>
-            </>
-        )
+    return (
+        <>
+            <div className='space'>
+                <QuestionContext.Provider value={{ isCoding, setIsCoding, questionDetails }} >
+                    <QuestionTab />
 
-    } else {
-        return (
+                    {!isCoding ? (
+                        <>
+                            <Slider canvasRef={canvasRef} setCanvasEdgeMotionCoord={setCanvasEdgeMotionCoord} />
+                            <Canvas ref={canvasRef} canvasEdgeMotionCoord={canvasEdgeMotionCoord} />
+                        </>) : (
+                        <>
+                            <HorizVertSlider codespaceRef={codespaceRef} />
+                            <CodeSpace ref={codespaceRef} />
 
-            <>
-                <div className='space'>
-                    <QuestionContext.Provider value={{ isCoding, setIsCoding, questionDetails }} >
-                        <QuestionTab questionDetails={questionDetails} />
-                    <HorizVertSlider codespaceRef={codespaceRef} />
-                    <CodeSpace ref={codespaceRef} />
-                    </QuestionContext.Provider>
-                </div>
-            </>
-        )
-    }
+                        </>
+                    )}
+
+                </QuestionContext.Provider>
+            </div>
+        </>
+    )
+
 
 
 

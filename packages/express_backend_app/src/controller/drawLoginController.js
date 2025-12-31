@@ -59,7 +59,7 @@ exports.jwtRefreshTokenCreatorPost = async (req, res) => {
         maxAge: Number(process.env.RT_EXPIRES_IN),
         secure: false, // As the localserver is not https. Change it to secure when in Production.
         sameSite: "lax",
-        path: "/api/refresh-auth/",
+        path: "/api/refresh-auth",
     });
 
     res.json({ accessToken, userDetail });

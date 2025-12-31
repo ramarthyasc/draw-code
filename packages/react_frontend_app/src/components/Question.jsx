@@ -8,7 +8,7 @@ export function Question(props) {
         hard: "text-red-700"
     }
     return (
-        <div className="flex-2 p-4 text-left overflow-y-auto border-black border-solid border-t-0 border-x border-b mx-3 mt-0 mb-2 ">
+        <div className="flex-2 p-4 text-left overflow-y-auto border-black border-solid border-t-0 border-x border-b mx-3 mt-0 mb-2">
             <h2 className="text-gray-800 font-extrabold text-2xl mb-2">{question.title}</h2>
             <p className={`${colorMap[question.difficulty]} font-bold bg-gray-200 inline-block px-2 py-1 rounded-lg mb-2`} >{question.difficulty}</p>
             <br />

@@ -219,10 +219,10 @@ const solution = new Solution();
 
 #include <stdio.h>
 
-${codeData}
+//remove \ from here to insert the Codedata:  \${codeData}
 
 int main(void) {
-    printf("Coming soon ...")
+    printf("Coming soon ...");
     return 0;
 }
 
