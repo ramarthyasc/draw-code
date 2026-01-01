@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 import { QuestionContext } from "../context/QuestionContext";
 import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
 import type { IActiveOrNotButtonProps } from "./utilityComponents/ActiveOrNotButton";
@@ -85,11 +85,11 @@ export function ButtonTab() {
                 </div>
             </div>
             <div className="ml-5 w-max">
-                <OneClickButton interactionFuncs={{ onMouseDown: codedrawHandleDown, onMouseUp: codedrawHandleUp }}
-                    buttonProps={isCodingProps} />
-
-                {/* <div>CODE-SPACE ------&gt;</div> */}
+                    <OneClickButton interactionFuncs={{ onMouseDown: codedrawHandleDown, onMouseUp: codedrawHandleUp }}
+                        buttonProps={isCodingProps} />
             </div>
         </div>
     )
 }
+
+

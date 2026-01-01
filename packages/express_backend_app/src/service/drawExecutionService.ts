@@ -1,10 +1,11 @@
 import type { Spawn, PathModule } from "./types/nodeTypes.ts";
 
 interface IExecutionResult {
-    pass: boolean,
-    input: unknown,
-    userOutput: unknown,
-    expOutput: unknown
+    id: number;
+    pass: boolean;
+    input: string;
+    userOutput: string;
+    expOutput: string;
 }
 type UserLog = string;
 type CaseItems = IExecutionResult | UserLog;
@@ -165,7 +166,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                             .filter((item) => {
                                 return item !== "";
                             });
-                            console.log(casestringArray);
+                        console.log(casestringArray);
                         // Make array of Arrays, where each array is a case - where we have userlogs and our resultobject
                         const caseArrayArray: EachCaseResult = casestringArray
                             .map((string: string) => {
@@ -185,6 +186,7 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                                     })
                             })
                         console.log(caseArrayArray);
+
                         res(caseArrayArray);
                     }
 

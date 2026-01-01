@@ -61,9 +61,6 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                                         if (i === 0) {
                                             // reversing the mapping order
                                             const item = result[result.length - 1]
-                                            console.log("item", item);
-                                            console.log(JSON.stringify(item.pass))
-                                            console.log(item.input)
                                             return (
                                                 <div key={i}>
                                                     <div> {item.pass ?
@@ -75,11 +72,11 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                                                         </div>}
                                                     </div>
                                                     <div> Input: </div>
-                                                    <div> {stringify(item.input)} </div>
+                                                    <div> {item.input} </div>
                                                     <div> My Output: </div>
-                                                    <div> {stringify(item.userOutput)} </div>
+                                                    <div> {item.userOutput} </div>
                                                     <div> Expected Output: </div>
-                                                    <div> {stringify(item.expOutput)} </div>
+                                                    <div> {item.expOutput} </div>
                                                 </div>
                                             )
                                         } else {

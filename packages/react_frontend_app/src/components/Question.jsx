@@ -1,4 +1,3 @@
-// import "../styles/Question.css";
 
 export function Question(props) {
     const question = props.qDetailsQNextPrev.questionDetails;

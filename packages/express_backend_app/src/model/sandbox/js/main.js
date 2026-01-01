@@ -3,11 +3,11 @@
 class Solution {
 
     /**
-    * @param {number[]} height
-    * @return {number}
+    * @param {number[]} nums
+    * @return {number[][]}
     */
-    waterTrap(height) {
-console.log("hello")
+    threeSum(nums) {
+
     }
 }
 
@@ -105,14 +105,14 @@ function stringify(input) {
 
 let res0;
 try {
-     res0 = solution.waterTrap([0,2,0,3,1,0,1,3,2,1]);
+     res0 = solution.threeSum([-1,0,1,2,-1,-4]);
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(9, res0) ? 
+//     comparer([[-1,-1,2],[-1,0,1]], res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -120,9 +120,42 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer(9, res0)},` +
-`"input": [0,2,0,3,1,0,1,3,2,1],` +
-`"userOutput": ${stringify(res0)},` +
-`"expOutput": 9 }`);
+`"pass": ${comparer([[-1,-1,2],[-1,0,1]], res0)},` +
+`"input": "[-1,0,1,2,-1,-4]",` +
+`"userOutput": "${stringify(res0)}",` + 
+`"expOutput": "[[-1,-1,2],[-1,0,1]]" }`);
 
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+ //Second case
+
+let res1;
+try {
+     res1 = solution.threeSum([0,1,1]);
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer([], res1) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 1,` + 
+`"pass": ${comparer([], res1)},` +
+`"input": "[0,1,1]",` +
+`"userOutput": "${stringify(res1)}",` + 
+`"expOutput": "[]" }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
     console.log("_&&_@849"); //problem case separator =  _&&_@849\n

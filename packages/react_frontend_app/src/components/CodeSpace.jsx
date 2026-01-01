@@ -4,6 +4,7 @@ import { ResultBox } from "./ResultBox.jsx";
 import { useOutletContext } from "react-router-dom";
 import { useSecureDataGetter } from "./customhooks/useSecureDataGetter";
 import { useParams } from "react-router-dom";
+import { OneClickButton } from "./utilityComponents/OneClickButton.js";
 
 // store scrollHeight as localStorage, so that the Height is always there even when changing pages and unmounted
 
@@ -25,15 +26,20 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const [qTemplate, setQTemplate] = useState();
     //extract from route params
     const params = useParams();
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
 
     console.log(jsonWebToken)
 
     async function handleSubmit(e) {
         e.preventDefault();
 
+        // Don't send requests when pressing the submit button when loading (ie' it's fetching)
+        if ( isButtonLoading ) { return;}
+
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
         try {
+            setIsButtonLoading(true);
             await secureDataGetter({
                 jsonWebToken,
                 setJsonWebToken,
@@ -41,10 +47,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             },
                 params.qname,
                 formData);
-
         } catch (err) {
             setError(err);
         }
+        setIsButtonLoading(false);
 
     }
 
@@ -128,17 +134,28 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         throw error;
     }
     // loading state given inside async handling & useEffect's elements only
-
+    const submitProps = {
+        id: "submit-button",
+        name: "Submit",
+        color: "green",
+        type: "submit"
+    }
+    const loadingProps = {
+        id: "submit-button",
+        name: "🌀",
+        color: "green",
+        type: "submit"
+    }
     return (
         // implement uneditable numbers along the left side +
         // backend verification
-        <div ref={codespaceRef} className="flex flex-col outline-1 outline-green-400 font-jet-brains">
+        <div ref={codespaceRef} className="flex flex-col font-jet-brains">
 
             <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
                 {/* change language */}
-                <div className="text-left ">
+                <div className="text-left">
                     <select name="language" id="drop" onChange={selectOnChange} value={language}
-                        className="border border-black hover:cursor-pointer">
+                        className="border-t border-r border-b border-black hover:cursor-pointer">
                         <option value="js" className="hover:cursor-pointer">Javascript</option>
                         <option value="c" className="hover:cursor-pointer">C</option>
                     </select>
@@ -146,15 +163,24 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
                 <div className="flex flex-2">
                     <textarea ref={numberAreaRef} disabled id="row-number" cols="1"
-                        className=" text-right border border-black w-10 overflow-hidden resize-none pt-3">
-                    </textarea>
+                        className=" text-right border-t border-r border-b border-black w-10 overflow-hidden resize-none pt-3"
+                    > </textarea>
                     <textarea ref={textAreaRef} onScroll={handleScroll}
-                        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange} cols="130" name="code" id="code"
-                        className="flex-2 border border-black resize-none pl-3 pt-3"></textarea>
+                        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange}
+                        cols="130" name="code" id="code"
+                        className="flex-2 border border-black resize-none pl-3 pt-3"
+                    ></textarea>
                 </div>
+
                 <HorizVertSlider resultBoxRef={resultBoxRef} />
                 <ResultBox ref={resultBoxRef} result={result} />
-                <button type="submit" className="px-5 text-blue-700 border rounded" >run</button>
+
+                <div className="flex justify-end px-2 border-t border-r border-b border-solid py-2 min-w-24 bg-amber-100">
+                    {isButtonLoading ?
+                        <OneClickButton buttonProps={loadingProps} /> :
+                        <OneClickButton buttonProps={submitProps} />
+                    }
+                </div>
             </form>
 
         </div>

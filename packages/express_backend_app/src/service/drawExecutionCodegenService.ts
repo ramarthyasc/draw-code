@@ -141,10 +141,13 @@ try {
 // Make a JSON format
     console.log(\`{ "id": ${testCaseNum},\` + 
 \`"pass": \${comparer(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}, ${resName})},\` +
-\`"input": ${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)},\` +
-\`"userOutput": \${stringify(${resName})},\` +
-\`"expOutput": ${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)} }\`);
+\`"input": "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)}",\` +
+\`"userOutput": "\${stringify(${resName})}",\` + 
+\`"expOutput": "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}" }\`);
 
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
     console.log("_&&_@849"); //problem case separator =  _&&_@849\\n
 `
 }
