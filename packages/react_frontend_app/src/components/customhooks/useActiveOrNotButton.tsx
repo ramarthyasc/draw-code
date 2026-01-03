@@ -4,17 +4,17 @@ export function useIsButtonActive(initActiveButtonId: string) {
 
     //// Button Handlers
     const [mouseDown, setMouseDown] = useState(false)
-    const [activeButtonId, setActiveButton] = useState(initActiveButtonId)
+    const [activeButtonId, setActiveButtonId] = useState(initActiveButtonId)
     const mouseDownButtonIdRef = useRef("");
 
     function handleMouseDown(e: React.MouseEvent<HTMLButtonElement>) {
         setMouseDown(true);
-        mouseDownButtonIdRef.current = e.currentTarget.id;
+        mouseDownButtonIdRef.current = e.currentTarget.dataset.id ?? "";
     }
     function handleMouseUp(e: React.MouseEvent<HTMLButtonElement>) {
         // if mousedown & if mouseup button and the mouse downed button are the same
-        if (mouseDown && e.currentTarget.id === mouseDownButtonIdRef.current) {
-            setActiveButton(mouseDownButtonIdRef.current);
+        if (mouseDown && e.currentTarget.dataset.id === mouseDownButtonIdRef.current) {
+            setActiveButtonId(mouseDownButtonIdRef.current);
         }
         setMouseDown(false);
     }
@@ -30,6 +30,6 @@ export function useIsButtonActive(initActiveButtonId: string) {
     }, [])
     //// Button Handlers end
 
-    return { activeButtonId, handleMouseDown, handleMouseUp};
+    return { activeButtonId, setActiveButtonId, handleMouseDown, handleMouseUp};
 
 }

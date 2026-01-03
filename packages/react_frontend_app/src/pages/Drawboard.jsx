@@ -3,7 +3,7 @@ import { Canvas } from '../components/Canvas';
 import { QuestionTab } from '../components/QuestionTab';
 import Slider from '../components/Slider';
 import '../styles/Drawboard.css';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { QuestionContext } from '../context/QuestionContext';
 import { CodeSpace } from '../components/CodeSpace';
 import { HorizVertSlider } from '../components/HorizVertSlider.jsx';
@@ -21,6 +21,11 @@ function Drawboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [qDetailsQNextPrev, setQDetailsQNextPrev] = useState();
     const [error, setError] = useState();
+    // reference of the context object passed shouldn't change in each render - preventing context child 
+    // rerender in each render of parent
+    const providerValue = useMemo(() => {
+        return { isCoding, setIsCoding, qDetailsQNextPrev};
+    }, [isCoding, qDetailsQNextPrev])
 
     useEffect(() => {
         async function questionDetailsFetcher() {
@@ -62,10 +67,11 @@ function Drawboard() {
         return "loading..."
     }
 
+
     return (
         <>
             <div className='space'>
-                <QuestionContext.Provider value={{ isCoding, setIsCoding, qDetailsQNextPrev }} >
+                <QuestionContext.Provider value={providerValue} >
                     <QuestionTab />
 
                     {!isCoding ? (

@@ -185,7 +185,8 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
 
                                     })
                             })
-                        console.log(caseArrayArray);
+                        console.log("HEYY", caseArrayArray);
+                        console.log([{hey: "hello"}])
 
                         res(caseArrayArray);
                     }

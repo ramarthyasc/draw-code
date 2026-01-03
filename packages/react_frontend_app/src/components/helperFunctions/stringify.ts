@@ -13,7 +13,7 @@ export function stringify(input: unknown) {
         Object.prototype.toString.call(input) === "[object Array]" ||
         Object.prototype.toString.call(input) === "[object Object]"
     ) {
-        // json.stringify removes functions and undefined inside the array or object
+        // json.stringify removes key value pairs with value as a function or undefined inside the array or object
         return JSON.stringify(input);
     }
 }

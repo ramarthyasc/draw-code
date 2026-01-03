@@ -1,8 +1,7 @@
-import { useContext } from "react"
+import { useContext, useRef, useEffect } from "react"
 import { QuestionContext } from "../context/QuestionContext"
 import { ActiveOrNotButton } from "./utilityComponents/ActiveOrNotButton";
 import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
-import type { IActiveOrNotButtonProps } from "./utilityComponents/ActiveOrNotButton";
 import type { SetStateAction, Dispatch } from "react";
 import type { QuestionName } from "./types/question";
 
@@ -54,50 +53,41 @@ export function QuestionCases() {
     }
     const { qDetailsQNextPrev } = context;
     const questionDetails = qDetailsQNextPrev.questionDetails;
-    const { activeButtonId, handleMouseDown, handleMouseUp } = useIsButtonActive("case0");
+    // to know if the render is happening due to the change in qDetailsQNextPrev (Parent supplied state) 
+    // or due to the state change inside the component itself.
+    const qDetailsQNextPrevRef = useRef(qDetailsQNextPrev);
+    let isQDetailsQNextPrevChange: boolean = qDetailsQNextPrevRef.current !== qDetailsQNextPrev;
 
-    const case0: IActiveOrNotButtonProps = {
-        id: "case0",
-        name: "Case 0",
-        isActive: activeButtonId === "case0" ? true : false,
-        color: "green",
-    }
-    const case1: IActiveOrNotButtonProps = {
-        id: "case1",
-        name: "Case 1",
-        isActive: activeButtonId === "case1" ? true : false,
-        color: "green",
-    }
 
-    const activeCaseNum = activeButtonId === "case0" ? 0 : 1;
+    const { activeButtonId, setActiveButtonId, handleMouseDown, handleMouseUp } = useIsButtonActive("0");
 
-    if (questionDetails.examples.length === 1) {
-        return (
-            <div>
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
-                    buttonProps={case0} />
-                <div> Input: </div>
-                <div> {inputSanitize(questionDetails.examples[activeCaseNum].input)} </div>
-                <div> Output: </div>
-                <div> {questionDetails.examples[activeCaseNum].output} </div>
-            </div>
-        )
-    } else {
+    useEffect(() => {
+        setActiveButtonId("0");
+        qDetailsQNextPrevRef.current = qDetailsQNextPrev;
+    }, [isQDetailsQNextPrevChange]);
 
-        return (
-            <div>
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
-                    buttonProps={case0} />
-                {/* when you put same component multiple times,then they are duplicated like that when you  */}
-                {/* put many divs. So think of the component as many copies. Not same reference. */}
-                <ActiveOrNotButton interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
-                    buttonProps={case1} />
 
-                <div> Input: </div>
-                <div> {inputSanitize(questionDetails.examples[activeCaseNum].input)} </div>
-                <div> Output: </div>
-                <div> {questionDetails.examples[activeCaseNum].output} </div>
-            </div>
-        )
-    }
+    return (
+        <div>
+            {questionDetails.examples.map((_, i) => {
+                if (i > 1) { return; } //Types of cases (only 2 allowed)
+                return (
+                    <ActiveOrNotButton key={i} interactionFuncs={{ onMouseDown: handleMouseDown, onMouseUp: handleMouseUp }}
+                        buttonProps={{ id: i, name: `Case ${i}`, isActive: activeButtonId === `${i}`, color: "green" }} />
+                )
+            })
+            }
+
+            <div> Input: </div>
+            <div> {questionDetails.examples[Number(activeButtonId)] ?
+                inputSanitize(questionDetails.examples[Number(activeButtonId)].input) :
+                ""
+            } </div>
+            <div> Output: </div>
+            <div> {questionDetails.examples[Number(activeButtonId)] ?
+                inputSanitize(questionDetails.examples[Number(activeButtonId)].output) :
+                ""
+            } </div>
+        </div>
+    )
 }

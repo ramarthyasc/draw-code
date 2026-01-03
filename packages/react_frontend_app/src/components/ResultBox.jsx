@@ -1,9 +1,26 @@
-import { forwardRef } from "react";
-import { stringify } from "./helperFunctions/stringify";
+import { forwardRef, useRef, useEffect } from "react";
 import { QuestionCases } from "./QuestionCases";
+import { Result } from "./Result";
+import { ActiveOrNotButton } from "./utilityComponents/ActiveOrNotButton";
+import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
+import { useLocation } from "react-router-dom";
 
 
 export const ResultBox = forwardRef((props, resultBoxRef) => {
+
+    const { activeButtonId, setActiveButtonId, handleMouseDown, handleMouseUp } = useIsButtonActive("0");
+
+    // to know if url change is causing the render (using Link)
+    // or due to the state change inside the component itself.
+    // location.key changes if url changes (route params or anything else) - any new history entry created
+    const location = useLocation();
+    const locationKeyRef = useRef(location.key);
+    const isLocationChanged = locationKeyRef.current !== location.key;
+    useEffect(() => {
+        setActiveButtonId("0");
+        locationKeyRef.current = location.key;
+    }, [isLocationChanged]);
+
 
     if (props.result === "") {
         // default - show the cases - when Codespace component rendered initially
@@ -45,64 +62,50 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
             </div>
         )
     } else {
+        console.log("HEYYYYYYYYYY")
         //If prop.result is an Array of Arrays, then it's the Case Result
         console.log(props.result);
+        console.log(activeButtonId);
+
+
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
                 {
-                    props.result.map((result, index) => {
+                    props.result.some((result) => {
+                        return result.at(-1).pass === false;
+                    }) ?
+                        <div className="text-red-900">
+                            OOPS !! You Failed
+                        </div> :
+                        <div className="text-green-900">
+                            YAY !! You Passed
+                        </div>
+
+
+                }
+                <div >
+                    {props.result.map((result, i) => {
+                        //Can be many cases
                         return (
-                            <div key={index}>
-                                <div className="border border-solid rounded-md border-green-800 bg-green-50 text-green-900" >
-                                    Case {index}:
-                                </div>
-                                <div >
-                                    {result.map((_, i) => {
-                                        if (i === 0) {
-                                            // reversing the mapping order
-                                            const item = result[result.length - 1]
-                                            return (
-                                                <div key={i}>
-                                                    <div> {item.pass ?
-                                                        <div className="text-green-900">
-                                                            YAY !! You Passed
-                                                        </div>
-                                                        : <div className="text-red-900">
-                                                            OOPS !! You Failed
-                                                        </div>}
-                                                    </div>
-                                                    <div> Input: </div>
-                                                    <div> {item.input} </div>
-                                                    <div> My Output: </div>
-                                                    <div> {item.userOutput} </div>
-                                                    <div> Expected Output: </div>
-                                                    <div> {item.expOutput} </div>
-                                                </div>
-                                            )
-                                        } else {
-                                            const userlog = result[i - 1];
-                                            return (
-                                                <div key={i}>
-                                                    <div className="border border-solid rounded-md border-gray-700 bg-gray-200 text-gray-800" >
-                                                        Log {i - 1}:
-                                                    </div>
-                                                    <div>
-                                                        {stringify(userlog)}
-                                                    </div>
-
-                                                </div>
-                                            )
-                                        }
-
-
-                                    })}
-                                </div>
-                            </div>
+                            <ActiveOrNotButton key={i} interactionFuncs={{
+                                onMouseDown: handleMouseDown,
+                                onMouseUp: handleMouseUp
+                            }}
+                                buttonProps={{
+                                    id: i,
+                                    name: `Case ${i}`,
+                                    isActive: activeButtonId === `${i}`,
+                                    color: result.at(-1).pass ? "darkgreen" : "darkred"
+                                }} />
                         )
                     })
-                }
+                    }
+                </div>
+                < div >
+                    <Result result={props.result[Number(activeButtonId)]} />
+                </div>
 
-            </div>
+            </div >
         )
     }
 

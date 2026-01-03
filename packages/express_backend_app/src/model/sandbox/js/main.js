@@ -3,11 +3,11 @@
 class Solution {
 
     /**
-    * @param {number[]} nums
-    * @return {number[][]}
+    * @param {string} s
+    * @return {boolean}
     */
-    threeSum(nums) {
-
+    isPalindrome(s) {
+console.log("hello")
     }
 }
 
@@ -101,18 +101,37 @@ function stringify(input) {
 
 
 
+function stringLogger(input) {
+    if ( typeof input === "boolean" ||
+        typeof input === "number" ||
+        typeof input === "undefined" ||
+        typeof input === "string" ||
+        Object.prototype.toString.call(input) === "[object Null]"
+    ) {
+        return `${input}`;
+    } else if (
+        Object.prototype.toString.call(input) === "[object Array]" ||
+        Object.prototype.toString.call(input) === "[object Object]"
+    ) {
+        // json.stringify removes functions and undefined inside the array or object
+        return JSON.stringify(input);
+    }
+}
+
+
+
  //First case
 
 let res0;
 try {
-     res0 = solution.threeSum([-1,0,1,2,-1,-4]);
+     res0 = solution.isPalindrome("Was it a car or a cat I saw?");
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer([[-1,-1,2],[-1,0,1]], res0) ? 
+//     comparer(true, res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -120,10 +139,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer([[-1,-1,2],[-1,0,1]], res0)},` +
-`"input": "[-1,0,1,2,-1,-4]",` +
-`"userOutput": "${stringify(res0)}",` + 
-`"expOutput": "[[-1,-1,2],[-1,0,1]]" }`);
+`"pass": ${comparer(true, res0)},` +
+`"input": "Was it a car or a cat I saw?",` +
+`"userOutput": "${stringLogger(res0)}",` + 
+`"expOutput": "true" }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
@@ -135,14 +154,14 @@ try {
 
 let res1;
 try {
-     res1 = solution.threeSum([0,1,1]);
+     res1 = solution.isPalindrome("tab a cat");
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer([], res1) ? 
+//     comparer(false, res1) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -150,10 +169,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 1,` + 
-`"pass": ${comparer([], res1)},` +
-`"input": "[0,1,1]",` +
-`"userOutput": "${stringify(res1)}",` + 
-`"expOutput": "[]" }`);
+`"pass": ${comparer(false, res1)},` +
+`"input": "tab a cat",` +
+`"userOutput": "${stringLogger(res1)}",` + 
+`"expOutput": "false" }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.

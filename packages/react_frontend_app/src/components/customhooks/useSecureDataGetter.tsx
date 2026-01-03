@@ -134,6 +134,6 @@ export function useSecureDataGetter() {
     }, []);
 
     // You can use this result ie; Data state for any Generic use in any component
-    return { data, secureDataGetter };
+    return { data, setData, secureDataGetter };
 
 }

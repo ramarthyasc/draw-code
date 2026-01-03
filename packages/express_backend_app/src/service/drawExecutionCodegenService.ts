@@ -93,6 +93,23 @@ export function stringify(input: unknown) {
     }
 }
 
+export function stringLogger(input: unknown) {
+    if (typeof input === "boolean" ||
+        typeof input === "number" ||
+        typeof input === "undefined" ||
+        typeof input === "string" ||
+        Object.prototype.toString.call(input) === "[object Null]"
+    ) {
+        return `${input}`;
+    } else if (
+        Object.prototype.toString.call(input) === "[object Array]" ||
+        Object.prototype.toString.call(input) === "[object Object]"
+    ) {
+        // json.stringify removes functions and undefined inside the array or object
+        return JSON.stringify(input);
+    }
+}
+
 function stringifyText() {
 
     return `
@@ -108,6 +125,29 @@ function stringify(input) {
         typeof input === "string" 
     ){
         return \`"\${input}"\`
+    } else if (
+        Object.prototype.toString.call(input) === "[object Array]" ||
+        Object.prototype.toString.call(input) === "[object Object]"
+    ) {
+        // json.stringify removes functions and undefined inside the array or object
+        return JSON.stringify(input);
+    }
+}
+
+`
+}
+function stringLoggerText() {
+
+    return `
+
+function stringLogger(input) {
+    if ( typeof input === "boolean" ||
+        typeof input === "number" ||
+        typeof input === "undefined" ||
+        typeof input === "string" ||
+        Object.prototype.toString.call(input) === "[object Null]"
+    ) {
+        return \`\${input}\`;
     } else if (
         Object.prototype.toString.call(input) === "[object Array]" ||
         Object.prototype.toString.call(input) === "[object Object]"
@@ -141,9 +181,9 @@ try {
 // Make a JSON format
     console.log(\`{ "id": ${testCaseNum},\` + 
 \`"pass": \${comparer(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}, ${resName})},\` +
-\`"input": "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.case)}",\` +
-\`"userOutput": "\${stringify(${resName})}",\` + 
-\`"expOutput": "${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}" }\`);
+\`"input": "${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.case)}",\` +
+\`"userOutput": "\${stringLogger(${resName})}",\` + 
+\`"expOutput": "${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.output)}" }\`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
@@ -192,7 +232,7 @@ const solution = new Solution();
 
             case "trapping-rain-water": {
                 const caseAndMethod = questionMap['trapping-rain-water'];
-                transformedCode += jsResultComparerText() + stringifyText() +
+                transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
                     "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod);
 
                 break;
@@ -200,14 +240,14 @@ const solution = new Solution();
             case "is-palindrome": {
                 const caseAndMethod = questionMap['is-palindrome'];
 
-                transformedCode += jsResultComparerText() + stringifyText() +
+                transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
                     "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
                     "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
                 break;
             }
             case "three-integer-sum": {
                 const caseAndMethod = questionMap['three-integer-sum'];
-                transformedCode += jsResultComparerText() + stringifyText() +
+                transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
                     "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
                     "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
 

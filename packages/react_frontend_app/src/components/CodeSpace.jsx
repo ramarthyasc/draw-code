@@ -19,7 +19,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
     const { jsonWebToken, setJsonWebToken, setUser } = useOutletContext();
     // custom hook
-    const { data: result, secureDataGetter } = useSecureDataGetter();
+    const { data: result, setData: setResult, secureDataGetter } = useSecureDataGetter();
     const [language, setLanguage] = useState('js');
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +34,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         e.preventDefault();
 
         // Don't send requests when pressing the submit button when loading (ie' it's fetching)
-        if ( isButtonLoading ) { return;}
+        if (isButtonLoading) { return; }
 
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
@@ -104,6 +104,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                     const qtemplate = await res.text();
                     setIsLoading(false);
                     setQTemplate(qtemplate);
+                    setResult(""); // Reset the Resultbox result
                     console.log(qtemplate);
 
                 } else {
