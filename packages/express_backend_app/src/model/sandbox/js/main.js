@@ -3,11 +3,11 @@
 class Solution {
 
     /**
-    * @param {string} s
-    * @return {boolean}
+    * @param {number[]} nums
+    * @return {number[][]}
     */
-    isPalindrome(s) {
-console.log("hello")
+    threeSum(nums) {
+d
     }
 }
 
@@ -124,14 +124,14 @@ function stringLogger(input) {
 
 let res0;
 try {
-     res0 = solution.isPalindrome("Was it a car or a cat I saw?");
+     res0 = solution.threeSum([-1,0,1,2,-1,-4]);
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(true, res0) ? 
+//     comparer([[-1,-1,2],[-1,0,1]], res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -139,10 +139,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer(true, res0)},` +
-`"input": "Was it a car or a cat I saw?",` +
+`"pass": ${comparer([[-1,-1,2],[-1,0,1]], res0)},` +
+`"input": "[-1,0,1,2,-1,-4]",` +
 `"userOutput": "${stringLogger(res0)}",` + 
-`"expOutput": "true" }`);
+`"expOutput": "[[-1,-1,2],[-1,0,1]]" }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
@@ -154,14 +154,14 @@ try {
 
 let res1;
 try {
-     res1 = solution.isPalindrome("tab a cat");
+     res1 = solution.threeSum([0,1,1]);
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(false, res1) ? 
+//     comparer([], res1) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -169,10 +169,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 1,` + 
-`"pass": ${comparer(false, res1)},` +
-`"input": "tab a cat",` +
+`"pass": ${comparer([], res1)},` +
+`"input": "[0,1,1]",` +
 `"userOutput": "${stringLogger(res1)}",` + 
-`"expOutput": "false" }`);
+`"expOutput": "[]" }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.

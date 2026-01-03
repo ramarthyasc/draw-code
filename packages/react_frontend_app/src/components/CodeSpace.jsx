@@ -27,6 +27,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     //extract from route params
     const params = useParams();
     const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const { isLoggedIn } = useOutletContext();
 
     console.log(jsonWebToken)
 
@@ -122,6 +123,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
     }, [params.qname, language]);
 
+    useEffect(() => {
+        setResult("");
+    }, [isLoggedIn])
+
 
     function selectOnChange(e) {
         setLanguage(e.target.value);
@@ -176,7 +181,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 <HorizVertSlider resultBoxRef={resultBoxRef} />
                 <ResultBox ref={resultBoxRef} result={result} />
 
-                <div className="flex justify-end px-2 border-t border-r border-b border-solid py-2 min-w-24 bg-amber-100">
+                <div className="flex justify-end px-2 border-r border-b border-t border-solid border-amber-300 py-2 min-w-24 bg-amber-100">
                     {isButtonLoading ?
                         <OneClickButton buttonProps={loadingProps} /> :
                         <OneClickButton buttonProps={submitProps} />

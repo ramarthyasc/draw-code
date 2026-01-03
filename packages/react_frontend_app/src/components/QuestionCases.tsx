@@ -68,7 +68,7 @@ export function QuestionCases() {
 
 
     return (
-        <div>
+        <div className="mx-3 my-3">
             {questionDetails.examples.map((_, i) => {
                 if (i > 1) { return; } //Types of cases (only 2 allowed)
                 return (
@@ -77,17 +77,19 @@ export function QuestionCases() {
                 )
             })
             }
-
-            <div> Input: </div>
-            <div> {questionDetails.examples[Number(activeButtonId)] ?
-                inputSanitize(questionDetails.examples[Number(activeButtonId)].input) :
-                ""
-            } </div>
-            <div> Output: </div>
-            <div> {questionDetails.examples[Number(activeButtonId)] ?
-                inputSanitize(questionDetails.examples[Number(activeButtonId)].output) :
-                ""
-            } </div>
+            <div className="mx-2 my-2 text-gray-900">
+                <div > Input: </div>
+                <div className="my-2 py-2 px-2 rounded-md bg-gray-200"> {questionDetails.examples[Number(activeButtonId)] ?
+                    inputSanitize(questionDetails.examples[Number(activeButtonId)].input) :
+                    ""
+                } </div>
+                <div> Output: </div>
+                <div className="my-2 py-2 px-2 rounded-md bg-gray-200"> {questionDetails.examples[Number(activeButtonId)] ?
+                    inputSanitize(questionDetails.examples[Number(activeButtonId)].output) :
+                    ""
+                }
+                </div>
+            </div>
         </div>
     )
 }

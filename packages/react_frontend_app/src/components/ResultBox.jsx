@@ -3,7 +3,7 @@ import { QuestionCases } from "./QuestionCases";
 import { Result } from "./Result";
 import { ActiveOrNotButton } from "./utilityComponents/ActiveOrNotButton";
 import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 
 
 export const ResultBox = forwardRef((props, resultBoxRef) => {
@@ -21,7 +21,6 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
         locationKeyRef.current = location.key;
     }, [isLocationChanged]);
 
-
     if (props.result === "") {
         // default - show the cases - when Codespace component rendered initially
         return (
@@ -32,18 +31,22 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
     } else if (props.result === "signin") {
         // When i get refresh token error (ie' Not logged in), then did setData as "signin" in custom hook. 
         // Displays - signin to submit
+        console.log("signin")
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
-                <div> Signin to submit your answer </div>
+                <div className="px-2 mx-3 my-3 py-1 border border-yellow-600 rounded-md bg-yellow-300 text-black"
+            > Signin to submit your answer ↑ </div>
                 <QuestionCases />
             </div>
         )
 
     } else if (props.result === "Coming soon ...") {
-        // Coming soon ... is the input from GNU C COMPILER
+        // Coming soon ... is the output from GNU C COMPILER
+        console.log("coming soon")
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
-                <div> C language coming soon...</div>
+                <div className="px-2 mx-3 my-3 py-1 border border-blue-600 rounded-md bg-blue-200 text-black"
+            > C language coming soon...</div>
                 <QuestionCases />
             </div>
         )
@@ -51,10 +54,10 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
         // if props.result is string, then it is Error stack trace
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
-                <div className="border border-solid rounded-md border-red-700 bg-red-200 text-red-900" >
-                    Error:
+                <div className="px-2 mx-3 my-3 py-2 border border-red-700 rounded-md bg-red-300 text-red-950" >
+                    ERROR:
                 </div>
-                <div>
+                <div className="px-7 mx-3 my-3 py-4 rounded-md bg-red-100 text-red-950">
                     {props.result ? props.result.split("<br>").map((str, i) => {
                         return <div key={i}>{str}</div>
                     }) : ""}
@@ -62,28 +65,25 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
             </div>
         )
     } else {
-        console.log("HEYYYYYYYYYY")
         //If prop.result is an Array of Arrays, then it's the Case Result
-        console.log(props.result);
-        console.log(activeButtonId);
 
 
         return (
-            <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
+            <div ref={resultBoxRef} className="mx-3 h-81 text-left overflow-auto">
                 {
                     props.result.some((result) => {
                         return result.at(-1).pass === false;
                     }) ?
-                        <div className="text-red-900">
+                        <div className="px-2 mt-3 py-2 rounded-md bg-red-200 text-red-900">
                             OOPS !! You Failed
                         </div> :
-                        <div className="text-green-900">
+                        <div className="px-2 mt-3 py-2 rounded-md bg-green-200  text-green-900">
                             YAY !! You Passed
                         </div>
 
 
                 }
-                <div >
+                <div className="my-2">
                     {props.result.map((result, i) => {
                         //Can be many cases
                         return (
@@ -101,9 +101,7 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
                     })
                     }
                 </div>
-                < div >
-                    <Result result={props.result[Number(activeButtonId)]} />
-                </div>
+                <Result result={props.result[Number(activeButtonId)]} />
 
             </div >
         )

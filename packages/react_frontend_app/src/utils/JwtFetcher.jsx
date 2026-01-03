@@ -16,6 +16,7 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
 
 
     useEffect(() => {
+
         async function fetcher() {
 
             try {
