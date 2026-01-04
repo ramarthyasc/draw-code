@@ -7,7 +7,7 @@ class Solution {
     * @return {number[][]}
     */
     threeSum(nums) {
-d
+console.log("heyyy")
     }
 }
 

@@ -23,6 +23,8 @@ CREATE TABLE question_detail (
     detail jsonb NOT NULL
 );
 
+-- USER_CODE NOT BEING STORED IN DB> DON"T NEED TO BE SHOWN FOR OTHER USER DEVICES - instead stored in LOCALSTORAGE
+
 -- For storing user-code - for specific user - for specific question - for specific language
 CREATE TABLE user_code (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

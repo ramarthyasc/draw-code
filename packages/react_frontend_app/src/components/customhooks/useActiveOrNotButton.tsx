@@ -27,7 +27,7 @@ export function useIsButtonActive(initActiveButtonId: string) {
         return () => {
             window.removeEventListener("mouseup", handleMouseUpWindow);
         }
-    }, [])
+    }, []);
     //// Button Handlers end
 
     return { activeButtonId, setActiveButtonId, handleMouseDown, handleMouseUp};

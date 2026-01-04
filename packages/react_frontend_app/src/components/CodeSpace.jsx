@@ -21,13 +21,20 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     // custom hook
     const { data: result, setData: setResult, secureDataGetter } = useSecureDataGetter();
     const [language, setLanguage] = useState('js');
-    const [error, setError] = useState();
+    const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [qTemplate, setQTemplate] = useState();
     //extract from route params
     const params = useParams();
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const { isLoggedIn } = useOutletContext();
+    const [reset, setReset] = useState(0);
+    const qTemplatesRef = useRef({});
+
+    if (localStorage.getItem("qTemplates") !== null) {
+        qTemplatesRef.current = JSON.parse(localStorage.getItem("qTemplates"));
+    }
+    const [resetMouseDown, setResetMouseDown] = useState(false); 
 
     console.log(jsonWebToken)
 
@@ -49,7 +56,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 params.qname,
                 formData);
         } catch (err) {
-            setError(err);
+            setError(true);
+            console.log(err);
         }
         setIsButtonLoading(false);
 
@@ -92,8 +100,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         // numbers showing when scrolling - control the scrolling of numberArea programmatically when i scroll the text area = concept
     }, [])
 
-    //Language
+    //get QTemplate 
     useEffect(() => {
+
+        // only on the first fetch of a qtemplate is this function executed
         async function fetcher() {
             try {
                 console.log(params.qname);
@@ -106,40 +116,80 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                     setIsLoading(false);
                     setQTemplate(qtemplate);
                     setResult(""); // Reset the Resultbox result
+
+                    if (!qTemplatesRef.current[params.qname]) {
+                        qTemplatesRef.current[params.qname] = {};
+                    }
+
+                    qTemplatesRef.current[params.qname][language] = qtemplate;
+                    window.localStorage.setItem("qTemplates", JSON.stringify(qTemplatesRef.current));
+
                     console.log(qtemplate);
 
                 } else {
                     console.log("HTTP error: ", res.status);
-                    setError(new Error(`Http error: ${res.status}`));
+                    setError(true);
                 }
 
             } catch (err) {
                 console.log("Network/Fetch or parsing error", err);
-                setError(err);
+                setError(true);
             }
         }
 
-        fetcher();
+        if (!qTemplatesRef.current[params.qname]?.[language]) {
+            fetcher();
+        }
+        else {
+            setIsLoading(false);
+            setQTemplate(qTemplatesRef.current[params.qname][language]);
+            setResult(""); // Reset the Resultbox result
+        }
 
-    }, [params.qname, language]);
+    }, [params.qname, language, reset]);
 
     useEffect(() => {
         setResult("");
     }, [isLoggedIn])
 
 
-    function selectOnChange(e) {
+    function onLangChange(e) {
         setLanguage(e.target.value);
         setIsLoading(true);
     }
-    function editOnChange(e) {
+    function onTextChange(e) {
+
+        qTemplatesRef.current[params.qname][language] = e.target.value;
+        window.localStorage.setItem("qTemplates", JSON.stringify(qTemplatesRef.current));
+
         setQTemplate(e.target.value);
     }
 
-    if (error) {
-        throw error;
+    // Reset functionality
+    function mouseDownReset() {
+        setResetMouseDown(true);
     }
-    // loading state given inside async handling & useEffect's elements only
+    function mouseUpReset() {
+        if (resetMouseDown) {
+            qTemplatesRef.current[params.qname][language] = null;
+            window.localStorage.setItem("qTemplates", JSON.stringify(qTemplatesRef.current));
+            setReset(prev => { return prev + 1; })
+        }
+        setResetMouseDown(false);
+    }
+    useEffect(() => {
+        function handleMouseUpWindow() {
+            setResetMouseDown(false);
+        }
+        window.addEventListener("mouseup", handleMouseUpWindow);
+        return () => {
+            window.removeEventListener("mouseup", handleMouseUpWindow);
+        }
+    }, [])
+    //Reset functionality done
+
+    //NOTE: loading & error state given inside textArea element only to show users the fetch error
+    //
     const submitProps = {
         id: "submit-button",
         name: "Submit",
@@ -152,6 +202,12 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         color: "green",
         type: "submit"
     }
+    const colorVariants =  {
+        darkred: {
+            normal: `bg-red-400 text-black hover:bg-red-300 hover:text-gray-800 active:text-gray-800 
+            active:bg-red-600`
+        },
+    }
     return (
         // implement uneditable numbers along the left side +
         // backend verification
@@ -159,12 +215,19 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
             <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
                 {/* change language */}
-                <div className="text-left">
-                    <select name="language" id="drop" onChange={selectOnChange} value={language}
-                        className="border-t border-r border-b border-black hover:cursor-pointer">
-                        <option value="js" className="hover:cursor-pointer">Javascript</option>
-                        <option value="c" className="hover:cursor-pointer">C</option>
-                    </select>
+                <div className="flex justify-between">
+                    <div className="text-left">
+                        <select name="language" id="drop" onChange={onLangChange} value={language}
+                            className="border-t border-r border-b border-black hover:cursor-pointer">
+                            <option value="js" className="hover:cursor-pointer">Javascript</option>
+                            <option value="c" className="hover:cursor-pointer">C</option>
+                        </select>
+                    </div>
+                    <button type="button" onMouseDown={mouseDownReset} onMouseUp={mouseUpReset}
+        className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.darkred.normal}`}>
+                        Reset
+                    </button>
+
                 </div>
 
                 <div className="flex flex-2">
@@ -172,7 +235,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                         className=" text-right border-t border-r border-b border-black w-10 overflow-hidden resize-none pt-3"
                     > </textarea>
                     <textarea ref={textAreaRef} onScroll={handleScroll}
-                        value={isLoading ? "...loading" : qTemplate} onChange={editOnChange}
+                        value={error ? "Sorry.. Network error" : isLoading ? "...loading" : qTemplate}
+                        onChange={onTextChange}
                         cols="130" name="code" id="code"
                         className="flex-2 border border-black resize-none pl-3 pt-3"
                     ></textarea>
