@@ -4,7 +4,7 @@ const pool = require("./drawpool.js");
 // userid TEXT PRIMARY KEY, name TEXT, email TEXT, picture TEXT
 
 async function userAddReturn(userPayload) {
-  const text = "INSERT INTO users (userid, name, email, picture) VALUES ($1, $2, $3, $4) RETURNING *"
+  const text = "INSERT INTO users (userid, name, email, picture) VALUES ($1, $2, $3, $4) RETURNING *";
   const values = [userPayload.sub, userPayload.name, userPayload.email, userPayload.picture];
   const { rows } = await pool.query(text, values);
   return rows;

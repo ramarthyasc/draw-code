@@ -25,18 +25,6 @@ const { uiJwtAuth, refreshTokenJwtGen } = require('./controller/drawAuthMiddlewa
 const { secureRouter } = require('./routers/drawSecureRouter.ts');
 const { nonSecureRouter } = require('./routers/drawNonSecureRouter.ts');
 
-const USERS = [];
-const QUESTIONS = [{
-    title: "Two sum",
-    description: "Find two numbers in a list which sums upto a target number specified",
-    testCases: [{
-        input: "[1,2,3,4], 7",
-        output: 4
-    }]
-}]
-
-const SUBMISSION = [{}]
-
 
 ///////////////////////////////////////////////////////////////////
 //DrawLogin App
@@ -80,7 +68,8 @@ app.route('/login')
 app.get('/home', jwtVerification, userHomeGet);
 app.get('/problemset', jwtVerification, userProblemsetGet);
 
-//DrawLogin App
+//NOTE: DrawLogin App
+//
 app.use('/proPic', express.static(path.join(__dirname, "./public/proPic/")));
 
 // Lightweight session check for the frontend (not for security) = UI HELPER- DON'T NEED - CONFUSING

@@ -14,3 +14,24 @@ CREATE TABLE refresh_tokens (
     rotated_from uuid REFERENCES refresh_tokens(id),
     absolute_expires_at timestamptz NOT NULL
 );
+
+
+CREATE TABLE question_detail (
+    id integer PRIMARY KEY,
+    name text NOT NULL UNIQUE,
+    difficulty text NOT NULL,
+    detail jsonb NOT NULL
+);
+
+-- For storing user-code - for specific user - for specific question - for specific language
+CREATE TABLE user_code (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    userid text NOT NULL REFERENCES users(userid) ON DELETE CASCADE,
+    qname text NOT NULL REFERENCES question_detail(name) ON DELETE CASCADE,
+    language text NOT NULL,
+    code text NOT NULL,
+    CONSTRAINT unique_user_question_language UNIQUE(userid, qname, language)
+);
+
+-- SEED VALUES FROM SERVER USING nodepg
+
