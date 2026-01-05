@@ -59,7 +59,7 @@ export function ButtonTab() {
     }
 
     return (
-        <div className="flex mx-2 py-2 px-5 items-center justify-between border border-solid border-black ">
+        <div className="flex mx-2 py-0 px-5 items-center justify-between border border-solid border-black ">
             <div className="flex gap-3">
                 <ActiveOrNotButton interactionFuncs={{
                     onMouseDown: activeOrNotHandleDown,

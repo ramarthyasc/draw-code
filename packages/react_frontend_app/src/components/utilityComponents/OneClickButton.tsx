@@ -37,7 +37,7 @@ export function OneClickButton({ interactionFuncs, buttonProps }: IOneClickButto
 
         <button id={buttonProps.id} type={buttonProps.type} onMouseDown={interactionFuncs?.onMouseDown} 
         onMouseUp={interactionFuncs?.onMouseUp}
-            className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants[buttonProps.color]?.normal}`}
+            className={`border border-solid px-1.5 py-0 mx-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants[buttonProps.color]?.normal}`}
             >{buttonProps.name}</button>
     )
 }

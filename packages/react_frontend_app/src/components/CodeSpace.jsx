@@ -215,10 +215,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
             <form className="flex flex-col flex-2" id="code-form" onSubmit={handleSubmit}>
                 {/* change language */}
-                <div className="flex justify-between">
+                <div className="flex justify-between border-t">
                     <div className="text-left">
                         <select name="language" id="drop" onChange={onLangChange} value={language}
-                            className="border-t border-r border-b border-black hover:cursor-pointer">
+                            className="mt-1 py-px rounded-sm bg-amber-100 border-t border-r border-b border-black hover:cursor-pointer">
                             <option value="js" className="hover:cursor-pointer">Javascript</option>
                             <option value="c" className="hover:cursor-pointer">C</option>
                         </select>

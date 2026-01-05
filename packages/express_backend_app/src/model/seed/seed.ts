@@ -149,7 +149,7 @@ export async function seedQuestionDetails() {
     ];
 
     try {
-     const res = await pool.query(text, values);
+     await pool.query(text, values);
     } catch(err) {
         throw err; // will be caught by the server.ts file who calls it
     }
