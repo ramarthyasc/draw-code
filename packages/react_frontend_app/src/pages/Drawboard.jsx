@@ -65,7 +65,6 @@ function Drawboard() {
 
         return () => {
             console.log("UNMOUNTING DRAWBOARD");
-            console.log("Aborting the current fetch")
             controller.abort();
         }
 
@@ -76,7 +75,11 @@ function Drawboard() {
     }
 
     if (isLoading) {
-        return "loading..."
+        return (
+            <div>
+                loading...
+            </div>
+        )
     }
 
 

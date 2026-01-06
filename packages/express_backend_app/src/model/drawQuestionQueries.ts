@@ -1,5 +1,5 @@
 import pool from "../model/drawpool";
-import type { Difficulty, IQuestionDetail, LanguageTemplates, QuestionMeta } from "../controller/drawAdminController";
+import type { Difficulty, IQuestionDetail, ILanguageTemplates, IQuestionMeta } from "../controller/drawAdminController";
 
 export async function getQuestionsQuery(offset: number, limit: number) {
     const text = `SELECT id, name, difficulty 
@@ -84,8 +84,8 @@ export async function getQTemplate(qname: string) {
     }
 }
 
-export async function updateQTemplate(changedQmeta: QuestionMeta,
-    changedLangtemplates: LanguageTemplates, qname: string) {
+export async function updateQTemplate(changedQmeta: IQuestionMeta,
+    changedLangtemplates: ILanguageTemplates, qname: string) {
 
     const text = `UPDATE question_template
                     SET qmeta = $1, langtemplates = $2
@@ -105,7 +105,7 @@ export async function updateQTemplate(changedQmeta: QuestionMeta,
 
 
 
-export async function createQTemplate(newQmeta: QuestionMeta, newLangtemplates: LanguageTemplates, newQname: string) {
+export async function createQTemplate(newQmeta: IQuestionMeta, newLangtemplates: ILanguageTemplates, newQname: string) {
     const text = `INSERT INTO question_template (qname, qmeta, langtemplates)
                     VALUES ($1, $2, $3)
                     RETURNING qname, qmeta, langtemplates`;

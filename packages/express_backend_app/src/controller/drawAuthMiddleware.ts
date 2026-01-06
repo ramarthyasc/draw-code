@@ -41,15 +41,24 @@ export interface IJwtVerifiedPayload extends IUserDetailWithRole {
 }
 
 export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
+
     const header: string | undefined = req.get("Authorization");
     let accessToken: string | undefined;
+    let response: CodeResponse;
+
     if (header && header.startsWith("Bearer")) {
         accessToken = header.split(" ")[1];
+    } else {
+        response = {
+            code: "NO_JWT",
+            status: 401,
+        }
+        return res.status(response.status).json(response)
     }
+
     console.log(accessToken)
 
 
-    let response: CodeResponse;
     // Invalid/expired jwt
     let decoded: IJwtVerifiedPayload;
     try {
@@ -85,7 +94,8 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
         // There is refresh token
         console.log(refreshToken, "helooooo");
 
-        const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(refreshToken,
+        const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(
+            refreshToken,
             searchRefreshToken,
             revokeRefreshToken, revokeOneRefreshTokenChain);
 

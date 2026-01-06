@@ -3,7 +3,6 @@ import Navbar from './components/Navbar.jsx';
 import JwtFetcher from './utils/JwtFetcher.jsx';
 import './styles/App.css'
 import { useState } from 'react';
-import { QuestionContext } from './context/QuestionContext';
 import ErrorBoundary from './utils/ErrorHandling.js';
 
 function App() {

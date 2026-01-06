@@ -16,16 +16,13 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
 
 
     useEffect(() => {
-        const controller = new AbortController();
 
         async function fetcher() {
 
             try {
-
                 const res = await fetch('/api/refresh-auth', {
                     method: "GET",
                     credentials: 'include',
-                    signal: controller.signal,
                 })
 
 
@@ -58,13 +55,8 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
                 }
 
             } catch (err) {
-                if (err.name === "AbortError") {
-                    console.log("Abort Error: ", err);
-
-                } else {
                     console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
                     setError(new Error("Network error"));
-                }
 
             }
             setIsLoading(false);
@@ -77,9 +69,6 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
         }
         isMountedRef.current = true;
 
-        return () => {
-            controller.abort();
-        }
 
     }, []);
 

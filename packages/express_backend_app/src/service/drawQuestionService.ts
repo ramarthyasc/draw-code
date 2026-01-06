@@ -1,7 +1,7 @@
-import type { QuestionsList } from "../controller/drawAdminController";
+import type { IQuestionsList } from "../controller/drawAdminController";
 
 interface Funcs {
-    getQuestionsQuery(limit: number, offset: number): Promise<QuestionsList[]>;
+    getQuestionsQuery(limit: number, offset: number): Promise<IQuestionsList[]>;
 }
 
 export async function paginateQuestionsList(page: number, limit: number, funcs: Funcs) {

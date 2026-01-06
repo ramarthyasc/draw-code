@@ -11,12 +11,12 @@ import {
 import { paginateQuestionsList } from "../service/drawQuestionService";
 
 export type Difficulty = "easy" | "medium" | "hard";
-export interface QuestionsList {
+export interface IQuestionsList {
     id: number,
     name: string,
     difficulty: Difficulty;
 }
-export interface Paginate {
+export interface IPaginate {
     page: number;
     limit: number;
 }
@@ -50,7 +50,7 @@ export async function questionsDbGet(req: Request, res: Response, next: NextFunc
     const page = Number(req.query.page);
     const limit = Number(req.query.limit);
     // get a list of objects
-    let questionsList: QuestionsList[];
+    let questionsList: IQuestionsList[];
     try {
         questionsList = await paginateQuestionsList(page, limit, { getQuestionsQuery });
     } catch (err) {
@@ -127,7 +127,7 @@ export async function questionDbPost(req: Request, res: Response, next: NextFunc
 
 //NOTE: QUESTION TEMPLATE
 
-export interface LanguageTemplates {
+export interface ILanguageTemplates {
     js: string;
     c: string;
 }
@@ -137,14 +137,14 @@ type CaseAndOutput = {
     output: any
 }
 
-export interface QuestionMeta {
+export interface IQuestionMeta {
     method: string,
     caseAndOutput: CaseAndOutput[],
 }
-export interface QTemplatePackage {
+export interface IQTemplatePackage {
     qname: string;
-    qmeta: QuestionMeta;
-    langtemplates: LanguageTemplates;
+    qmeta: IQuestionMeta;
+    langtemplates: ILanguageTemplates;
 }
 
 export async function qTemplateDbGet(req: Request, res: Response, next: NextFunction) {
@@ -153,7 +153,7 @@ export async function qTemplateDbGet(req: Request, res: Response, next: NextFunc
     // Get QTemplate of all languages
     if (typeof qname === "string") {
         try {
-            const qtemplate: QTemplatePackage = await getQTemplate(qname);
+            const qtemplate: IQTemplatePackage = await getQTemplate(qname);
             return res.json(qtemplate);
         } catch (err) {
             return next(err);
@@ -167,12 +167,12 @@ export async function qTemplateDbGet(req: Request, res: Response, next: NextFunc
 export async function qTemplateDbPut(req: Request, res: Response, next: NextFunction) {
     const qname = req.params.qname;
 
-    const changedQmeta: QuestionMeta = req.body.qmeta;
-    const changedLangtemplates: LanguageTemplates = req.body.langtemplates;
+    const changedQmeta: IQuestionMeta = req.body.qmeta;
+    const changedLangtemplates: ILanguageTemplates = req.body.langtemplates;
 
     if (typeof qname === "string") {
         try {
-            const qtemplate: QTemplatePackage = await updateQTemplate(changedQmeta, changedLangtemplates, qname);
+            const qtemplate: IQTemplatePackage = await updateQTemplate(changedQmeta, changedLangtemplates, qname);
             return res.json(qtemplate);
         } catch (err) {
             return next(err);
@@ -186,12 +186,12 @@ export async function qTemplateDbPut(req: Request, res: Response, next: NextFunc
 export async function qTemplateDbPost(req: Request, res: Response, next: NextFunction) {
     const newQname = req.params.qname;
 
-    const newQmeta: QuestionMeta = req.body.qmeta;
-    const newLangtemplates: LanguageTemplates = req.body.langtemplates;
+    const newQmeta: IQuestionMeta = req.body.qmeta;
+    const newLangtemplates: ILanguageTemplates = req.body.langtemplates;
 
     if (typeof newQname === "string") {
         try {
-            const qtemplate: QTemplatePackage = await createQTemplate(newQmeta, newLangtemplates, newQname);
+            const qtemplate: IQTemplatePackage = await createQTemplate(newQmeta, newLangtemplates, newQname);
             return res.json(qtemplate);
         } catch (err) {
             return next(err);

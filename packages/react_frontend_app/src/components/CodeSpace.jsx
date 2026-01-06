@@ -26,7 +26,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const [qTemplate, setQTemplate] = useState();
     //extract from route params
     const params = useParams();
-    const isButtonLoadingRef = useRef(false);
+    const [ isButtonLoading, setIsButtonLoading ] = useState(false);
     const { isLoggedIn } = useOutletContext();
     const [reset, setReset] = useState(0);
     const qTemplatesRef = useRef({});
@@ -36,19 +36,18 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     }
     const [resetMouseDown, setResetMouseDown] = useState(false);
 
-    console.log(jsonWebToken)
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         // Don't send requests when pressing the submit button when loading (ie' it's fetching)
-        if (isButtonLoadingRef.current) { return; }
+        if (isButtonLoading) { return; }
 
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
         const path = `/api/draw-submit/${params.qname}`;
         try {
-            isButtonLoadingRef.current = true;
+            setIsButtonLoading(true);
             await secureDataGetter(
                 {
                     jsonWebToken,
@@ -62,7 +61,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             setError(true);
             console.log(err);
         }
-        isButtonLoadingRef.current = false;
+        setIsButtonLoading(false);
 
     }
 
@@ -259,7 +258,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 <ResultBox ref={resultBoxRef} result={result} />
 
                 <div className="flex justify-end px-2 border-r border-b border-t border-solid border-amber-300 py-1 min-w-24 bg-amber-100">
-                    {isButtonLoadingRef.current ?
+                    {isButtonLoading ?
                         <OneClickButton buttonProps={loadingProps} /> :
                         <OneClickButton buttonProps={submitProps} />
                     }

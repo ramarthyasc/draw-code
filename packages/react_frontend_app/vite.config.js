@@ -16,7 +16,11 @@ export default defineConfig({
             '/draw-question': 'http://localhost:5000',
             '/api/draw-submit': 'http://localhost:5000',
             '/api/refresh-auth': 'http://localhost:5000',
-            '/docs/templates/': 'http://localhost:5000',
+            '/docs/templates': 'http://localhost:5000',
+            '/admin/questions': 'http://localhost:5000',
+            '/admin/new-question': 'http://localhost:5000',
+            '/admin/template': 'http://localhost:5000',
+            '/admin/new-template': 'http://localhost:5000',
         },
 
     }

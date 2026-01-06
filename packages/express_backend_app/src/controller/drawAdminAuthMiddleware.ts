@@ -7,14 +7,22 @@ import jwt from "jsonwebtoken";
 export const jwtAuthAdmin = (req: Request, res: Response, next: NextFunction) => {
 
     const header: string | undefined = req.get("Authorization");
+    let response: CodeResponse;
+
     let accessToken: string | undefined;
     if (header && header.startsWith("Bearer")) {
         accessToken = header.split(" ")[1];
+    } else {
+        response = {
+            code: "NO_JWT",
+            status: 401,
+        }
+        return res.status(response.status).json(response)
+
     }
     console.log(accessToken)
 
 
-    let response: CodeResponse;
     // Invalid/expired jwt
     let decoded: IJwtVerifiedPayload;
     try {
