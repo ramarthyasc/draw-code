@@ -13,12 +13,14 @@ function Home() {
     const [questionsList, setQuestionsList] = useState();
 
     useEffect(() => {
+        const controller = new AbortController();
         async function questionsListfetcher() {
             try {
 
                 let res = await fetch("/draw-question", {
                     method: "GET",
                     credentials: 'include',
+                    signal: controller.signal,
                 })
 
 
@@ -35,15 +37,23 @@ function Home() {
                 }
 
             } catch (err) {
-                console.log(err);
-                // user's network error. So need error handler
-                setError(err);
-                return;
+                if (err.name === "AbortError") {
+                    console.log("Abort Error: ", err);
+                    return;
+                } else {
+                    console.log(err);
+                    // user's network error. So need error handler
+                    setError(err);
+                    return;
+
+                }
+
             }
         }
         questionsListfetcher();
         return () => {
             console.log("UNMOUNT HOME");
+            controller.abort();
         }
 
     }, [])

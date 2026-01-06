@@ -1,12 +1,12 @@
 import type { Language, QuestionName } from '../controller/drawNonSecureController';
 import type { QuestionMethodName } from './types/question';
 
-export interface QuestionTemplate {
+interface QuestionTemplate {
     js: string;
     c: string;
 }
 
-export type QuestionTemplateList = {
+type QuestionTemplateList = {
     [key in QuestionName]: QuestionTemplate
 }
 type CaseAndOutput = {

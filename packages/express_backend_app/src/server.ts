@@ -1,9 +1,9 @@
 import app from "./app.js";
-import { seedQuestionDetails } from './model/seed/seed';
+import { seedQData } from './model/seed/seed';
 
 const PORT: number = Number(process.env.PORT) || 3000;
 
-seedQuestionDetails()
+seedQData()
     .then(() => {
         console.log("Seeding completed !!");
     })

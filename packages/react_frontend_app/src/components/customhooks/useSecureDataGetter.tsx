@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import type { QuestionName, IBody } from '../types/question';
+import type { IBody } from '../types/question';
 //
 //
 export type UserDetail = {
@@ -22,12 +22,13 @@ export function useSecureDataGetter() {
 
     const [data, setData] = useState("");
 
-    const secureDataGetter = useCallback(async (authState: IAuthState, qname: QuestionName, body?: FormData) => {
+    const secureDataGetter = useCallback(async (authState: IAuthState, path: string,
+        body?: FormData) => {
         try {
             let res: Response;
             if (body) {
                 const bodyObject: IBody = Object.fromEntries(body.entries());
-                res = await fetch(`/api/draw-submit/${qname}`, {
+                res = await fetch(path, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -37,7 +38,7 @@ export function useSecureDataGetter() {
                     body: JSON.stringify(bodyObject),
                 })
             } else {
-                res = await fetch(`/api/draw-submit/${qname}`, {
+                res = await fetch(path, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -48,7 +49,7 @@ export function useSecureDataGetter() {
             }
 
             if (res.ok) {
-                
+
                 // server judge service 
                 const resJson = await res.json();
                 setData(resJson);
@@ -68,7 +69,7 @@ export function useSecureDataGetter() {
                 }
 
             } else if (res.status === 401) {
-                // jwt is expired, so get the refresh token
+                // jwt is expired or none is there, so get the jwt & refresh token using the current RT
                 const { code } = await res.json();
                 console.log(code)
                 // now fetch the RT & JWT
@@ -90,13 +91,13 @@ export function useSecureDataGetter() {
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
                                 setUser: authState.setUser
-                            }, qname, body);
+                            }, path, body);
                         } else {
                             await secureDataGetter({
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
                                 setUser: authState.setUser
-                            }, qname);
+                            }, path);
                         }
                     } catch (err) {
                         console.log(err);
@@ -119,6 +120,13 @@ export function useSecureDataGetter() {
                     console.log("HTTP error: ", jwtFetch.status);
                     throw new Error(jwtFetch.status.toString());
                 }
+
+            } else if (res.status === 403) {
+                /// ADMIN NON AUTHORIZATION - FORBIDDEN IF ROLE IS USER
+                const { code } = await res.json();
+                console.log(code);
+                setData("signin"); // Say forbidden when we get "signin" as the setData
+                return;
 
             } else {
                 // unknown error from server (someone changed statuscode from serverside)

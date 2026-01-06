@@ -32,7 +32,10 @@ export interface IUserDetail {
     email: string;
     picture: string;
 }
-export interface IJwtVerifiedPayload extends IUserDetail {
+export interface IUserDetailWithRole extends IUserDetail{
+    role: "user" | "admin";
+}
+export interface IJwtVerifiedPayload extends IUserDetailWithRole {
     iat: number;
     exp: number;
 }
@@ -100,7 +103,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
             if (req.body?.revokeRefreshToken) {
                 await revokeRefreshToken(detailRefreshToken);
                 response = {
-                    code:"REFRESH_TOKEN_REVOKED",
+                    code: "REFRESH_TOKEN_REVOKED",
                     status: 401,
                 }
                 return res.status(response.status).json(response);
@@ -109,8 +112,18 @@ export const refreshTokenJwtGen = async (req: Request, res: Response) => {
 
             const dummyUserPayload: { sub: string } = { sub: detailRefreshToken.userid };
             const [userDetail]: [IUserDetail] = await searchUser(dummyUserPayload);
-            const accessToken = jwtCreatorService(jwt, userDetail);
 
+
+            // Add role to the Userdetail before sending to the Server
+            let userDetailWithRole: IUserDetailWithRole;
+            if (userDetail.email === "amarthyasreechand@gmail.com") {
+                userDetailWithRole = { ...userDetail, role: "admin" };
+            } else {
+                userDetailWithRole = { ...userDetail, role: "user" };
+            }
+            // Done
+
+            const accessToken = jwtCreatorService(jwt, userDetailWithRole);
 
             let refreshToken: string = refreshTokenGenerateService(crypto);
 

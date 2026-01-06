@@ -6,12 +6,12 @@ import pool from "../drawpool";
 //     difficulty text NOT NULL,
 //     detail jsonb NOT NULL
 // )
-export async function seedQuestionDetails() {
-    const text = `INSERT INTO question_detail (id, name, difficulty, detail) 
-                VALUES ($1, $2, $3, $4), ($5, $6, $7, $8), ($9, $10, $11, $12) 
+export async function seedQData() {
+    // QuestionDetails Seed
+    const qDetailInsertText = `INSERT INTO question_detail (name, difficulty, detail) 
+                VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9) 
                 ON CONFLICT (name) DO NOTHING`;
-    const values = [
-        0,
+    const qDetailInsertValues = [
         "trapping-rain-water",
         "hard",
         {
@@ -47,7 +47,6 @@ export async function seedQuestionDetails() {
             ],
         },
 
-        1,
         "is-palindrome",
         "easy",
         {
@@ -92,7 +91,6 @@ export async function seedQuestionDetails() {
             ],
         },
 
-        2,
         "three-integer-sum",
         "medium",
         {
@@ -149,9 +147,115 @@ export async function seedQuestionDetails() {
     ];
 
     try {
-     await pool.query(text, values);
-    } catch(err) {
+        await pool.query(qDetailInsertText, qDetailInsertValues);
+    } catch (err) {
         throw err; // will be caught by the server.ts file who calls it
     }
+
+    //QTemplates Seed
+    const qTemplateInsertText = `INSERT INTO question_template (qname, qmeta, langtemplates)
+                  VALUES ($1, $2, $3), ($4, $5, $6), ($7, $8, $9)
+                  ON CONFLICT (qname) DO NOTHING`;
+    const qTemplateInsertValues = [
+        // 1
+        "trapping-rain-water",
+        {
+            method: "waterTrap",
+            caseAndOutput: [
+                {
+                    case: [0, 2, 0, 3, 1, 0, 1, 3, 2, 1],
+                    output: 9
+                }
+            ]
+        },
+        {
+            js: `class Solution {
+
+    /**
+    * @param {number[]} height
+    * @return {number}
+    */
+    waterTrap(height) {
+
+    }
+}`,
+            c: `int waterTrap(int *height) {
+}
+
+           C Coming Soon ...
+`
+        },
+
+        // 2
+        "is-palindrome",
+        {
+            method: "isPalindrome",
+            caseAndOutput: [
+                {
+                    case: "Was it a car or a cat I saw?",
+                    output: true
+                },
+                {
+                    case: "tab a cat",
+                    output: false
+                }
+            ]
+        },
+        {
+            js: `class Solution {
+
+    /**
+    * @param {string} s
+    * @return {boolean}
+    */
+    isPalindrome(s) {
+
+    }
+}`,
+            c: `int isPalindrome(const char *s) {
+}
+
+           C Coming Soon ...
+`
+        },
+
+        //3
+        "three-integer-sum",
+        {
+            method: "threeSum",
+            caseAndOutput: [
+                {
+                    case: [-1, 0, 1, 2, -1, -4],
+                    output: [[-1, -1, 2], [-1, 0, 1]]
+                },
+                {
+                    case: [0, 1, 1],
+                    output: []
+                }
+            ]
+        },
+        {
+            js: `class Solution {
+
+    /**
+    * @param {number[]} nums
+    * @return {number[][]}
+    */
+    threeSum(nums) {
+
+    }
+}`,
+            c: `C Coming soon...`
+
+        }
+
+    ]
+
+    try {
+        await pool.query(qTemplateInsertText, qTemplateInsertValues);
+    } catch (err) {
+        throw err; // will be caught by the server.ts file who calls it
+    }
+
 }
 

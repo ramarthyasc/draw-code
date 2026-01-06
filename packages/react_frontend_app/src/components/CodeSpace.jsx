@@ -26,7 +26,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const [qTemplate, setQTemplate] = useState();
     //extract from route params
     const params = useParams();
-    const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const isButtonLoadingRef = useRef(false);
     const { isLoggedIn } = useOutletContext();
     const [reset, setReset] = useState(0);
     const qTemplatesRef = useRef({});
@@ -34,7 +34,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     if (localStorage.getItem("qTemplates") !== null) {
         qTemplatesRef.current = JSON.parse(localStorage.getItem("qTemplates"));
     }
-    const [resetMouseDown, setResetMouseDown] = useState(false); 
+    const [resetMouseDown, setResetMouseDown] = useState(false);
 
     console.log(jsonWebToken)
 
@@ -42,24 +42,27 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         e.preventDefault();
 
         // Don't send requests when pressing the submit button when loading (ie' it's fetching)
-        if (isButtonLoading) { return; }
+        if (isButtonLoadingRef.current) { return; }
 
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
+        const path = `/api/draw-submit/${params.qname}`;
         try {
-            setIsButtonLoading(true);
-            await secureDataGetter({
-                jsonWebToken,
-                setJsonWebToken,
-                setUser
-            },
-                params.qname,
-                formData);
+            isButtonLoadingRef.current = true;
+            await secureDataGetter(
+                {
+                    jsonWebToken,
+                    setJsonWebToken,
+                    setUser
+                },
+                path,
+                formData
+            );
         } catch (err) {
             setError(true);
             console.log(err);
         }
-        setIsButtonLoading(false);
+        isButtonLoadingRef.current = false;
 
     }
 
@@ -102,13 +105,14 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
     //get QTemplate 
     useEffect(() => {
-
+        const controller = new AbortController();
         // only on the first fetch of a qtemplate is this function executed
         async function fetcher() {
             try {
                 console.log(params.qname);
                 const res = await fetch(`/docs/templates/${params.qname}?language=${language}`, {
                     method: "GET",
+                    signal: controller.signal,
                 })
 
                 if (res.ok) {
@@ -132,8 +136,13 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 }
 
             } catch (err) {
-                console.log("Network/Fetch or parsing error", err);
-                setError(true);
+                if (err.name === "AbortError") {
+                    console.log("AbortError: ", err);
+                    return;
+                } else {
+                    console.log("Network/Fetch or parsing error", err);
+                    setError(true);
+                }
             }
         }
 
@@ -144,6 +153,10 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             setIsLoading(false);
             setQTemplate(qTemplatesRef.current[params.qname][language]);
             setResult(""); // Reset the Resultbox result
+        }
+
+        return () => {
+            controller.abort();
         }
 
     }, [params.qname, language, reset]);
@@ -202,7 +215,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         color: "green",
         type: "submit"
     }
-    const colorVariants =  {
+    const colorVariants = {
         darkred: {
             normal: `bg-red-400 text-black hover:bg-red-300 hover:text-gray-800 active:text-gray-800 
             active:bg-red-600`
@@ -224,7 +237,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                         </select>
                     </div>
                     <button type="button" onMouseDown={mouseDownReset} onMouseUp={mouseUpReset}
-        className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.darkred.normal}`}>
+                        className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.darkred.normal}`}>
                         Reset
                     </button>
 
@@ -246,7 +259,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 <ResultBox ref={resultBoxRef} result={result} />
 
                 <div className="flex justify-end px-2 border-r border-b border-t border-solid border-amber-300 py-1 min-w-24 bg-amber-100">
-                    {isButtonLoading ?
+                    {isButtonLoadingRef.current ?
                         <OneClickButton buttonProps={loadingProps} /> :
                         <OneClickButton buttonProps={submitProps} />
                     }

@@ -18,14 +18,9 @@ export function ButtonTab() {
     const { prevNextQuestionsArray } = qDetailsQNextPrev
     const { handleMouseDown: codedrawHandleDown, handleMouseUp: codedrawHandleUp } = useOneClickButton(setIsCoding);
     //don't need this activeButtonId bcs, we are not having 2 or more ActiveOrNotButtons to switch the "isActive" state
-    const {
-        activeButtonId,
-        handleMouseDown: activeOrNotHandleDown,
-        handleMouseUp: activeOrNotHandleUp
-    } = useIsButtonActive("");
 
     const questionProps: IActiveOrNotButtonProps = {
-        id: "question",
+        id: 0,
         name: "Question",
         isActive: true,
         color: "gray",
@@ -61,11 +56,7 @@ export function ButtonTab() {
     return (
         <div className="flex mx-2 py-0 px-5 items-center justify-between border border-solid border-black ">
             <div className="flex gap-3">
-                <ActiveOrNotButton interactionFuncs={{
-                    onMouseDown: activeOrNotHandleDown,
-                    onMouseUp: activeOrNotHandleUp
-                }}
-                    buttonProps={questionProps} />
+                <ActiveOrNotButton buttonProps={questionProps} />
 
                 <div className="flex gap-1">
                     {prevNextQuestionsArray[0] === null ?

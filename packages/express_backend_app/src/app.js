@@ -22,8 +22,9 @@ const { preflightOptionsSetter, corsAllowResponseSetter } = require('./controlle
 const { questionsGet } = require('./controller/drawQuestionsController.js');
 const { submitPost } = require('./controller/drawCompilerController.js');
 const { uiJwtAuth, refreshTokenJwtGen } = require('./controller/drawAuthMiddleware');
-const { secureRouter } = require('./routers/drawSecureRouter.ts');
-const { nonSecureRouter } = require('./routers/drawNonSecureRouter.ts');
+const { drawSecureRouter } = require('./routers/drawSecureRouter');
+const { drawNonSecureRouter } = require('./routers/drawNonSecureRouter');
+const { drawAdminRouter } = require('./routers/drawAdminRouter')
 
 
 ///////////////////////////////////////////////////////////////////
@@ -84,10 +85,13 @@ app.post('/draw-login', corsAllowResponseSetter, googleJwtVerifyPost, jwtRefresh
 app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); // {/:question} is optional. ie; / is optional ,and the route param is optional
 
 //Secure routes - Router
-app.use('/api', secureRouter);
+app.use('/api', drawSecureRouter);
 
 //Non-secure routes - For Non secure Data
-app.use('/docs', nonSecureRouter);
+app.use('/docs', drawNonSecureRouter);
+
+// Admin route
+app.use('/admin', drawAdminRouter);
 
 //For logging the errors in Production into the terminal(And importantly when testing) 
 //& Most importantly streamlining the server error flow using next(err) & then handle from Frontend too the 

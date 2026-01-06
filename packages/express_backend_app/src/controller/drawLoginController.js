@@ -18,7 +18,7 @@ exports.googleJwtVerifyPost = async (req, res, next) => {
     let userPayload;
     try {
         // userPayload is the jwt payload from Google authorization library : Check Google authorization for webapp -look at Credentials.
-            userPayload = await verifyGoogleJWTService(client, token);
+        userPayload = await verifyGoogleJWTService(client, token);
 
     } catch (err) {
         console.error(err);
@@ -41,8 +41,16 @@ exports.googleJwtVerifyPost = async (req, res, next) => {
 
 exports.jwtRefreshTokenCreatorPost = async (req, res) => {
 
-    const userDetail = req.userDetail;
-    //create jwt using the userDetail
+    // add Role (admin or user) into jwt
+    let userDetail;
+    if (req.userDetail.email === "amarthyasreechand@gmail.com") {
+        userDetail = { ...req.userDetail, role: "admin" };
+    } else {
+        userDetail = { ...req.userDetail, role: "user" };
+    }
+    //Done
+
+    //create jwt using the userDetail with role
     const accessToken = jwtCreatorService(jwt, userDetail);
     let refreshToken = refreshTokenGenerateService(crypto);
 

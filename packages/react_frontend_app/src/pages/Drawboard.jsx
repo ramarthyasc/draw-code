@@ -24,16 +24,20 @@ function Drawboard() {
     // reference of the context object passed shouldn't change in each render - preventing context child 
     // rerender in each render of parent
     const providerValue = useMemo(() => {
-        return { isCoding, setIsCoding, qDetailsQNextPrev};
+        return { isCoding, setIsCoding, qDetailsQNextPrev };
     }, [isCoding, qDetailsQNextPrev])
 
     useEffect(() => {
+        // one controller for each request - controller is linked to the specific request
+        const controller = new AbortController();
+
         async function questionDetailsFetcher() {
 
             try {
                 let res = await fetch(`/draw-question/${params.qname}`, {
                     method: "GET",
                     credentials: 'include',
+                    signal: controller.signal,
                 });
 
                 if (res.ok) {
@@ -47,14 +51,22 @@ function Drawboard() {
                     return;
                 }
             } catch (err) {
-                console.log(err);
-                setError(err);
+                if (err.name === "AbortError") {
+                    console.log("Fetch aborted");
+                    // Intentional error. So don't setError here
+                } else {
+                    console.log(err);
+                    setError(err);
+                }
             }
         }
 
         questionDetailsFetcher();
+
         return () => {
             console.log("UNMOUNTING DRAWBOARD");
+            console.log("Aborting the current fetch")
+            controller.abort();
         }
 
     }, [params.qname]);

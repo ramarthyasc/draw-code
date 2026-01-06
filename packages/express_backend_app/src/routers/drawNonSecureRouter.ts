@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { templateGet } from '../controller/drawNonSecureController';
+import { corsAllowResponseSetter } from '../controller/drawCorsController';
 
-export const nonSecureRouter = Router();
+export const drawNonSecureRouter = Router();
 
-nonSecureRouter.get('/templates/:qname', templateGet);
+drawNonSecureRouter.use(corsAllowResponseSetter);
+
+drawNonSecureRouter.get('/templates/:qname', templateGet);

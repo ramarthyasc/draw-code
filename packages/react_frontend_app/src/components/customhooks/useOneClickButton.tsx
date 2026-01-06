@@ -13,12 +13,12 @@ export function useOneClickButton(sideEffectSetState: Dispatch<SetStateAction<bo
     function handleMouseUp(e: React.MouseEvent<HTMLButtonElement>) {
         if (mouseDown && mouseDownButtonIdRef.current === e.currentTarget.id) {
             // Data can be any state that is passed while calling the custom hook
-            sideEffectSetState((val: boolean | number ) => {
+            sideEffectSetState((val: boolean | number) => {
                 if (typeof val === "boolean") {
-                    return !val;
+                return !val; 
                 } else {
-                    return val + 1;
-                } 
+                    return (val + 1);
+                }
             });
         }
         setMouseDown(false);

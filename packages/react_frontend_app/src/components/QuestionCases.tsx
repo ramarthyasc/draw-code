@@ -13,30 +13,31 @@ interface IExample {
     explanation: string;
 
 }
-interface ITips {
+interface ITip {
     title: string;
     description: string;
 }
-interface IQuestionDetails {
+interface IQuestionDetail {
     id: number;
     name: QuestionName;
     title: string;
     difficulty: string;
+    description: string;
     examples: IExample[];
     constraints: string[];
-    tips: ITips[];
+    tips: ITip[];
 }
 interface IPrevNextQuestion {
     id: number;
     name: QuestionName;
     difficulty: string;
 }
-interface IQDetailsQNextPrev {
-    questionDetails: IQuestionDetails;
+interface IQDetailQNextPrev {
+    questionDetails: IQuestionDetail;
     prevNextQuestionsArray: IPrevNextQuestion[];
 }
 export interface IQuestionContext {
-    qDetailsQNextPrev: IQDetailsQNextPrev;
+    qDetailsQNextPrev: IQDetailQNextPrev;
     isCoding: boolean;
     setIsCoding: Dispatch<SetStateAction<boolean>>;
 }

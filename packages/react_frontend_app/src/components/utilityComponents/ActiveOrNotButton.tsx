@@ -22,7 +22,7 @@ export interface IInteractionFunctions {
 }
 
 interface IActiveOrNotButtonComponent {
-    interactionFuncs: IInteractionFunctions;
+    interactionFuncs?: IInteractionFunctions;
     buttonProps: IActiveOrNotButtonProps;
 }
 //USAGE:  We can switch the "isActive" state between buttons when there are 2 or more buttons. 
@@ -62,7 +62,7 @@ export function ActiveOrNotButton({ interactionFuncs, buttonProps}: IActiveOrNot
 
     return (
         <button type="button" data-id={buttonProps.id}
-            onMouseDown={interactionFuncs.onMouseDown} onMouseUp={interactionFuncs.onMouseUp}
+            onMouseDown={interactionFuncs?.onMouseDown} onMouseUp={interactionFuncs?.onMouseUp}
             className={`border border-solid px-1.5 py-0 mx-1 my-1 rounded-sm cursor-pointer transition-colors duration-300 ${buttonProps.isActive ? (colorVariants[buttonProps.color]?.active ?? ""): (colorVariants[buttonProps.color]?.inactive ?? "")}`}
         >{buttonProps.name}</button>
     )

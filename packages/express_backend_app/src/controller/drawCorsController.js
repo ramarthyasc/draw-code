@@ -1,7 +1,7 @@
 
 exports.preflightOptionsSetter = (req, res) => {
   //setting the headers
-  res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.set('Access-Control-Allow-Origin', req.headers.origin);
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.set('Access-Control-Allow-Credentials', 'true');
@@ -9,7 +9,6 @@ exports.preflightOptionsSetter = (req, res) => {
 }
 
 exports.corsAllowResponseSetter = (req, res, next) => {
-    console.log("OWWOWOOWO")
-  res.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.set('Access-Control-Allow-Origin', req.headers.origin);
   next();
 }
