@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 function Home() {
 
-    const { user } = useOutletContext();
+    const { setIsAdmin } = useOutletContext();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState();
     const [questionsList, setQuestionsList] = useState();
@@ -51,6 +51,8 @@ function Home() {
             }
         }
         questionsListfetcher();
+        setIsAdmin(false);
+
         return () => {
             console.log("UNMOUNT HOME");
             controller.abort();
@@ -63,7 +65,7 @@ function Home() {
     }
 
     if (isLoading) {
-            <div>
+            <div className="text-center">
                 loading...
             </div>
     } else {
@@ -140,13 +142,13 @@ function Home() {
                 {/*     </svg> */}
                 {/**/}
                 {/* </div> */}
-                <div className="absolute mb-100 ml-300">
-                    <svg width="2" height="300" viewBox="0 0 1 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div className="absolute mb-95 ml-300">
+                    <svg width="2" height="210" viewBox="0 0 1 118" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.1 0.0999985L0.776382 117.111" stroke="black" stroke-width="0.2" stroke-linecap="round" />
                     </svg>
 
                 </div>
-                <div className="absolute mt-240 ml-300">
+                <div className="absolute mt-250 ml-300">
                     <svg width="2" height="300" viewBox="0 0 1 118" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.1 0.0999985L0.776382 117.111" stroke="black" stroke-width="0.2" stroke-linecap="round" />
                     </svg>

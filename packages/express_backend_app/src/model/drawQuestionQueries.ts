@@ -37,8 +37,8 @@ export async function updateQuestion(changedDetail: IQuestionDetail,
     changedName: string, changedDifficulty: Difficulty,
     qname: string) {
     const text = `UPDATE question_detail
-                    SET detail = $1, qname = $2, qdifficulty = $3
-                    WHERE qname = $4
+                    SET detail = $1, name = $2, difficulty = $3
+                    WHERE name = $4
                     RETURNING detail`;
     const values = [changedDetail, changedName, changedDifficulty, qname];
 

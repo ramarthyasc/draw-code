@@ -1,6 +1,9 @@
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
-import { useOutletContext, useSearchParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useSecureDataGetter } from "./customhooks/useSecureDataGetter";
+import { colorVariants } from "./AdminQuestionDetail";
 
 export type Difficulty = "easy" | "medium" | "hard";
 export interface IQuestionsList {
@@ -20,135 +23,179 @@ export interface IAppContext {
     isLoggedIn: boolean;
     setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
     jsonWebToken: string;
-    setJsonWebToken: Dispatch<SetStateAction<string>>;
+    setJsonWebToken: Dispatch<SetStateAction<string | null>>;
     user: IUserDetailWithRole,
-    setUser: Dispatch<SetStateAction<IUserDetailWithRole>>;
+    setUser: Dispatch<SetStateAction<IUserDetailWithRole | null>>;
+    setIsAdmin: Dispatch<SetStateAction<boolean>>;
 }
+
 
 function AdminQuestionsList() {
     const [searchParams, setSearchParams] = useSearchParams("?page=0&limit=10");
-    const [questionsList, setQuestionsList] = useState<IQuestionsList[]>([]);
     const [error, setError] = useState(false);
-    const [errorPage, setErrorPage] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const onMountRef = useRef(false);
+
+    const { data, secureDataGetter } = useSecureDataGetter<IQuestionsList[]>();
+    const isMountedRef = useRef(false);
     const context: IAppContext = useOutletContext();
 
-    const { jsonWebToken} = context;
-    console.log(jsonWebToken)
+    const { jsonWebToken, setJsonWebToken, setUser, user, setIsLoggedIn, setIsAdmin } = context;
+    const navigate = useNavigate();
 
     useEffect(() => {
 
-        // when doing await, react sets this state
-        setErrorPage(false);
-
         async function fetcher() {
-            // searchParams is webapi itself
             const page = searchParams.get("page") ?? "0";
             const limit = searchParams.get("limit") ?? "10";
+            const path = `/admin/questions?page=${page}&limit=${limit}`;
             try {
-                //fetching secure api - need jwt
-                const res = await fetch(`/admin/questions?page=${page}&limit=${limit}`, {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Authorization": `Bearer ${jsonWebToken}`
-                    },
-                });
-
-                if (res.ok) {
-                    const questionsList: IQuestionsList[] = await res.json();
-                    console.log("EHYYYY")
-                    setQuestionsList(questionsList);
-                    if (!onMountRef.current) {
-                        // run only on Mount
-                        setSearchParams([
-                            ["page", page],
-                            ["limit", limit]
-                        ])
-                        onMountRef.current = true;
-                    }
-                } else {
-                    const error = await res.text();
-                    console.log("HTTP server status: ", res.status);
-                    console.log("HTTP error ", error);
-                    setErrorPage(true);
-                }
+                await secureDataGetter({
+                    setJsonWebToken,
+                    jsonWebToken,
+                    setUser,
+                    setIsLoggedIn
+                },
+                    path
+                );
 
             } catch (err) {
-                console.log(err);
                 setError(true);
+                console.log(err);
             }
         }
 
-        fetcher();
+        if (!isMountedRef.current || data !== "") {
+            fetcher();
+        }
+        isMountedRef.current = true;
+
     }, [searchParams, jsonWebToken]);
+
+
+    useEffect(() => {
+        if (jsonWebToken && user.role === "admin") {
+            console.log(data)
+            setIsAdmin(true);
+            if (typeof data !== "string" && data.length > 0) {
+                const lastqid = data.at(-1)?.id;
+                if (lastqid) {
+                    console.log("HEYYY THIA IS MY IDDD", lastqid);
+                    window.localStorage.setItem("lastqid", lastqid.toString());
+                }
+            }
+        } else {
+            setIsAdmin(false);
+        }
+    }, [jsonWebToken, data]);
+
 
     if (error) {
         throw new Error("Network Error !!")
     }
-    if (isLoading) {
+    if (data === "") {
+        // initial data from customhook is ""
         return (
-            <div>
+            <div className="text-center">
                 loading...
             </div>
         )
     }
 
-    if (errorPage) {
+    if (typeof data === "string") {
+
         return (
             <div className="flex justify-center">
-                <div className="text-4xl text-center mt-20 border p-5">
-                    Heyy Bro!! You're not an Admin...
-                    <br />
-                    <br />
-                    Forget it
-                </div>
-            </div>
-        )
-
-    } else {
-        return (
-            <div>
                 {
+                    data === "not-admin" ?
+                        (
+                            <div className="text-4xl text-center mt-20 border p-5">
+                                Heyy Bro!! You're not an Admin...
+                                <br />
+                                <br />
+                                Forget it
+                            </div>
+                        ) : data === "signin" ?
+                            (
+                                <div className="text-4xl text-center mt-20 border p-5">
+                                    Signin as Admin to Access...
+                                </div>
+                            ) : (
+                                <div className="text-4xl text-center mt-20 border p-5">
+                                    BAD REQUEST
+                                </div>
 
-                    <table className="mr-20">
-                        <thead>
-                            <tr className="border-b font-bold">
-                                <td className="border-r pr-2">Id</td>
-                                <td className="border-r text-center">Problem</td>
-                                <td className="pl-2 text-center">Difficulty</td>
-                                <td className="pl-2 text-center">Detail</td>
-                                <td className="pl-2 text-center">Template</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {questionsList.map((obj, i) => {
-                                return (
-                                    <tr className={`${questionsList.length - 1 === i ? "" : "border-b"}`} key={obj.id}>
-                                        <td className="border-r text-center"> {obj.id} </td>
-                                        <td className="border-r px-2"> {obj.name} </td>
-                                        <td className="text-center">{obj.difficulty}</td>
-                                        <td className="text-center">
-                                            <Link to={`/admin/question-detail/${obj.name}`}>View/Edit</Link>
-                                        </td>
-                                        <td className="text-center">
-                                            <Link to={`/admin/question-template/${obj.name}`}>View/Edit</Link>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                            }
-
-                        </tbody>
-                    </table >
-
+                            )
                 }
             </div>
         )
 
     }
 
+    function handleAddMouseDown() {
+        navigate("/admin/question-detail/create");
+    }
+
+    const questionList = data;
+
+    return (
+
+
+        <div className="flex-1 flex flex-col justify-center items-center pb-100">
+            <div className="pb-20 text-4xl font-extrabold">
+                Questions
+            </div>
+            {
+
+                <table>
+                    <thead>
+                        <tr className="border-b font-bold">
+                            <td className="px-2 border-r text-center">Id</td>
+                            <td className="px-2 border-r text-center">Problem</td>
+                            <td className="px-2 border-r text-center">Difficulty</td>
+                            <td className="px-2 border-r text-center">Detail</td>
+                            <td className="pl-2">Template</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {questionList.map((obj, i) => {
+                            return (
+                                <tr className={`${questionList.length - 1 === i ? "" : "border-b"}`} key={obj.id}>
+                                    <td className="border-r px-2 text-center"> {obj.id} </td>
+                                    <td className="border-r px-2"> {obj.name} </td>
+                                    <td className="border-r px-2">{obj.difficulty}</td>
+                                    <td className="border-r px-2 text-blue-700 hover:text-gray-600">
+                                        <Link to={`/admin/question-detail/${obj.name}`}>View/Edit</Link>
+                                    </td>
+                                    <td className="px-2 text-center text-blue-700 hover:text-gray-600">
+                                        <Link to={`/admin/question-template/${obj.name}`}>View/Edit</Link>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        }
+
+                    </tbody>
+                    <tfoot>
+                        <tr >
+                            <td ></td>
+                            <td ></td>
+                            <td className="pl-2 pt-4">
+
+                                <button type="button" onMouseDown={handleAddMouseDown}
+                                    className={`border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.gray.normal}`}>
+                                    Add
+                                </button>
+                            </td>
+                            {/* <td >Detail</td> */}
+                            {/* <td >Template</td> */}
+                        </tr>
+                    </tfoot>
+                </table >
+
+            }
+        </div>
+    )
+
 }
+
 
 export default AdminQuestionsList;

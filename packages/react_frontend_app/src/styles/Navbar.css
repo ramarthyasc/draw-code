@@ -1,14 +1,3 @@
-.nav {
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(to right, #FFD469, #f9a66c);
-  /* clip-path: ellipse(69.48% 50% at 26.23% 50.00%); */
-  height: 50px;
-  /* given constant because when opening console, and pulling up the console, navbar shouldn't shrink*/
-
-}
 
 .logo {
   width: 40px;

@@ -32,7 +32,7 @@ export interface IUserDetail {
     email: string;
     picture: string;
 }
-export interface IUserDetailWithRole extends IUserDetail{
+export interface IUserDetailWithRole extends IUserDetail {
     role: "user" | "admin";
 }
 export interface IJwtVerifiedPayload extends IUserDetailWithRole {
@@ -77,86 +77,91 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 }
 
 
-export const refreshTokenJwtGen = async (req: Request, res: Response) => {
+export const refreshTokenJwtGen = async (req: Request, res: Response, next: NextFunction) => {
 
     const refreshToken: string | undefined = req.cookies?.refreshToken;
     console.log(refreshToken);
 
 
-    let response: CodeResponse;
-    if (!refreshToken) {
-        response = {
-            code: "NO_REFRESH_TOKEN",
-            status: 401,
-        }
-        return res.status(response.status).json(response);
-    } else {
-        // There is refresh token
-        console.log(refreshToken, "helooooo");
-
-        const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(
-            refreshToken,
-            searchRefreshToken,
-            revokeRefreshToken, revokeOneRefreshTokenChain);
-
-        if (!detailRefreshToken) {
+    try {
+        let response: CodeResponse;
+        if (!refreshToken) {
             response = {
-                code: "INVALID_REFRESH_TOKEN",
+                code: "NO_REFRESH_TOKEN",
                 status: 401,
             }
             return res.status(response.status).json(response);
-
         } else {
-            // Refresh token is Valid(non Revoked) and non Expired 
+            // There is refresh token
+            console.log(refreshToken, "helooooo");
 
-            /// User manually signsout
-            if (req.body?.revokeRefreshToken) {
-                await revokeRefreshToken(detailRefreshToken);
+            const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(
+                refreshToken,
+                searchRefreshToken,
+                revokeRefreshToken, revokeOneRefreshTokenChain);
+
+            if (!detailRefreshToken) {
                 response = {
-                    code: "REFRESH_TOKEN_REVOKED",
+                    code: "INVALID_REFRESH_TOKEN",
                     status: 401,
                 }
                 return res.status(response.status).json(response);
-            }
-            /// 
 
-            const dummyUserPayload: { sub: string } = { sub: detailRefreshToken.userid };
-            const [userDetail]: [IUserDetail] = await searchUser(dummyUserPayload);
-
-
-            // Add role to the Userdetail before sending to the Server
-            let userDetailWithRole: IUserDetailWithRole;
-            if (userDetail.email === "amarthyasreechand@gmail.com") {
-                userDetailWithRole = { ...userDetail, role: "admin" };
             } else {
-                userDetailWithRole = { ...userDetail, role: "user" };
+                // Refresh token is Valid(non Revoked) and non Expired 
+
+                /// User manually signsout
+                if (req.body?.revokeRefreshToken) {
+                    await revokeRefreshToken(detailRefreshToken);
+                    response = {
+                        code: "REFRESH_TOKEN_REVOKED",
+                        status: 401,
+                    }
+                    return res.status(response.status).json(response);
+                }
+                /// 
+
+                const dummyUserPayload: { sub: string } = { sub: detailRefreshToken.userid };
+                const [userDetail]: [IUserDetail] = await searchUser(dummyUserPayload);
+
+
+                // Add role to the Userdetail before sending to the Server
+                let userDetailWithRole: IUserDetailWithRole;
+                if (userDetail.email === "amarthyasreechand@gmail.com") {
+                    userDetailWithRole = { ...userDetail, role: "admin" };
+                } else {
+                    userDetailWithRole = { ...userDetail, role: "user" };
+                }
+                // Done
+
+                const accessToken = jwtCreatorService(jwt, userDetailWithRole);
+
+                let refreshToken: string = refreshTokenGenerateService(crypto);
+
+                refreshToken = await addAndRevokeRTService(addRefreshToken, {
+                    userid: userDetailWithRole.userid,
+                    token: refreshToken,
+                    rotated_from: detailRefreshToken.id,
+                }, revokeRefreshToken, detailRefreshToken);
+
+                console.log(refreshToken, "TWOOOOOO");
+
+                // Set new RT in cookie & Send new JWT  
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    maxAge: Number(process.env.RT_EXPIRES_IN),
+                    secure: false, // As the localserver is not https. Change it to secure when in Production.
+                    sameSite: "lax",
+                    path: "/api/refresh-auth",
+                });
+                return res.json({ accessToken, userDetail: userDetailWithRole });
+
+                /// Redirect the client to the requested route (Do it from the frontend with the new JWT - For Secure routes.)
             }
-            // Done
-
-            const accessToken = jwtCreatorService(jwt, userDetailWithRole);
-
-            let refreshToken: string = refreshTokenGenerateService(crypto);
-
-            refreshToken = await addAndRevokeRTService(addRefreshToken, {
-                userid: userDetail.userid,
-                token: refreshToken,
-                rotated_from: detailRefreshToken.id,
-            }, revokeRefreshToken, detailRefreshToken);
-
-            console.log(refreshToken, "TWOOOOOO");
-
-            // Set new RT in cookie & Send new JWT  
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: Number(process.env.RT_EXPIRES_IN),
-                secure: false, // As the localserver is not https. Change it to secure when in Production.
-                sameSite: "lax",
-                path: "/api/refresh-auth",
-            });
-            return res.json({ accessToken, userDetail });
-
-            /// Redirect the client to the requested route (Do it from the frontend with the new JWT - For Secure routes.)
         }
+
+    } catch (err) {
+        return next(err);
     }
 
 }

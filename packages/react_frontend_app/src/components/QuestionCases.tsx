@@ -4,6 +4,7 @@ import { ActiveOrNotButton } from "./utilityComponents/ActiveOrNotButton";
 import { useIsButtonActive } from "./customhooks/useActiveOrNotButton";
 import type { SetStateAction, Dispatch } from "react";
 import type { QuestionName } from "./types/question";
+import type { Difficulty } from "./AdminQuestionsList";
 
 interface IExample {
     id: number;
@@ -17,11 +18,11 @@ interface ITip {
     title: string;
     description: string;
 }
-interface IQuestionDetail {
+export interface IQuestionDetail {
     id: number;
     name: QuestionName;
     title: string;
-    difficulty: string;
+    difficulty: Difficulty;
     description: string;
     examples: IExample[];
     constraints: string[];

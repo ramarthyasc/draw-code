@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import JwtFetcher from './utils/JwtFetcher.jsx';
 import './styles/App.css'
-import { useState } from 'react';
+import { useState} from 'react';
 import ErrorBoundary from './utils/ErrorHandling.js';
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
 
     // Display State : 
     const [user, setUser] = useState(null);
+    const [isAdmin, setIsAdmin ]= useState(false);
 
 
     return (
@@ -28,11 +29,13 @@ function App() {
 
                 <div className='app'>
                     <Navbar setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}
-                        setJsonWebToken={setJsonWebToken} setUser={setUser} user={user} />
+                        setJsonWebToken={setJsonWebToken} setUser={setUser} user={user} isAdmin={isAdmin} />
 
                     {/* Outlet is Authorization Protected only if isLoggedIn == true (That we did in JwtFetcher). Otherwise, you are free to explore both pages. */}
-                    <Outlet context={{ isLoggedIn, setIsLoggedIn, jsonWebToken, setJsonWebToken, setUser, user }} />
-                    {/* In the Outlet =  Pages : Home & Drawboard */}
+                    <Outlet context={
+                        { isLoggedIn, setIsLoggedIn, jsonWebToken, setJsonWebToken, setUser, user, setIsAdmin }
+                    } />
+                    {/* In the Outlet =  Pages : Home , Drawboard, Adminpages */}
                 </div>
 
             </JwtFetcher>

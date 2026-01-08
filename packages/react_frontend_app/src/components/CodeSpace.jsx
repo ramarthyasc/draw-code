@@ -17,7 +17,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const maxLineNumberRef = useRef();
     const resultBoxRef = useRef();
 
-    const { jsonWebToken, setJsonWebToken, setUser } = useOutletContext();
+    const { jsonWebToken, setJsonWebToken, setUser, setIsLoggedIn } = useOutletContext();
     // custom hook
     const { data: result, setData: setResult, secureDataGetter } = useSecureDataGetter();
     const [language, setLanguage] = useState('js');
@@ -52,10 +52,14 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                 {
                     jsonWebToken,
                     setJsonWebToken,
-                    setUser
+                    setUser,
+                    setIsLoggedIn
                 },
                 path,
-                formData
+                {
+                    content: formData,
+                    method: "POST"
+                }
             );
         } catch (err) {
             setError(true);

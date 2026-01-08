@@ -1,45 +1,60 @@
 import { useState, useCallback } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { IBody } from '../types/question';
+import type { IUserDetailWithRole } from '../AdminQuestionsList';
 //
 //
-export type UserDetail = {
-    userid: string;
-    name: string;
-    email: string;
-    picture: string;
-}
-interface IAuthState {
+export interface IAuthState {
     jsonWebToken: string;
-    setJsonWebToken: Dispatch<SetStateAction<string>>;
-    setUser: Dispatch<SetStateAction<UserDetail>>;
+    setJsonWebToken: Dispatch<SetStateAction<string | null>>;
+    setUser: Dispatch<SetStateAction<IUserDetailWithRole | null>>;
+    setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface IFetchBody<K> {
+    content: FormData | K;
+    method: "POST" | "PUT";
 }
 
 
 // a “Custom hook” must call at least one Hook at its top level, otherwise it’s just a normal function.That's it
 // Custom hook with side effects for jsonWebToken, user. Returned data ie; data
-export function useSecureDataGetter() {
+export function useSecureDataGetter<T = string, K = FormData>() {
 
-    const [data, setData] = useState("");
+    const [data, setData] = useState<string | T>("");
 
     const secureDataGetter = useCallback(async (authState: IAuthState, path: string,
-        body?: FormData) => {
+        body?: IFetchBody<K>) => {
         try {
             let res: Response;
             if (body) {
-                const bodyObject: IBody = Object.fromEntries(body.entries());
-                res = await fetch(path, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${authState.jsonWebToken}`
-                    },
-                    body: JSON.stringify(bodyObject),
-                })
+                if (body.content instanceof FormData) {
+                    let bodyObject: IBody = Object.fromEntries(body.content.entries());
+                    res = await fetch(path, {
+                        method: body.method,
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${authState.jsonWebToken}`
+                        },
+                        body: JSON.stringify(bodyObject),
+                    })
+                } else {
+                    // Any type can be given -mostly Object or string (type given when calling the hook)
+                    res = await fetch(path, {
+                        method: body.method,
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${authState.jsonWebToken}`
+                        },
+                        body: JSON.stringify(body.content),
+                    })
+
+                }
             } else {
                 res = await fetch(path, {
-                    method: "POST",
+                    method: "GET",
                     credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
@@ -60,7 +75,7 @@ export function useSecureDataGetter() {
                 const resText = await res.text();
 
                 if (res.status === 400) {
-                    // wrong answer submitted. Error got from inside the container
+                    // wrong answer submitted. Error got from inside the container or Wrong parameters send(Bad request)
                     setData(resText);
                     return;
                 } else {
@@ -83,6 +98,7 @@ export function useSecureDataGetter() {
                     const { accessToken, userDetail } = await jwtFetch.json();
                     authState.setJsonWebToken(accessToken);
                     authState.setUser(userDetail);
+                    authState.setIsLoggedIn(true);
 
                     // call the Function once more to do the function request again
                     try {
@@ -90,13 +106,15 @@ export function useSecureDataGetter() {
                             await secureDataGetter({
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
-                                setUser: authState.setUser
+                                setUser: authState.setUser,
+                                setIsLoggedIn: authState.setIsLoggedIn
                             }, path, body);
                         } else {
                             await secureDataGetter({
                                 jsonWebToken: accessToken,
                                 setJsonWebToken: authState.setJsonWebToken,
-                                setUser: authState.setUser
+                                setUser: authState.setUser,
+                                setIsLoggedIn: authState.setIsLoggedIn
                             }, path);
                         }
                     } catch (err) {
@@ -109,6 +127,9 @@ export function useSecureDataGetter() {
                     console.log(code);
                     // Show in the ResultBox that You have to signin to submit (Instead of throwing Error)
                     setData("signin");
+                    authState.setJsonWebToken(null);
+                    authState.setUser(null);
+                    authState.setIsLoggedIn(false);
                 } else if (jwtFetch.status === 500) {
                     //any server error
                     const defaultServerError = await jwtFetch.text();
@@ -125,7 +146,7 @@ export function useSecureDataGetter() {
                 /// ADMIN NON AUTHORIZATION - FORBIDDEN IF ROLE IS USER
                 const { code } = await res.json();
                 console.log(code);
-                setData("signin"); // Say forbidden when we get "signin" as the setData
+                setData("not-admin"); // Say forbidden when we get "not-admin" as the setData - but don't logout
                 return;
 
             } else {

@@ -10,7 +10,7 @@ import { HorizVertSlider } from '../components/HorizVertSlider.jsx';
 import { useParams } from 'react-router-dom';
 
 function Drawboard() {
-    const user = useOutletContext();
+    const { setIsAdmin } = useOutletContext();
 
     const canvasRef = useRef();
     const codespaceRef = useRef();
@@ -62,6 +62,7 @@ function Drawboard() {
         }
 
         questionDetailsFetcher();
+        setIsAdmin(false);
 
         return () => {
             console.log("UNMOUNTING DRAWBOARD");
@@ -76,7 +77,7 @@ function Drawboard() {
 
     if (isLoading) {
         return (
-            <div>
+            <div className="text-center">
                 loading...
             </div>
         )

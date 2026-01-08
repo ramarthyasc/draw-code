@@ -85,7 +85,7 @@ export async function questionDbPut(req: Request, res: Response, next: NextFunct
     const qname = req.params.qname;
 
     // Changed question name, difficulty, detail (Detail is the one updated. I get name & diff - derived)
-    const changedDetail: IQuestionDetail = req.body.qdetail;
+    const changedDetail: IQuestionDetail = req.body;
     const changedDifficulty = changedDetail.difficulty;
     const changedName = changedDetail.name;
 
@@ -107,7 +107,7 @@ export async function questionDbPut(req: Request, res: Response, next: NextFunct
 
 
 export async function questionDbPost(req: Request, res: Response, next: NextFunction) {
-    const newQDetail: IQuestionDetail = req.body.detail;
+    const newQDetail: IQuestionDetail = req.body;
 
     // derived 
     const newQName = newQDetail.name;

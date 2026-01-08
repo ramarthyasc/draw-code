@@ -1,4 +1,4 @@
-export function Result({ result }) {
+export function Result({ result }: any) {
     if (!result) { return; };  // Need this
 
     const resultObject = result.at(-1);
