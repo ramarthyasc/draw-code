@@ -62,9 +62,8 @@ function AdminQuestionDetail() {
     const params = useParams();
     const { data, setData, secureDataGetter } = useSecureDataGetter<IQuestionDetail, IQuestionDetail>();
     const context: IAppContext = useOutletContext();
-    const [error, setError] = useState(false);
-    const isMountedRef = useRef(false);
     const { jsonWebToken, setJsonWebToken, setUser, user, setIsLoggedIn, setIsAdmin } = context;
+    const [error, setError] = useState(false);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
 
     const [created, setCreated] = useState(false);
@@ -76,50 +75,50 @@ function AdminQuestionDetail() {
 
     useEffect(() => {
 
-        if (!isMountedRef.current || data !== "") {
+        // if (!isMountedRef.current || data !== "") {
 
-            // If in the update, the name was changed, then the qdetail 
-            // with changed name will get returned. So when navigating to that param name, I don't want it to 
-            // fetch once more
-            if (params.qname === qdetail?.name) { return; }
-            // end
-            //
-            // When we are creating new Question 
-            if (params.qname === "create") {
-                if (window.localStorage.getItem("lastqid")) {
-                    const nextqid = Number(window.localStorage.getItem("lastqid")) + 1;
-                    console.log("NEXT QID", nextqid)
-                    createqDetail.id = nextqid;
-                    createqDetail.name = Math.random().toString();
-                    setData({ ...createqDetail }); // qDetail will be set automatically be the next UseEffect
-                }
-                return;
+        // If in the update, the name was changed, then the qdetail 
+        // with changed name will get returned. So when navigating to that param name, I don't want it to 
+        // fetch once more
+        // if (params.qname === qdetail?.name) { return; }
+        // end
+        //
+        // When we are creating new Question 
+        if (params.qname === "create") {
+            if (window.localStorage.getItem("lastqid")) {
+                const nextqid = Number(window.localStorage.getItem("lastqid")) + 1;
+                console.log("NEXT QID", nextqid)
+                createqDetail.id = nextqid;
+                createqDetail.name = Math.random().toString();
+                setData({ ...createqDetail }); // qDetail will be set automatically be the next UseEffect
             }
-            //end
-
-            async function fetcher() {
-                const path = `/admin/questions/${params.qname}`;
-                try {
-                    await secureDataGetter({
-                        setJsonWebToken,
-                        jsonWebToken,
-                        setUser,
-                        setIsLoggedIn
-                    },
-                        path
-                    );
-
-                } catch (err) {
-                    setError(true);
-                    console.log(err);
-                }
-            }
-
-            fetcher();
+            return;
         }
-        isMountedRef.current = true;
+        //end
 
-    }, [jsonWebToken, params.name]);
+        async function fetcher() {
+            const path = `/admin/questions/${params.qname}`;
+            try {
+                await secureDataGetter({
+                    setJsonWebToken,
+                    jsonWebToken,
+                    setUser,
+                    setIsLoggedIn
+                },
+                    path
+                );
+
+            } catch (err) {
+                setError(true);
+                console.log(err);
+            }
+        }
+
+        fetcher();
+        // }
+        // isMountedRef.current = true;
+
+    }, [jsonWebToken]);
 
 
     useEffect(() => {

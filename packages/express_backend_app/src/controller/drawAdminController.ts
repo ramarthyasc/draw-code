@@ -7,8 +7,9 @@ import {
     updateQTemplate,
     createQuestion,
     createQTemplate,
+    deleteQuestionQuery
 } from "../model/drawQuestionQueries";
-import { paginateQuestionsList } from "../service/drawQuestionService";
+import { paginateQuestionsList} from "../service/drawQuestionService";
 
 export type Difficulty = "easy" | "medium" | "hard";
 export interface IQuestionsList {
@@ -43,6 +44,8 @@ export interface IQuestionDetail {
     constraints: string[];
     tips: ITip[];
 }
+
+
 //NOTE: QUESTION 
 export async function questionsDbGet(req: Request, res: Response, next: NextFunction) {
     // get all the questions (or Paginated)- only the id, name, difficulty from question_details table 
@@ -62,7 +65,7 @@ export async function questionsDbGet(req: Request, res: Response, next: NextFunc
 }
 
 export async function questionDetailDbGet(req: Request, res: Response, next: NextFunction) {
-    const qname = req.params.qname;
+    const qname = req.params.qname ?? "";
 
     let questionDetail: IQuestionDetail;
     if (typeof qname === "string") {
@@ -82,7 +85,7 @@ export async function questionDetailDbGet(req: Request, res: Response, next: Nex
 export async function questionDbPut(req: Request, res: Response, next: NextFunction) {
 
     // current question name 
-    const qname = req.params.qname;
+    const qname = req.params.qname ?? "";
 
     // Changed question name, difficulty, detail (Detail is the one updated. I get name & diff - derived)
     const changedDetail: IQuestionDetail = req.body;
@@ -122,6 +125,34 @@ export async function questionDbPost(req: Request, res: Response, next: NextFunc
     }
 }
 
+export async function questionDbDelete(req: Request, res: Response, next: NextFunction) {
+    const qname = req.params.qname ?? "";
+    const page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+
+    let questionsList: IQuestionsList[];
+    if (typeof qname === "string") {
+        try {
+
+            const row = await deleteQuestionQuery(qname);
+
+            if (!row) {
+                // row undefined
+                return res.status(400).send("Nothing to delete");
+            }
+
+            questionsList = await paginateQuestionsList(page, limit, { getQuestionsQuery });
+
+            return res.json(questionsList);
+        } catch (err) {
+            return next(err);
+        }
+    } else {
+        return res.status(400).send("Route parameter value undefined");
+    }
+
+}
+
 
 
 
@@ -142,18 +173,58 @@ export interface IQuestionMeta {
     caseAndOutput: CaseAndOutput[],
 }
 export interface IQTemplatePackage {
+    id: string;
     qname: string;
     qmeta: IQuestionMeta;
     langtemplates: ILanguageTemplates;
 }
 
+const newQTemplate: IQTemplatePackage = {
+    id: "default",
+    qname: "changetotherealqname",
+    qmeta: {
+        method: "<methodName>",
+        caseAndOutput: [
+            {
+                case: "do you want to play a game ?",
+                output: false
+            },
+            {
+                case: "is it a good game ?",
+                output: true
+            }
+        ]
+    },
+    langtemplates: {
+        js: `class Solution {
+
+    /**
+    * @param {<paramType>} <paramName>
+    * @return {<returnType>}
+    */
+    <methodName>(<paramName>) {
+
+    }
+}`,
+        c: `int <methodName>(<paramType> <paramName>) {
+}
+
+           C Coming Soon ...
+`
+    },
+}
 export async function qTemplateDbGet(req: Request, res: Response, next: NextFunction) {
-    const qname = req.params.qname;
+    const qname = req.params.qname ?? "";
 
     // Get QTemplate of all languages
     if (typeof qname === "string") {
         try {
             const qtemplate: IQTemplatePackage = await getQTemplate(qname);
+            if (!qtemplate) {
+                newQTemplate.qname = qname;
+                return res.json(newQTemplate); // send the Default Templatepackage so that 
+                // frontend knows that there is no entry in db
+            }
             return res.json(qtemplate);
         } catch (err) {
             return next(err);
@@ -165,7 +236,7 @@ export async function qTemplateDbGet(req: Request, res: Response, next: NextFunc
 }
 
 export async function qTemplateDbPut(req: Request, res: Response, next: NextFunction) {
-    const qname = req.params.qname;
+    const qname = req.params.qname ?? "";
 
     const changedQmeta: IQuestionMeta = req.body.qmeta;
     const changedLangtemplates: ILanguageTemplates = req.body.langtemplates;
@@ -184,7 +255,7 @@ export async function qTemplateDbPut(req: Request, res: Response, next: NextFunc
 }
 
 export async function qTemplateDbPost(req: Request, res: Response, next: NextFunction) {
-    const newQname = req.params.qname;
+    const newQname = req.params.qname ?? "";
 
     const newQmeta: IQuestionMeta = req.body.qmeta;
     const newLangtemplates: ILanguageTemplates = req.body.langtemplates;
@@ -201,3 +272,4 @@ export async function qTemplateDbPost(req: Request, res: Response, next: NextFun
     }
 
 }
+

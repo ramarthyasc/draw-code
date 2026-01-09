@@ -15,5 +15,5 @@ seedQData()
     .catch((err) => {
         console.log("Startup failed", err);
         process.exit(1);
-    })
+    });
 

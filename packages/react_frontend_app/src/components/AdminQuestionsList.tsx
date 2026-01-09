@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -35,17 +35,17 @@ function AdminQuestionsList() {
     const [error, setError] = useState(false);
 
     const { data, secureDataGetter } = useSecureDataGetter<IQuestionsList[]>();
-    const isMountedRef = useRef(false);
     const context: IAppContext = useOutletContext();
 
     const { jsonWebToken, setJsonWebToken, setUser, user, setIsLoggedIn, setIsAdmin } = context;
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
 
         async function fetcher() {
-            const page = searchParams.get("page") ?? "0";
-            const limit = searchParams.get("limit") ?? "10";
+            const page = searchParams.get("page");
+            const limit = searchParams.get("limit");
             const path = `/admin/questions?page=${page}&limit=${limit}`;
             try {
                 await secureDataGetter({
@@ -63,10 +63,10 @@ function AdminQuestionsList() {
             }
         }
 
-        if (!isMountedRef.current || data !== "") {
-            fetcher();
-        }
-        isMountedRef.current = true;
+        // if (!isMountedRef.current || data !== "") {
+        fetcher();
+        // }
+        // isMountedRef.current = true;
 
     }, [searchParams, jsonWebToken]);
 
@@ -75,13 +75,8 @@ function AdminQuestionsList() {
         if (jsonWebToken && user.role === "admin") {
             console.log(data)
             setIsAdmin(true);
-            if (typeof data !== "string" && data.length > 0) {
-                const lastqid = data.at(-1)?.id;
-                if (lastqid) {
-                    console.log("HEYYY THIA IS MY IDDD", lastqid);
-                    window.localStorage.setItem("lastqid", lastqid.toString());
-                }
-            }
+            const lastqid = data.length - 1 ; // Id is added + 1 inside AdminQuestionDetail
+            window.localStorage.setItem("lastqid", lastqid.toString());
         } else {
             setIsAdmin(false);
         }
@@ -134,6 +129,38 @@ function AdminQuestionsList() {
         navigate("/admin/question-detail/create");
     }
 
+    async function deleteMouseDown(name: string) {
+        if (confirm("Delete this question ?")) {
+
+            if (isButtonLoading) { return; }
+
+            const page = searchParams.get("page");
+            const limit = searchParams.get("limit");
+            const path = `/admin/delete-question/${name}?page=${page}&limit=${limit}`;
+            try {
+                setIsButtonLoading(true);
+                await secureDataGetter({
+                    setJsonWebToken,
+                    jsonWebToken,
+                    setUser,
+                    setIsLoggedIn
+                },
+                    path,
+                    {
+                        content: null,
+                        method: "DELETE"
+                    }
+                );
+
+
+            } catch (err) {
+                setError(true);
+                console.log(err);
+            }
+            setIsButtonLoading(false);
+        }
+    }
+
     const questionList = data;
 
     return (
@@ -159,15 +186,22 @@ function AdminQuestionsList() {
                         {questionList.map((obj, i) => {
                             return (
                                 <tr className={`${questionList.length - 1 === i ? "" : "border-b"}`} key={obj.id}>
-                                    <td className="border-r px-2 text-center"> {obj.id} </td>
+                                    <td className="border-r px-2 text-center"> {i} </td>
                                     <td className="border-r px-2"> {obj.name} </td>
-                                    <td className="border-r px-2">{obj.difficulty}</td>
+                                    <td className="border-r px-2 text-center">{obj.difficulty}</td>
                                     <td className="border-r px-2 text-blue-700 hover:text-gray-600">
                                         <Link to={`/admin/question-detail/${obj.name}`}>View/Edit</Link>
                                     </td>
                                     <td className="px-2 text-center text-blue-700 hover:text-gray-600">
                                         <Link to={`/admin/question-template/${obj.name}`}>View/Edit</Link>
                                     </td>
+                                    {
+                                        questionList.length - 1 === i ?
+                                            (<td className="pl-4 ">
+                                                <button className="cursor-pointer px-1 py-0 my-px bg-gray-300 border rounded-sm" onMouseDown={() => { deleteMouseDown(obj.name) }}>-</button>
+                                            </td>) :
+                                            <td></td>
+                                    }
                                 </tr>
                             )
                         })
@@ -178,7 +212,10 @@ function AdminQuestionsList() {
                         <tr >
                             <td ></td>
                             <td ></td>
-                            <td className="pl-2 pt-4">
+                            <td className="pl-2 pt-4 text-center">
+                                .<br />
+                                .<br />
+                                .<br />
 
                                 <button type="button" onMouseDown={handleAddMouseDown}
                                     className={`border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.gray.normal}`}>

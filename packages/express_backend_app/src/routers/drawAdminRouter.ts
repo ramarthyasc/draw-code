@@ -7,6 +7,7 @@ import {
     qTemplateDbPut,
     questionDbPost,
     qTemplateDbPost,
+    questionDbDelete,
 } from "../controller/drawAdminController";
 import { jwtAuthAdmin } from "../controller/drawAdminAuthMiddleware";
 
@@ -34,3 +35,5 @@ drawAdminRouter.route('/template/:qname')
 drawAdminRouter.post('/new-template/:qname', qTemplateDbPost) // template create ie; post (qmeta & langtemplates)
 
 
+// DELETE qname - which cascades and deletes from the child question_templates table
+drawAdminRouter.delete('/delete-question/:qname', questionDbDelete)

@@ -1,13 +1,13 @@
 import type { Language, QuestionName } from '../controller/drawNonSecureController';
 import type { QuestionMethodName } from './types/question';
 
-interface QuestionTemplate {
+interface IQuestionTemplate {
     js: string;
     c: string;
 }
 
 type QuestionTemplateList = {
-    [key in QuestionName]: QuestionTemplate
+    [key in QuestionName]: IQuestionTemplate
 }
 type CaseAndOutput = {
     case: any,
@@ -118,7 +118,7 @@ export const qtemplate: QuestionTemplateList = {
 
 export function generateTemplate(qname: QuestionName, language: Language): string {
 
-    const template: QuestionTemplate = qtemplate[qname];
+    const template: IQuestionTemplate = qtemplate[qname];
 
     return template[language];
 

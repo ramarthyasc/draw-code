@@ -96,6 +96,13 @@ app.use('/admin', drawAdminRouter);
 //For logging the errors in Production into the terminal(And importantly when testing) 
 //& Most importantly streamlining the server error flow using next(err) & then handle from Frontend too the 
 //default error.. always
+
+app.use((req, res) => {
+    console.log("404 path not found");
+    return res.status(404).send("Request to unknown path");
+})
+
+
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).send("Something broke !!")

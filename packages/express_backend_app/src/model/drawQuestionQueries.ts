@@ -66,10 +66,26 @@ export async function createQuestion(newQDetail: IQuestionDetail, newQName: stri
     }
 }
 
+export async function deleteQuestionQuery(qname: string) {
+    const text = `DELETE FROM question_detail
+                    WHERE name = $1
+                    RETURNING id, name, difficulty`;
+    const values = [qname];
+
+    try {
+        const { rows } = await pool.query(text, values);
+        return rows[0];
+    } catch (err) {
+        console.log("DB error: ", err);
+        throw err;
+    }
+    
+}
+
 
 // TEMPLATES
 export async function getQTemplate(qname: string) {
-    const text = `SELECT qname, qmeta, langtemplates
+    const text = `SELECT id, qname, qmeta, langtemplates
                     FROM question_template
                     WHERE qname = $1`;
 
@@ -90,7 +106,7 @@ export async function updateQTemplate(changedQmeta: IQuestionMeta,
     const text = `UPDATE question_template
                     SET qmeta = $1, langtemplates = $2
                     WHERE qname = $3
-                    RETURNING qname, qmeta, langtemplates`;
+                    RETURNING id, qname, qmeta, langtemplates`;
     const values = [changedQmeta, changedLangtemplates, qname];
 
     try {
@@ -108,7 +124,7 @@ export async function updateQTemplate(changedQmeta: IQuestionMeta,
 export async function createQTemplate(newQmeta: IQuestionMeta, newLangtemplates: ILanguageTemplates, newQname: string) {
     const text = `INSERT INTO question_template (qname, qmeta, langtemplates)
                     VALUES ($1, $2, $3)
-                    RETURNING qname, qmeta, langtemplates`;
+                    RETURNING id, qname, qmeta, langtemplates`;
     const values = [newQname, newQmeta, newLangtemplates];
 
     try {

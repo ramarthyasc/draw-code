@@ -21,6 +21,7 @@ export default defineConfig({
             '/admin/new-question': 'http://localhost:5000',
             '/admin/template': 'http://localhost:5000',
             '/admin/new-template': 'http://localhost:5000',
+            '/admin/delete-question': 'http://localhost:5000',
         },
 
     }

@@ -12,8 +12,8 @@ export interface IAuthState {
 }
 
 export interface IFetchBody<K> {
-    content: FormData | K;
-    method: "POST" | "PUT";
+    content: FormData | K | null;
+    method: "POST" | "PUT" | "DELETE";
 }
 
 
@@ -39,6 +39,14 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                         },
                         body: JSON.stringify(bodyObject),
                     })
+                } else if (body.content === null) {
+                    res = await fetch(path, {
+                        method: "DELETE",
+                        credentials: "include",
+                        headers: {
+                            "Authorization": `Bearer ${authState.jsonWebToken}`
+                        }
+                    })
                 } else {
                     // Any type can be given -mostly Object or string (type given when calling the hook)
                     res = await fetch(path, {
@@ -57,7 +65,6 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                     method: "GET",
                     credentials: "include",
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": `Bearer ${authState.jsonWebToken}`
                     }
                 })
@@ -148,6 +155,13 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                 console.log(code);
                 setData("not-admin"); // Say forbidden when we get "not-admin" as the setData - but don't logout
                 return;
+
+            } else if (res.status === 404) {
+                // Path not found
+
+                const resText = await res.text();
+                console.log(resText);
+                throw new Error(resText);
 
             } else {
                 // unknown error from server (someone changed statuscode from serverside)
