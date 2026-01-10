@@ -20,7 +20,6 @@ const { rotatingRefreshTokenAndJwt } = require('./controller/drawRotRefreshToken
 const { secureRouteGet } = require('./controller/drawSecureRouteController.js')
 const { preflightOptionsSetter, corsAllowResponseSetter } = require('./controller/drawCorsController.js');
 const { questionsGet } = require('./controller/drawQuestionsController.js');
-const { submitPost } = require('./controller/drawCompilerController.js');
 const { uiJwtAuth, refreshTokenJwtGen } = require('./controller/drawAuthMiddleware');
 const { drawSecureRouter } = require('./routers/drawSecureRouter');
 const { drawNonSecureRouter } = require('./routers/drawNonSecureRouter');

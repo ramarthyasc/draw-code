@@ -5,7 +5,7 @@ const { executeCodeContainer } = require('../service/drawExecutionService');
 const { generateExecutableCodeFile } = require('../service/drawExecutionCodegenService');
 
 
-exports.submitPost = (req, res, next) => {
+exports.submitPost = async (req, res, next) => {
     // take the data in
     const codeLanguage = req.body.language;
     const codeData = req.body.code;
@@ -25,7 +25,7 @@ exports.submitPost = (req, res, next) => {
 
     let codeFilePath;
     try {
-        codeFilePath = generateExecutableCodeFile(codeData, codeLanguage, qname, codeFolderPath, FILENAME, path, fs);
+        codeFilePath = await generateExecutableCodeFile(codeData, codeLanguage, qname, codeFolderPath, FILENAME, path, fs);
     } catch (err) {
         next(err);
     }

@@ -280,7 +280,7 @@ export async function qTemplateUserDbGet(req: Request, res: Response, next: Next
                 // We didn't add a template for that question from the admin. So we will get rows[0] as undefined.
                 // So we need to send a good response. With "Coming soon" message. So that in front end there won't happen 
                 // a bug when navigating
-                return res.status(200).send("Coming soon !!");
+                return res.status(200).send("admin-add-template");
             }
             const qlangtemplate: string = qtemplate.langtemplates[language];
 

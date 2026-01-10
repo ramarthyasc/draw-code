@@ -2,6 +2,8 @@ import type { QuestionName, Language } from './types/question';
 import type { PathModule, FileSystem } from './types/nodeTypes.ts';
 import type { QuestionMap } from './drawQTemplateService';
 import { questionMap } from './drawQTemplateService';
+import { IQTemplatePackage, IQuestionMeta } from '../controller/drawQuestionsAndTemplatesController';
+import { getQTemplate } from '../model/drawQuestionQueries';
 
 function jsResultComparerText() {
     return `
@@ -161,7 +163,7 @@ function stringLogger(input) {
 `
 }
 
-function jsExecuterText(resName: string, testCaseNum: number, caseAndMethod: QuestionMap[QuestionName]) {
+function jsExecuterText(resName: string, testCaseNum: number, caseAndMethod: IQuestionMeta) {
     return `
 
 let ${resName};
@@ -214,7 +216,7 @@ try {
 // `
 // }
 
-export function generateExecutableCodeFile(codeData: string,
+export async function generateExecutableCodeFile(codeData: string,
     codeLanguage: Language, qname: QuestionName,
     codeFolderPath: string, fileName: string, path: PathModule, fs: FileSystem) {
 
@@ -231,36 +233,20 @@ const solution = new Solution();
 
 
 `
+        const qtemplate: IQTemplatePackage = await getQTemplate(qname);
+        const caseAndMethod = qtemplate.qmeta;
 
-
-
-        switch (qname) {
-
-            case "trapping-rain-water": {
-                const caseAndMethod = questionMap['trapping-rain-water'];
+        caseAndMethod.caseAndOutput.forEach((_, i) => {
+            if (i === 0) {
                 transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
-                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod);
-
-                break;
-            }
-            case "is-palindrome": {
-                const caseAndMethod = questionMap['is-palindrome'];
-
-                transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
-                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
-                    "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
-                break;
-            }
-            case "three-integer-sum": {
-                const caseAndMethod = questionMap['three-integer-sum'];
-                transformedCode += jsResultComparerText() + stringifyText() + stringLoggerText() +
-                    "\n\n //First case" + jsExecuterText("res0", 0, caseAndMethod) +
-                    "\n\n //Second case" + jsExecuterText("res1", 1, caseAndMethod);
-
-                break;
+                    jsExecuterText(`res${i}`, i, caseAndMethod);
+            } else {
+                transformedCode += jsExecuterText(`res${i}`, i, caseAndMethod);
             }
 
-        }
+        })
+
+
     } else if (codeLanguage === 'c') {
         // PASS right now 
         transformedCode =
@@ -281,6 +267,7 @@ int main(void) {
         throw new Error("Unknown language");
     }
 
+
     const codeFilePath = path.join(codeFolderPath, `${fileName}.${codeLanguage}`);
     try {
         fs.writeFileSync(codeFilePath, transformedCode);
@@ -293,25 +280,3 @@ int main(void) {
 
 }
 
-
-// exports.generateCodeFile = (fs, path, fileName, codeFolderPath, codeData, codeLanguage) => {
-//
-//     const codeFilePath = path.join(codeFolderPath, `${fileName}.${codeLanguage}`);
-//     if (codeLanguage === "js") {
-//         try {
-//             fs.writeFileSync(codeFilePath, codeData);
-//             // append export 
-//             const data = "export const solution = new Solution();"
-//             fs.appendFileSync(codeFilePath, data);
-//
-//         } catch (err) {
-//             console.log(err);
-//             throw err;
-//         }
-//
-//     } else if (codeLanguage === "c") {
-//         fs.writeFileSync(codeFilePath, codeData);
-//     }
-//     return codeFilePath;
-//
-// }

@@ -26,10 +26,11 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
     const [qTemplate, setQTemplate] = useState();
     //extract from route params
     const params = useParams();
-    const [ isButtonLoading, setIsButtonLoading ] = useState(false);
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
     const { isLoggedIn } = useOutletContext();
     const [reset, setReset] = useState(0);
     const qTemplatesRef = useRef({});
+    const [noSubmit, setNoSubmit] = useState(false);
 
     if (localStorage.getItem("qTemplates") !== null) {
         qTemplatesRef.current = JSON.parse(localStorage.getItem("qTemplates"));
@@ -42,6 +43,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
         // Don't send requests when pressing the submit button when loading (ie' it's fetching)
         if (isButtonLoading) { return; }
+        // When admin didn't create template -i shouldn't be able to submit
+        if (noSubmit) { return; }
 
         const formData = new FormData(e.target);
         // side effects - changing jsonWebToken, user
@@ -120,6 +123,12 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
 
                 if (res.ok) {
                     const qtemplate = await res.text();
+                    if (qtemplate === "admin-add-template") {
+                        //admin didn't add template
+                        setNoSubmit(true);
+                    } else {
+                        setNoSubmit(false);
+                    }
                     setIsLoading(false);
                     setQTemplate(qtemplate);
                     setResult(""); // Reset the Resultbox result
@@ -149,10 +158,11 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             }
         }
 
-        if (!qTemplatesRef.current[params.qname]?.[language]) {
+        if (!qTemplatesRef.current[params.qname]?.[language]
+            || qTemplatesRef.current[params.qname][language] === "admin-add-template") {
             fetcher();
-        }
-        else {
+        } else {
+            setNoSubmit(false);
             setIsLoading(false);
             setQTemplate(qTemplatesRef.current[params.qname][language]);
             setResult(""); // Reset the Resultbox result
@@ -174,7 +184,6 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         setIsLoading(true);
     }
     function onTextChange(e) {
-
         qTemplatesRef.current[params.qname][language] = e.target.value;
         window.localStorage.setItem("qTemplates", JSON.stringify(qTemplatesRef.current));
 
@@ -224,6 +233,16 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             active:bg-red-600`
         },
     }
+
+    if (error) {
+        //make the user reload -so that he can't see the faulty SPA navigation due to error
+        return (
+            <div className="text-center">
+                Something went wrong...
+            </div>
+        )
+    }
+
     return (
         // implement uneditable numbers along the left side +
         // backend verification
@@ -251,7 +270,8 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                         className=" text-right border-t border-r border-b border-black w-10 overflow-hidden resize-none pt-3"
                     > </textarea>
                     <textarea ref={textAreaRef} onScroll={handleScroll}
-                        value={error ? "Coming soon..." : isLoading ? "...loading" : qTemplate}
+                        disabled={noSubmit}
+                        value={error ? "Error..." : isLoading ? "...loading" : qTemplate}
                         onChange={onTextChange}
                         cols="130" name="code" id="code"
                         className="flex-2 border border-black resize-none pl-3 pt-3"
