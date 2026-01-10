@@ -279,6 +279,128 @@ export const Canvas = forwardRef((props, canvasRef) => {
         //
 
     }
+    useEffect(() => {
+        function shortcutShapeSelector(button) {
+            console.log("EHYYLLLOOOOO");
+            const style = getComputedStyle(canvasRef.current);
+            buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
+
+            Object.keys(whichShapeSelectedRef.current).forEach((key) => {
+                whichShapeSelectedRef.current[key] = (key === button); // turning all others false and turning on the active button
+            })
+            if (colorPaletteIsOnRef.current) {
+                pasteDrawableCanvas(contextRef.current, imgDataRef.current);
+                colorPaletteIsOnRef.current = false;
+            }
+
+            Object.keys(whichShapeSelectedRef.current).forEach((key) => {
+                if (whichShapeSelectedRef.current[key]) {
+                    buttonRender(contextRef.current, style, buttonsImgDataRef.current, { select: true }, colorPaletteImgDataRef.current,
+                        colorsRef.current[0], key);
+                }
+            })
+        }
+        function shortcutUndo() {
+            console.log("EHYYLLLOOOOO");
+            const style = getComputedStyle(canvasRef.current);
+
+            clearCanvas(offContextRef.current, offCanvasRef.current);
+            pasteOffscreenCanvas(contextRef.current, offCanvasRef.current);
+            buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
+            // if color Palette was on, then revert the drawable canvas back to the state before the palette was displayed
+            colorPaletteIsOnRef.current = false;
+
+            let undoRedoArrayPointer = Number(window.localStorage.getItem("undoRedoArrayPointer"));
+            if (undoRedoArrayPointer >= 0) {
+                window.localStorage.setItem("undoRedoArrayPointer", undoRedoArrayPointer - 1);
+                undoRedoArrayPointer = Number(window.localStorage.getItem("undoRedoArrayPointer"));
+            }
+
+            if (undoRedoArrayPointer >= 0) {
+
+                drawUndoRedoArray("undo", offContextRef.current, offCanvasRef.current, clearCanvas, setDrawProps,
+                    { drawRectangle, drawCircle, drawLine, drawPencil, drawDot });
+                pasteOffscreenCanvas(contextRef.current, offCanvasRef.current);
+                buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
+
+            }
+
+            Object.keys(whichShapeSelectedRef.current).forEach((key) => {
+                if (whichShapeSelectedRef.current[key]) {
+                    buttonRender(contextRef.current, style, buttonsImgDataRef.current, { select: true }, colorPaletteImgDataRef.current,
+                        colorsRef.current[0], key);
+                }
+            })
+        }
+
+        function shortcutRedo() {
+            const style = getComputedStyle(canvasRef.current);
+            // make the highlighted button to normal
+            buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
+
+            // if color Palette was on, then revert the drawable canvas back to the state before the palette was displayed
+            if (colorPaletteIsOnRef.current) {
+                pasteDrawableCanvas(contextRef.current, imgDataRef.current);
+                colorPaletteIsOnRef.current = false;
+            }
+
+            const undoRedoArray = JSON.parse(window.localStorage.getItem("undoRedoArray"));
+            let undoRedoArrayPointer = Number(window.localStorage.getItem("undoRedoArrayPointer"));
+
+            window.localStorage.setItem("undoRedoArrayPointer", undoRedoArrayPointer + 1);
+
+            undoRedoArrayPointer = Number(window.localStorage.getItem("undoRedoArrayPointer"));
+
+            // if the pointer didn't cross the last element of array
+            if (undoRedoArrayPointer < undoRedoArray.length) {
+                drawUndoRedoArray("redo", offContextRef.current, offCanvasRef.current, clearCanvas, setDrawProps,
+                    { drawRectangle, drawCircle, drawLine, drawPencil, drawDot });
+                pasteOffscreenCanvas(contextRef.current, offCanvasRef.current);
+                buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
+
+            } else {
+                window.localStorage.setItem("undoRedoArrayPointer", undoRedoArrayPointer - 1);
+            }
+
+
+            Object.keys(whichShapeSelectedRef.current).forEach((key) => {
+                if (whichShapeSelectedRef.current[key]) {
+                    buttonRender(contextRef.current, style, buttonsImgDataRef.current, { select: true }, colorPaletteImgDataRef.current,
+                        colorsRef.current[0], key);
+                }
+            })
+        }
+
+
+        function onKeyDownWindow(e) {
+            if (e.key === "z" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutUndo();
+            } else if (e.key === "x" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutRedo();
+            } else if (e.key === "a" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutShapeSelector("rectangle");
+            } else if (e.key === "s" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutShapeSelector("circle");
+            } else if (e.key === "d" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutShapeSelector("line");
+            } else if (e.key === "f" && e.ctrlKey) {
+                e.preventDefault();
+                shortcutShapeSelector("pencil");
+            }
+
+        }
+
+        window.addEventListener("keydown", onKeyDownWindow);
+        return () => {
+            window.removeEventListener("keydown", onKeyDownWindow);
+        }
+
+    }, [])
 
     const handleMouseUp = ({ nativeEvent }) => {
 
@@ -885,6 +1007,8 @@ export const Canvas = forwardRef((props, canvasRef) => {
 
 
     // onMouseMove is a mine
-    return <canvas ref={canvasRef} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}
+    return (
+        <canvas ref={canvasRef} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave} />
+    )
 })
