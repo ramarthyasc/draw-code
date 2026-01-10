@@ -19,11 +19,11 @@ export function QuestionTab() {
                 <div className='text-sm mx-2'>
                     Undo: <br/>Ctrl-Z
                 </div>
-                <div className='text-sm mx-2'>
+                <div className='text-sm mx-1'>
                     Redo: <br/>Ctrl-X
                 </div>
                 <div className='text-sm mx-2'>
-                    <strong>Fast shapes</strong>: <br />Ctrl-A/S/D/F
+                    <strong>Fast shapes (L-hand)</strong>: <br />Ctrl-A/S/D/F
                 </div>
             </div>
         </div>
