@@ -93,7 +93,7 @@ export const Canvas = forwardRef((props, canvasRef) => {
     });
     const offContextRef = useRef();
     const offCanvasRef = useRef();
-    const isPendingRef = useRef(-1);
+    const isPendingRef = useRef(false);
     const [innerHeight, setInnerHeight] = useState(window.innerHeight);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -587,20 +587,20 @@ export const Canvas = forwardRef((props, canvasRef) => {
         const scale = 1; //window.devicePixelRatio;
         // This makes the no. of canvas pixels [internal bitmap of canvas] 
         // in the width (canvas.width) and height (canvas.height) equal to the no. of physical pixels. Thus increasing clarity.
-            // NOTE: THE STORY STARTS ::
-            // By default, No. of Canvas pixels = No. of Css pixels.
-            // DON"T CARE ABOUT CSS PIXELS. ONLY CARE ABOUT BITMAP ie; CANVAS PIXELS, and PHYSICAL PIXELS
-            //The no. of Canvas Pixels should match with the no. of Physical pixels on the screen, otherwise - sure Blur.
-            //Because the Bitmap doesn't have enough data to give to all the physical pixels. So it interpolates.
-            //
-            //DevicePixelRatio is the ratio of the css pixel width or height(pixel = square) to the physical pixel 
+        // NOTE: THE STORY STARTS ::
+        // By default, No. of Canvas pixels = No. of Css pixels.
+        // DON"T CARE ABOUT CSS PIXELS. ONLY CARE ABOUT BITMAP ie; CANVAS PIXELS, and PHYSICAL PIXELS
+        //The no. of Canvas Pixels should match with the no. of Physical pixels on the screen, otherwise - sure Blur.
+        //Because the Bitmap doesn't have enough data to give to all the physical pixels. So it interpolates.
+        //
+        //DevicePixelRatio is the ratio of the css pixel width or height(pixel = square) to the physical pixel 
         //width or height.
-            //So if DPR = 2, then we have css pixel width = 2x physical pixel width
-            // We already know that our Canvas pixel width is the same as Css pixel width by default when context creation.
+        //So if DPR = 2, then we have css pixel width = 2x physical pixel width
+        // We already know that our Canvas pixel width is the same as Css pixel width by default when context creation.
         //As we have 2 physical pixel widths for 1 css pixel, we also need 2 canvas pixel widths for 1 css pixel width.ie;
         //We need to shrink the Canvas pixel width by half. To do that, we can double the no. of canvas pixels 
         //within the same canvas width (css area).
-            //So we multiply the css total width (No. of css pixels in the width) by dpr(ie; 2) to get the canvas total width (Total width means No. of pixels in the width). & similarly for height. That's it.. to get a clear Image
+        //So we multiply the css total width (No. of css pixels in the width) by dpr(ie; 2) to get the canvas total width (Total width means No. of pixels in the width). & similarly for height. That's it.. to get a clear Image
         //NOTE : THE STORY ENDS HERE
         //
         // CSS PIXEL = pixels that the whole webpage is made of (style.width, style.height)
@@ -775,7 +775,7 @@ export const Canvas = forwardRef((props, canvasRef) => {
                         offContextRef.current.beginPath();
                         //
                         //reset isPendingRef
-                        isPendingRef.current = -1;
+                        // isPendingRef.current = -1;
 
                     })
                 }
@@ -805,10 +805,12 @@ export const Canvas = forwardRef((props, canvasRef) => {
                     clientX = e.clientX;
                     clientY = e.clientY;
 
-                    isPendingRef.current += 1;
+                    // isPendingRef.current += 1;
 
-                    if (isPendingRef.current > 3) { isPendingRef.current = 0; }
-                    if (isPendingRef.current === 0) {
+                    // if (isPendingRef.current > 3) { isPendingRef.current = 0; }
+                    // if (isPendingRef.current === 0) {
+                    if (!isPendingRef.current) {
+                        isPendingRef.current = true;
                         requestAnimationFrame(() => {
                             /// for pencil === true
                             //Draw on both canvas pixels
@@ -823,8 +825,11 @@ export const Canvas = forwardRef((props, canvasRef) => {
                                         colorPaletteImgDataRef.current, colorsRef.current[0], key);
                                 }
                             })
+                            isPendingRef.current = false;
                         })
+
                     }
+                    // }
                 }
 
                 if (whichShapeSelectedRef.current.rectangle) {
