@@ -277,7 +277,10 @@ export async function qTemplateUserDbGet(req: Request, res: Response, next: Next
         try {
             const qtemplate: IQTemplatePackage = await getQTemplate(qname);
             if (!qtemplate) {
-                return res.status(400).send("Bad Request !!");
+                // We didn't add a template for that question from the admin. So we will get rows[0] as undefined.
+                // So we need to send a good response. With "Coming soon" message. So that in front end there won't happen 
+                // a bug when navigating
+                return res.status(200).send("Coming soon !!");
             }
             const qlangtemplate: string = qtemplate.langtemplates[language];
 

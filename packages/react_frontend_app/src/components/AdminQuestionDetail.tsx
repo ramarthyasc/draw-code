@@ -17,6 +17,10 @@ export const colorVariants = {
         normal: "bg-gray-300 text-black hover:bg-gray-200 hover:text-gray-400 active:text-gray-400\
             active:bg-gray-600",
     },
+    blue: {
+        normal: `bg-blue-300 text-black hover:bg-blue-200 hover:text-gray-900 active:text-gray-900
+            active:bg-blue-400`
+    }
 }
 
 export const createqDetail: IQuestionDetail = {
@@ -388,6 +392,11 @@ function AdminQuestionDetail() {
 
             <div className="flex-2 flex flex-col ml-10 w-100 border px-4 py-4 overflow-y-auto">
 
+            <div className="flex items-end">
+                <div className="bg-amber-200 px-2 mb-2 rounded-md text-sm">
+                    Note: "Examples" is parsed to be shown as the test cases in the resultbox before submitting the answer
+                </div>
+            </div>
                 <form onSubmit={params.qname !== "create" || created ?
                     handleUpdateSubmit : handleCreateSubmit} className="flex-2 flex flex-col">
                     {/* <textarea ref={textAreaRef} */}
@@ -473,12 +482,12 @@ function AdminQuestionDetail() {
                             (!isButtonLoading ?
 
                                 <button type="submit"
-                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.green.normal}`}
+                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.blue.normal}`}
                                 >
                                     Create
                                 </button> :
                                 <button type="button"
-                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.green.normal}`}
+                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.blue.normal}`}
                                 >
                                     🌀
                                 </button>)

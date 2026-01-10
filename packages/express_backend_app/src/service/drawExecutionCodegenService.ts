@@ -157,6 +157,7 @@ function stringLogger(input) {
     }
 }
 
+
 `
 }
 
@@ -189,6 +190,9 @@ try {
 // So that JSON.parse can be done safely even if the value is undefined or a function.
     
     console.log("_&&_@849"); //problem case separator =  _&&_@849\\n
+
+
+
 `
 }
 ///// USE WHEN DOING C CODE JUDGE
@@ -227,6 +231,8 @@ const solution = new Solution();
 
 
 `
+
+
 
         switch (qname) {
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSecureDataGetter } from "./customhooks/useSecureDataGetter";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import type { IAppContext } from "./AdminQuestionsList";
 import { colorVariants } from "./AdminQuestionDetail";
 
@@ -293,8 +293,13 @@ function AdminQuestionTemplate() {
             </div>
 
             <div className="flex-2 flex flex-col ml-10 w-100 border px-4 py-4 overflow-y-auto">
+            <div className="flex items-end">
+                <div className="bg-amber-200 px-2 mt-1 rounded-md text-sm">
+                    Note: This "Method name" and "Cases" is used for calculation and showing case results
+                </div>
+            </div>
 
-                <form onSubmit={created ? handleUpdateSubmit : handleCreateSubmit} className="flex-2 flex flex-col mt-10">
+                <form onSubmit={created ? handleUpdateSubmit : handleCreateSubmit} className="flex-2 flex flex-col mt-4">
                     <div>
                         <label htmlFor="method" className="cursor-pointer font-bold inline-block w-35">Method name: </label>
                         <input id="method" name="method" value={qtemplate?.qmeta.method ?? ""} onChange={handleInputChange}
@@ -334,12 +339,12 @@ function AdminQuestionTemplate() {
                             (!isButtonLoading ?
 
                                 <button type="submit"
-                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.green.normal}`}
+                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.blue.normal}`}
                                 >
                                     Create
                                 </button> :
                                 <button type="button"
-                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.green.normal}`}
+                                    className={`fixed bottom-11 right-15 border border-solid px-1.5 rounded-sm cursor-pointer transition-colors duration-300 ease-out active:scale-100 ${colorVariants.blue.normal}`}
                                 >
                                     🌀
                                 </button>
