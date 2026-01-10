@@ -1,9 +1,14 @@
 import { Router } from 'express';
-import { templateGet } from '../controller/drawNonSecureController';
 import { corsAllowResponseSetter } from '../controller/drawCorsController';
+import { questionsDbGet, questionDetailUserDbGet, qTemplateUserDbGet } from '../controller/drawQuestionsAndTemplatesController';
 
 export const drawNonSecureRouter = Router();
 
 drawNonSecureRouter.use(corsAllowResponseSetter);
 
-drawNonSecureRouter.get('/templates/:qname', templateGet);
+drawNonSecureRouter.get('/template/:qname', qTemplateUserDbGet);
+
+drawNonSecureRouter.get('/questions', questionsDbGet);
+
+drawNonSecureRouter.get('/questions/:qname', questionDetailUserDbGet)
+    

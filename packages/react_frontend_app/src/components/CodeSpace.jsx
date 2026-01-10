@@ -113,7 +113,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         async function fetcher() {
             try {
                 console.log(params.qname);
-                const res = await fetch(`/docs/templates/${params.qname}?language=${language}`, {
+                const res = await fetch(`/docs/template/${params.qname}?language=${language}`, {
                     method: "GET",
                     signal: controller.signal,
                 })
@@ -251,7 +251,7 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                         className=" text-right border-t border-r border-b border-black w-10 overflow-hidden resize-none pt-3"
                     > </textarea>
                     <textarea ref={textAreaRef} onScroll={handleScroll}
-                        value={error ? "Sorry.. Network error" : isLoading ? "...loading" : qTemplate}
+                        value={error ? "Coming soon..." : isLoading ? "...loading" : qTemplate}
                         onChange={onTextChange}
                         cols="130" name="code" id="code"
                         className="flex-2 border border-black resize-none pl-3 pt-3"

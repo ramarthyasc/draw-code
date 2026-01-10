@@ -82,7 +82,7 @@ app.post('/draw-login', corsAllowResponseSetter, googleJwtVerifyPost, jwtRefresh
 // app.route('/draw-secure')
 //   .get(corsAllowResponseSetter, rotatingRefreshTokenAndJwt, secureRouteGet)
 //   .post(corsAllowResponseSetter, rotatingRefreshTokenAndJwt);
-app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); // {/:question} is optional. ie; / is optional ,and the route param is optional
+// app.get("/draw-question{/:question}", corsAllowResponseSetter, questionsGet); // {/:question} is optional. ie; / is optional ,and the route param is optional
 
 //Secure routes - Router
 app.use('/api', drawSecureRouter);

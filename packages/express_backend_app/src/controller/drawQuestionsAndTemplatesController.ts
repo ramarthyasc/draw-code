@@ -1,4 +1,5 @@
-import { NextFunction, Request, Response } from "express"
+import type { NextFunction, Request, Response } from "express"
+import type { Language } from "../service/types/question";
 import {
     getQuestionsQuery,
     getQuestionDetail,
@@ -7,9 +8,10 @@ import {
     updateQTemplate,
     createQuestion,
     createQTemplate,
-    deleteQuestionQuery
+    deleteQuestionQuery,
+    getPrevNextCurrentQuestionsQuery,
 } from "../model/drawQuestionQueries";
-import { paginateQuestionsList} from "../service/drawQuestionService";
+import { paginateQuestionsList } from "../service/drawQuestionService";
 
 export type Difficulty = "easy" | "medium" | "hard";
 export interface IQuestionsList {
@@ -50,8 +52,9 @@ export interface IQuestionDetail {
 export async function questionsDbGet(req: Request, res: Response, next: NextFunction) {
     // get all the questions (or Paginated)- only the id, name, difficulty from question_details table 
 
-    const page = Number(req.query.page);
-    const limit = Number(req.query.limit);
+    const page = Number(req.query.page ?? "0");
+    const limit = Number(req.query.limit ?? "10");
+    console.log(page, limit);
     // get a list of objects
     let questionsList: IQuestionsList[];
     try {
@@ -80,6 +83,46 @@ export async function questionDetailDbGet(req: Request, res: Response, next: Nex
     }
 
     return res.json(questionDetail);
+}
+
+export async function questionDetailUserDbGet(req: Request, res: Response, next: NextFunction) {
+    const qname = req.params.qname ?? "";
+
+    let questionDetails: IQuestionDetail;
+    if (typeof qname === "string") {
+        try {
+            const row = await getQuestionDetail(qname);
+            questionDetails = row.detail;
+
+            const prevNextCurrentQuestionsArray: IQuestionsList[] = await getPrevNextCurrentQuestionsQuery(qname);
+
+            let prevNextQuestionsArray: (IQuestionsList | null)[] = [];
+            if (prevNextCurrentQuestionsArray[0]?.name === qname) {
+                prevNextQuestionsArray.push(null);
+                prevNextQuestionsArray.push(prevNextCurrentQuestionsArray[1] as IQuestionsList);
+
+            } else if (!prevNextCurrentQuestionsArray[2]) {
+                prevNextQuestionsArray.push(prevNextCurrentQuestionsArray[0] as IQuestionsList);
+                prevNextQuestionsArray.push(null);
+
+            } else if (prevNextCurrentQuestionsArray.length === 3) {
+                prevNextQuestionsArray.push(prevNextCurrentQuestionsArray[0] as IQuestionsList);
+                prevNextQuestionsArray.push(prevNextCurrentQuestionsArray[2] as IQuestionsList);
+            }
+
+            const qDetailsQNextPrev = { questionDetails, prevNextQuestionsArray }
+
+            return res.json(qDetailsQNextPrev);
+
+
+
+        } catch (err) {
+            return next(err);
+        }
+    } else {
+        return res.status(400).send("Route parameter value undefined");
+    }
+
 }
 
 export async function questionDbPut(req: Request, res: Response, next: NextFunction) {
@@ -213,6 +256,41 @@ const newQTemplate: IQTemplatePackage = {
 `
     },
 }
+
+function isLanguage(value: string | undefined): value is Language {
+    return value === "js" || value === "c";
+}
+
+export async function qTemplateUserDbGet(req: Request, res: Response, next: NextFunction) {
+    const { language } = req.query;
+    const qname = req.params.qname ?? "";
+
+    if (typeof language !== "string") {
+        return res.status(400).send("Invalid Query !!");
+    }
+    if (!isLanguage(language)) {
+        return res.status(404).send(`Invalid language: ${language} !!`);
+    }
+
+    // Get QTemplate of specific language
+    if (typeof qname === "string") {
+        try {
+            const qtemplate: IQTemplatePackage = await getQTemplate(qname);
+            if (!qtemplate) {
+                return res.status(400).send("Bad Request !!");
+            }
+            const qlangtemplate: string = qtemplate.langtemplates[language];
+
+            return res.send(qlangtemplate);
+        } catch (err) {
+            return next(err);
+        }
+    } else {
+        return res.status(400).send("Route parameter value undefined");
+    }
+
+}
+
 export async function qTemplateDbGet(req: Request, res: Response, next: NextFunction) {
     const qname = req.params.qname ?? "";
 

@@ -1,4 +1,4 @@
-import type { IQuestionsList } from "../controller/drawAdminController";
+import type { IQuestionsList } from "../controller/drawQuestionsAndTemplatesController";
 
 interface IGetQuestion {
     getQuestionsQuery(limit: number, offset: number): Promise<IQuestionsList[]>;

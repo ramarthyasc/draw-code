@@ -34,7 +34,7 @@ function Drawboard() {
         async function questionDetailsFetcher() {
 
             try {
-                let res = await fetch(`/draw-question/${params.qname}`, {
+                let res = await fetch(`/docs/questions/${params.qname}`, {
                     method: "GET",
                     credentials: 'include',
                     signal: controller.signal,

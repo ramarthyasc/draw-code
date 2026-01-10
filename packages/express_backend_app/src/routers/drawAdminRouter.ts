@@ -8,7 +8,7 @@ import {
     questionDbPost,
     qTemplateDbPost,
     questionDbDelete,
-} from "../controller/drawAdminController";
+} from "../controller/drawQuestionsAndTemplatesController";
 import { jwtAuthAdmin } from "../controller/drawAdminAuthMiddleware";
 
 export const drawAdminRouter = Router();

@@ -1,5 +1,50 @@
 import pool from "../model/drawpool";
-import type { Difficulty, IQuestionDetail, ILanguageTemplates, IQuestionMeta } from "../controller/drawAdminController";
+import type { Difficulty, IQuestionDetail, ILanguageTemplates, IQuestionMeta } from "../controller/drawQuestionsAndTemplatesController";
+
+export async function getPrevNextCurrentQuestionsQuery(qname: string) {
+    const text = `SELECT id, name, difficulty
+                    FROM (
+                        (SELECT id, name, difficulty
+                        FROM question_detail
+                        WHERE id > (
+                            SELECT id
+                            FROM question_detail
+                            WHERE name = $1
+                        )
+                        ORDER BY id ASC
+                        LIMIT 1)
+
+                        UNION ALL
+
+                        (SELECT id, name, difficulty
+                        FROM question_detail
+                        WHERE name = $1)
+
+                        UNION ALL
+
+                        (SELECT id, name, difficulty
+                        FROM question_detail
+                        WHERE id < (
+                            SELECT id
+                            FROM question_detail
+                            WHERE name = $1
+                        )
+                        ORDER BY id DESC
+                        LIMIT 1)
+                    ) AS prevnext
+
+                    ORDER BY id ASC`;
+
+    const values = [qname];
+
+    try {
+        const { rows } = await pool.query(text, values);
+        return rows;
+    } catch (err) {
+        console.log("DB error: ", err);
+        throw err;
+    }
+}
 
 export async function getQuestionsQuery(offset: number, limit: number) {
     const text = `SELECT id, name, difficulty 

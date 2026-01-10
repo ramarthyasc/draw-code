@@ -17,7 +17,7 @@ function Home() {
         async function questionsListfetcher() {
             try {
 
-                let res = await fetch("/draw-question", {
+                let res = await fetch("/docs/questions", {
                     method: "GET",
                     credentials: 'include',
                     signal: controller.signal,
@@ -65,9 +65,9 @@ function Home() {
     }
 
     if (isLoading) {
-            <div className="text-center">
-                loading...
-            </div>
+        <div className="text-center">
+            loading...
+        </div>
     } else {
         return (
             <div className="relative flex flex-col justify-center items-center h-screen pb-80">
@@ -176,7 +176,7 @@ function Home() {
                             return (
                                 <tr className={`${questionsList.length - 1 === i ? "" : "border-b"}`} key={obj.id}>
                                     <td className="border-r text-center">
-                                        <Link to={`/draw-code/${obj.name}`}>{obj.id}</Link>
+                                        <Link to={`/draw-code/${obj.name}`}>{i}</Link>
                                     </td>
                                     <td className="border-r px-2">
                                         <Link to={`/draw-code/${obj.name}`}>{obj.name}</Link>
