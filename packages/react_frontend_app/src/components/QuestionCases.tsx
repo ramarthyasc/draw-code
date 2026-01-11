@@ -9,7 +9,7 @@ import type { Difficulty } from "./AdminQuestionsList";
 interface IExample {
     id: number;
     title: string;
-    input: string;
+    input: string | number;
     output: string;
     explanation: string;
 
@@ -44,7 +44,9 @@ export interface IQuestionContext {
 }
 
 function inputSanitize(input: IExample["input"]) {
-    return input.replace(/.*=\s?/, "")
+    console.log(input);
+    if (typeof input === "number") {return input.toString()};
+    return input.replace(/.*=\s?/, "");
 }
 
 export function QuestionCases() {
@@ -68,7 +70,7 @@ export function QuestionCases() {
         qDetailsQNextPrevRef.current = qDetailsQNextPrev;
     }, [isQDetailsQNextPrevChange]);
 
-
+console.log(questionDetails.examples[Number(activeButtonId)].output);
     return (
         <div className="mx-3 my-3">
             {questionDetails.examples.map((_, i) => {

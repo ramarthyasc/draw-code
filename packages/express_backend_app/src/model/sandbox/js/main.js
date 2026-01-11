@@ -3,11 +3,33 @@
 class Solution {
 
     /**
-    * @param {number[]} height
-    * @return {number}
+    * @param {string} s
+    * @return {boolean}
     */
-    waterTrap(height) {
-return 9;
+    isPalindrome(s) {
+if (s.trim().length === 0) {
+    return true;
+  }
+  let lowerCaseString = s.toLowerCase().trim();
+  let finalString = '';
+  // UTF code of a - 97
+  // UTF code of z - 122
+  // UTF code of 0 - 48
+  // UTF code of 9 - 57
+  for (let c of lowerCaseString) {
+    if (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122) {
+      finalString += c;
+    } else if (c.charCodeAt(0) >= 48 && c.charCodeAt(0) <= 57) {
+      finalString += c;
+    }
+  }
+  for (let i = 0; i < Math.floor(finalString.length/2); i++) {
+    if (finalString.charAt(i) !== finalString.charAt(finalString.length - 1 - i)) {
+      return false;
+    }
+  }
+  return true;
+
     }
 }
 
@@ -123,14 +145,14 @@ function stringLogger(input) {
 
 let res0;
 try {
-     res0 = solution.waterTrap([0,2,0,3,1,0,1,3,2,1]);
+     res0 = solution.isPalindrome("Was it a car or a cat I saw?");
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(9, res0) ? 
+//     comparer(true, res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -138,10 +160,41 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer(9, res0)},` +
-`"input": "[0,2,0,3,1,0,1,3,2,1]",` +
+`"pass": ${comparer(true, res0)},` +
+`"input": "Was it a car or a cat I saw?",` +
 `"userOutput": "${stringLogger(res0)}",` + 
-`"expOutput": "9" }`);
+`"expOutput": "true" }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res1;
+try {
+     res1 = solution.isPalindrome("tab a cat");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(false, res1) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 1,` + 
+`"pass": ${comparer(false, res1)},` +
+`"input": "tab a cat",` +
+`"userOutput": "${stringLogger(res1)}",` + 
+`"expOutput": "false" }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
