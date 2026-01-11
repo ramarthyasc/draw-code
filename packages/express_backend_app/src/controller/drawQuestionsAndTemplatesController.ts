@@ -8,7 +8,7 @@ import {
     updateQTemplate,
     createQuestion,
     createQTemplate,
-    deleteQuestionQuery,
+    deleteLastQuestionQuery,
     getPrevNextCurrentQuestionsQuery,
 } from "../model/drawQuestionQueries";
 import { paginateQuestionsList } from "../service/drawQuestionService";
@@ -168,30 +168,26 @@ export async function questionDbPost(req: Request, res: Response, next: NextFunc
     }
 }
 
+// Deletes the question_template row related to the question_detail row - as CASCADE DELETE is given
 export async function questionDbDelete(req: Request, res: Response, next: NextFunction) {
-    const qname = req.params.qname ?? "";
     const page = Number(req.query.page);
     const limit = Number(req.query.limit);
 
     let questionsList: IQuestionsList[];
-    if (typeof qname === "string") {
-        try {
+    try {
 
-            const row = await deleteQuestionQuery(qname);
+        const row = await deleteLastQuestionQuery();
 
-            if (!row) {
-                // row undefined
-                return res.status(400).send("Nothing to delete");
-            }
-
-            questionsList = await paginateQuestionsList(page, limit, { getQuestionsQuery });
-
-            return res.json(questionsList);
-        } catch (err) {
-            return next(err);
+        if (!row) {
+            // row undefined - ie; No rows to delete
+            return res.json([]);
         }
-    } else {
-        return res.status(400).send("Route parameter value undefined");
+
+        questionsList = await paginateQuestionsList(page, limit, { getQuestionsQuery });
+
+        return res.json(questionsList);
+    } catch (err) {
+        return next(err);
     }
 
 }

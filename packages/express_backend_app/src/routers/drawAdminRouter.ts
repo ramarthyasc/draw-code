@@ -36,4 +36,4 @@ drawAdminRouter.post('/new-template/:qname', qTemplateDbPost) // template create
 
 
 // DELETE qname - which cascades and deletes from the child question_templates table
-drawAdminRouter.delete('/delete-question/:qname', questionDbDelete)
+drawAdminRouter.delete('/delete-question', questionDbDelete)

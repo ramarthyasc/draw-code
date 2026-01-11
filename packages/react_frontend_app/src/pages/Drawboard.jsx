@@ -65,7 +65,6 @@ function Drawboard() {
         setIsAdmin(false);
 
         return () => {
-            console.log("UNMOUNTING DRAWBOARD");
             controller.abort();
         }
 

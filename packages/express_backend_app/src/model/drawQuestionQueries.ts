@@ -111,14 +111,18 @@ export async function createQuestion(newQDetail: IQuestionDetail, newQName: stri
     }
 }
 
-export async function deleteQuestionQuery(qname: string) {
+export async function deleteLastQuestionQuery() {
     const text = `DELETE FROM question_detail
-                    WHERE name = $1
+                    WHERE id = (
+                        SELECT id 
+                        FROM question_detail
+                        ORDER BY id DESC
+                        LIMIT 1
+                    )
                     RETURNING id, name, difficulty`;
-    const values = [qname];
 
     try {
-        const { rows } = await pool.query(text, values);
+        const { rows } = await pool.query(text);
         return rows[0];
     } catch (err) {
         console.log("DB error: ", err);
