@@ -2,13 +2,16 @@ services:
   js-compiler:
     build: .
     image: js-compiler
+    read_only: true
     network_mode: "none"
     pids_limit: 64
     mem_limit: 256m
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid,nodev
     volumes: 
       - type: bind
         source: /home/r-amarthya-sreechand/Web_Dev/leetcode_project/packages/express_backend_app/src/model/sandbox/js/
-        target: /usr/src/code/js/readonly/
+        target: /usr/src/code/js/usercode/
         read_only: true
 
 

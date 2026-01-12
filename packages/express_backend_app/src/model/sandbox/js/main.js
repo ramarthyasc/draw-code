@@ -7,29 +7,48 @@ class Solution {
     * @return {boolean}
     */
     isPalindrome(s) {
-if (s.trim().length === 0) {
-    return true;
-  }
-  let lowerCaseString = s.toLowerCase().trim();
-  let finalString = '';
-  // UTF code of a - 97
-  // UTF code of z - 122
-  // UTF code of 0 - 48
-  // UTF code of 9 - 57
-  for (let c of lowerCaseString) {
-    if (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122) {
-      finalString += c;
-    } else if (c.charCodeAt(0) >= 48 && c.charCodeAt(0) <= 57) {
-      finalString += c;
-    }
-  }
-  for (let i = 0; i < Math.floor(finalString.length/2); i++) {
-    if (finalString.charAt(i) !== finalString.charAt(finalString.length - 1 - i)) {
-      return false;
-    }
-  }
-  return true;
+  let l = 0;
+        let r = s.length - 1;
+        
+        let string = s.toLowerCase();
 
+        function charAnalyser(char) {
+            
+            if ((
+                "a".charCodeAt(0)<=char.charCodeAt(0) && 
+                char.charCodeAt(0)<="z".charCodeAt(0)
+                ) || (
+                "0".charCodeAt(0)<=char.charCodeAt(0) &&
+                char.charCodeAt(0) <="9".charCodeAt(0)
+                )
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        while (l<r) {
+
+         if (!charAnalyser(string.at(l)) || !charAnalyser(string.at(r))) {
+            if (!charAnalyser(string.at(l))) {
+                l++;
+            } 
+            if (!charAnalyser(string.at(r))) {
+                r--;
+            }
+            continue;
+         }
+         
+        
+        if (string.at(l) !== string.at(r)) {
+            console.log("hello")
+            return false;
+        }
+        l++;
+        r--;   
+        }
+        return true;
     }
 }
 

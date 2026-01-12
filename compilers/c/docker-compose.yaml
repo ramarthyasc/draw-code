@@ -2,13 +2,16 @@ services:
   c-compiler:
     build: .
     image: c-compiler
+    read_only: true
     network_mode: "none"
     pids_limit: 64
     mem_limit: 256m
+    tmpfs:
+      - /tmp:size=32m,nosuid,nodev,exec
     volumes: 
       - type: bind
         source: /home/r-amarthya-sreechand/Web_Dev/leetcode_project/packages/express_backend_app/src/model/sandbox/c/
-        target: /usr/src/code/c/readonly/
+        target: /usr/src/code/c/usercode/
         read_only: true
 
 

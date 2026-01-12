@@ -5,8 +5,8 @@ COPY ./runJs.sh .
 RUN chmod +x runJs.sh
 
 # adduser creates non root user & group - give permission to read & write inside js directory only
-RUN adduser --disabled-password --gecos '' --no-create-home rasc \
-&& chown -R rasc:rasc /usr/src/code/js
+RUN adduser --disabled-password --gecos '' --no-create-home rasc
+# && chown -R rasc:rasc /usr/src/code/js
 
 USER rasc
 

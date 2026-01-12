@@ -713,11 +713,13 @@ export const Canvas = forwardRef((props, canvasRef) => {
         // By default, No. of Canvas pixels = No. of Css pixels.
         // DON"T CARE ABOUT CSS PIXELS. ONLY CARE ABOUT BITMAP ie; CANVAS PIXELS, and PHYSICAL PIXELS
         //The no. of Canvas Pixels should match with the no. of Physical pixels on the screen, otherwise - sure Blur.
-        //Because the Bitmap doesn't have enough data to give to all the physical pixels. So it interpolates.
+        //Because the Bitmap doesn't have enough data to give to all the physical pixels (dpr>1) ie; 1
+        //Physical pixel will have only a fraction of the canvas pixel. or, one Physical
+        //pixel will have many canvas pixels, overwhelming the physical pixel (dpr < 1). So it interpolates.
         //
         //DevicePixelRatio is the ratio of the css pixel width or height(pixel = square) to the physical pixel 
-        //width or height.
-        //So if DPR = 2, then we have css pixel width = 2x physical pixel width
+        //width or height. ie; Think it like this : No of physical pixels widths for 1 css pixel width = dpr
+        //So if DPR = 2, then we have css pixel width = 2x physical pixel width.
         // We already know that our Canvas pixel width is the same as Css pixel width by default when context creation.
         //As we have 2 physical pixel widths for 1 css pixel, we also need 2 canvas pixel widths for 1 css pixel width.ie;
         //We need to shrink the Canvas pixel width by half. To do that, we can double the no. of canvas pixels 
