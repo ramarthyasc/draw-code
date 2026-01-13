@@ -57,11 +57,12 @@ You can see (everything) the process from the start - demonstrations, bug encoun
   1. Learnt about containerization. Used docker to containerize Coding judges. Created Docker images using Dockerfile, ran the containers using the runtime config ie; docker-compose.yaml. Used Docker compose cli to run the judges.
   2. Created custom function for deep comparing User's result object (object Array or object Object, or anything else) with the Solution object. Here : [Custom functions](https://github.com/ramarthyasc/customFunctions)
 - **Custom Jwt with Rotating Refresh token** :
-  <img width="1887" height="2032" alt="image" src="https://github.com/user-attachments/assets/58d24d76-6b19-4ab3-8239-3cb0125048c9" />
+  <img width="1887" height="2036" alt="image" src="https://github.com/user-attachments/assets/ac65c369-f89a-4ccc-8f29-5e992c054bae" />
   1. Learnt about jwt, sha256 hashing, HMAC, and used a containerized Postgresql to store the Refresh token.
   2. All the cases of hacking are tested manually using Curl cli tool.
     1. Implemented an Absolute expiry for the Refresh token chain so that even if a hacker gets a valid RT, but the user is idle, then the Refresh token chain will expire after the abs.exp time. So that hacker can't rotate the refresh token infinitely.
     2. If a refresh token is stolen, after the user or the hacker rotates the refresh token, then the subsequent refresh token rotation request would cause every Refresh tokens of that user's device (hacker copied one of it) to be revoked. Thus logging the user and hacker out.
+  3. Refresh tokens are stored in httpOnly cookies to disable js accessing the cookie, and with SameSite=Lax to prevent CSRF, and jwt is in client memory.
 - **Administrator** :
   1. Created a CRUD application for Adding, Deleting, Updating, Reading Questions.
   2. In the frontend, used useState hooks, useSearchParams hook (react router) for Pagination, useParams hook for retrieving the route parameters, useEffects for adding after effects, useNavigation for navigating programmatically.
@@ -88,6 +89,8 @@ That's it.. That was the process.
 
 ## 🍿 Video :
 Below video shows - Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code.
+https://github.com/user-attachments/assets/c1ac8478-5d50-430f-b0dd-de9ab0dec3ac
+
 
 
 Below video shows how you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
