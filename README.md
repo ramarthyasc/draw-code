@@ -2,7 +2,7 @@
 Like Leetcode, but you can draw out the solution before you code and submit .
 
 ## Why ?
-I frequently draw out the solution before coding it - when doing dsa or developing. There was none existing. So I built Draw-Code.
+I frequently draw out the solution before coding it - when doing dsa or developing. There was no existing tool for doing both inside one application. So I built Draw-Code.
 
 ## 🤖 Technologies :
 - Typescript
