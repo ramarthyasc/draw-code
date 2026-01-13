@@ -1,4 +1,4 @@
-# Draw-Code
+# ✍🏻 Draw-Code
 Like Leetcode, but you can draw out the solution before you code and submit .
 
 ## Why ?
