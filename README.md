@@ -1,4 +1,4 @@
-<img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/652214b6-fc1f-42e9-b705-964fc5df87d2" /># Draw-Code
+# Draw-Code
 Like Leetcode, but you can draw out the solution before you code and submit .
 
 ## Why ?
@@ -53,10 +53,11 @@ You can see (everything) the process from the start - demonstrations, bug encoun
   8. Canvas vim implemented using keydown event handlers - built with developer comfort in mind (Developers will be using Draw-code)
 - **Code Engine** :
   <img width="1549" height="1532" alt="image" src="https://github.com/user-attachments/assets/81851fca-8a47-466c-ad9c-5e5e8276a7e0" />
+  <img width="879" height="451" alt="image" src="https://github.com/user-attachments/assets/6444eacc-0d68-498c-bd47-9b59242ce179" />
   1. Learnt about containerization. Used docker to containerize Coding judges. Created Docker images using Dockerfile, ran the containers using the runtime config ie; docker-compose.yaml. Used Docker compose cli to run the judges.
   2. Created custom function for deep comparing User's result object (object Array or object Object, or anything else) with the Solution object. Here : [Custom functions](https://github.com/ramarthyasc/customFunctions)
 - **Custom Jwt with Rotating Refresh token** :
-  <img width="879" height="451" alt="image" src="https://github.com/user-attachments/assets/6444eacc-0d68-498c-bd47-9b59242ce179" />
+  <img width="1887" height="2032" alt="image" src="https://github.com/user-attachments/assets/58d24d76-6b19-4ab3-8239-3cb0125048c9" />
   1. Learnt about jwt, sha256 hashing, HMAC, and used a containerized Postgresql to store the Refresh token.
   2. All the cases of hacking are tested manually using Curl cli tool.
     1. Implemented an Absolute expiry for the Refresh token chain so that even if a hacker gets a valid RT, but the user is idle, then the Refresh token chain will expire after the abs.exp time. So that hacker can't rotate the refresh token infinitely.
