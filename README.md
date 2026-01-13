@@ -89,7 +89,10 @@ That's it.. That was the process.
 ## 🍿 Video :
 Below video shows - Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code.
 
+
 Below video shows how you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
+https://github.com/user-attachments/assets/cc21db93-10e8-401c-abac-bbdba1781046
+
 
 
 For more videos on draw-code app, visit [my X profile](https://x.com/r_amarthya_sc)
