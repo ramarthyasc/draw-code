@@ -25,6 +25,7 @@ I frequently draw out the solution before coding it - when doing dsa or developi
   - Undo, Redo : Undo or Redo the changes
   - X : Clear the canvas
   - Canvas vim : Keep your Left hand on the keyboard to switch between the shapes on the go (fasttt) using Keyboard shortcuts. Right hand to draw using Mouse.
+  
     <img width="538" height="48" alt="image" src="https://github.com/user-attachments/assets/2c7ea913-edf4-4e87-87c7-579cf9824daf" />
 
 - **Drawboard resizer** : Resize the drawboard horizontally if you don't have space.
