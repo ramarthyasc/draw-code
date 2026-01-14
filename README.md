@@ -119,7 +119,7 @@ That's it.. That was the process.
 5. Open a browser, and go to [http://localhost:5173/](http://localhost:5173/) - to run the app locally.
 
 ## 🍿 Preview :
-Below video shows : Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code :
+1.Video: **Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code** :
 
 
 
@@ -128,7 +128,9 @@ https://github.com/user-attachments/assets/3f6988b4-d385-497d-b4fb-91f7def52d85
 
 
 
-Below video shows : How you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
+
+
+2. Video : **How you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace (Before Canvas Vim vs With Canvas Vim)**:
 
 
 
