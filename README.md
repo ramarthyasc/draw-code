@@ -69,7 +69,7 @@ _**Note** : Everything is handcrafted (for learning purposes) - no AI code cut &
         4. Async Js (Promises), JS event loop system (Callstack, Webapis, Microtask queue, Macrotask queue, Event loop)
         5. Node child processes (Pipes, Forking, File Descriptor inheritance)
         6. Server error handling (To not let it crash when error happens)
-- **Custom Jwt with Rotating Refresh token** :
+- **Custom Jwt with Rotating Refresh token System** :
   <img width="1887" height="2036" alt="image" src="https://github.com/user-attachments/assets/ac65c369-f89a-4ccc-8f29-5e992c054bae" />
   1. Learnt about JWT, SHA256 hashing, HMAC, and used a containerized Postgresql to store the Refresh token.
   2. All the cases of hacking are tested manually using Curl cli tool.
