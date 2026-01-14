@@ -31,9 +31,9 @@ I frequently draw out the solution before coding it - when doing dsa or developi
 
 - **Drawboard resizer, Codespace resizer** : Resize the drawboard horizontally if you need more space for drawing. Resize the Result box in the Codespace vertically to view the Test case results without scrolling. Resize the Codespace horizontally to code with a wider view.
 - **Coding space**
-  - Code editor : Write your code - Submit - get the Result.
-  - Code judge engines for each language : Containerized Coding judges with restricted resources for executing user submitted code. (Malicious code can't do anything to the host)
-  - Result Box : Case results or Error messages are shown. You can find out the succeeded or failed test cases from here.
+  - Code editor : Write your code - Submit - get the Result/Error at the Resultbox.
+  - Code judge engines for each language : Containerized Coding judges with restricted resources for executing user submitted code. (Malicious code can't do harm to the host)
+  - Result Box : Case results or Error messages are shown. You can find out the succeeded or failed test cases from here. Timeout Error if you used an infinite loop, Out of Memory error if alloted memory exceeded. Other Errors based on the code - are all shown here.
 - **Signin with Google** : OAuth authentication of user.
 - **Custom Jwt with Rotating Refresh token system** : Short lived Jwts for authenticating the user in subsequent requests after login. Long lived Refresh tokens for recreating the jwts when expired. Rotation of Refresh tokens for adding more security if hacker got hands on a valid Refresh token (rare but can't take the chance).
 - **Administrator** : Add questions from the admin page (only for authorized people -> jwt body object's role=admin property)   
