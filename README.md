@@ -131,7 +131,9 @@ https://github.com/user-attachments/assets/3f6988b4-d385-497d-b4fb-91f7def52d85
 Below video shows : How you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
 
 
-https://github.com/user-attachments/assets/b318ab00-944e-4bd4-b47b-10f049ae2967
+
+https://github.com/user-attachments/assets/80747804-2284-4747-a7df-8be7557253a3
+
 
 
 
