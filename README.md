@@ -118,8 +118,8 @@ That's it.. That was the process.
 4. Install docker. Then, cd into the `postgresql' directory at project root directory, and do `docker compose up` to spin up the psql container and adminer (Admin panel for Db)
 5. Open a browser, and go to [http://localhost:5173/](http://localhost:5173/) - to run the app locally.
 
-## 🍿 Video :
-Below video shows - Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code.
+## 🍿 Preview :
+Below video shows : Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code :
 
 
 
@@ -128,8 +128,12 @@ https://github.com/user-attachments/assets/3f6988b4-d385-497d-b4fb-91f7def52d85
 
 
 
-Below video shows how you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
-https://github.com/user-attachments/assets/cc21db93-10e8-401c-abac-bbdba1781046
+Below video shows : How you can use 'Canvas Vim' to quickly draw out your solution before coding it from Codespace:
+
+
+https://github.com/user-attachments/assets/b318ab00-944e-4bd4-b47b-10f049ae2967
+
+
 
 
 
