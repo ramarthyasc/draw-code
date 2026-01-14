@@ -116,11 +116,11 @@ That's it.. That was the process.
 1. Clone the repo into a directory
 2. `npm install` in the project root directory to install the required dependencies for both frontend and backend workspaces (Monorepo setup).
 3. `npm run dev` from the project root directory to run the backend and frontend (Vite) servers.
-4. Install docker. Then, cd into the `postgresql' directory at project root directory, and do `docker compose up` to spin up the psql container and adminer (Admin panel for Db)
+4. Install docker. Then, cd into the `postgresql` directory at project root directory, and do `docker compose up` to spin up the psql container and adminer (Admin panel for Db)
 5. Open a browser, and go to [http://localhost:5173/](http://localhost:5173/) - to run the app locally.
 
 ## 🍿 Preview :
-1. Video (Audio On): **Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code** :
+1. Video (Audio On): **Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then submitting the solution code to get the results** :
 
 
 
@@ -146,7 +146,7 @@ https://github.com/user-attachments/assets/750b2f56-c543-4d06-a1ad-6b1ce6f25822
 
 
 
-For more videos on draw-code app, visit [my X profile](https://x.com/r_amarthya_sc)
+For more videos (errors & fix videos) on draw-code app, visit [my X profile](https://x.com/r_amarthya_sc)
 
 ## What next ? 
 Deployment of Draw-Code app.
