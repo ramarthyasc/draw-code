@@ -99,10 +99,10 @@ _**Note** : Everything is handcrafted (for learning purposes) - no AI code cut &
 - **Testing** :
   <img width="913" height="375" alt="image" src="https://github.com/user-attachments/assets/f654a33a-9831-4466-a6d0-bed22d8d4177" />
   1. Integration testing (Backend and Database): Supertest api testing library used inside Jest testing framework to give input into the Backend which communicates with the DB inside testcontainer. Output is asserted and if the assertions are true, then tests are passed.
-     - **Learnings :**
+    - **Learnings :**
       1. Automated integration testing
       2. Testing with containers
- - **Configurations** :
+- **Configurations** :
   1. Created a Monorepo setup using npm workspaces (To share node modules between frontend app and backend app - which reduces space, and improves speed of first time project setups).
   2. Configured Jest, Typescript (tsconfig -> allowJs allows Js modules to be imported inside TS modules)
     - **Learnings :**
