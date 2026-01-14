@@ -41,7 +41,10 @@ I frequently draw out the solution before coding it - when doing dsa or developi
 ## 🔷 Process of development & learnings :
 You can see (everything) the process from the start - demonstrations, bug encounters & fixes at [my X profile](https://x.com/r_amarthya_sc)
 
-**Note** : Everything is handcrafted (for learning purposes) - no AI code cut & paste involved, no Roughjs or other libraries for canvas involved. Likewise No Codemirror library involved for the code editor -> For making a lean software.  
+```
+**Note** : Everything is handcrafted (for learning purposes) - no AI code cut & paste involved, no Roughjs or other libraries for canvas involved. Likewise No Codemirror library involved for the code editor -> For making a lean software.
+```
+  
 
 - **Drawboard** :
   1. Learnt about 2d Context, Relation between Device pixel ratio (DPR), Physical pixels, css pixels and canvas pixels - for improving pixel clarity, and syncing coordinates of canvas with css by scaling.
