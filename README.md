@@ -120,7 +120,11 @@ That's it.. That was the process.
 
 ## 🍿 Video :
 Below video shows - Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code.
-https://github.com/user-attachments/assets/c1ac8478-5d50-430f-b0dd-de9ab0dec3ac
+
+
+
+https://github.com/user-attachments/assets/3f6988b4-d385-497d-b4fb-91f7def52d85
+
 
 
 
