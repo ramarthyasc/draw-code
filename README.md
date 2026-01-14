@@ -1,6 +1,7 @@
 # ✒️ Draw-Code
 Like Leetcode.. but you can draw out the solution before you code and submit .
 
+(Preview videos at the end)
 ## Why ?
 I frequently draw out the solution before coding it - when doing dsa or developing. There was no existing tool for doing both inside one application. So I built Draw-Code.
 
@@ -119,7 +120,7 @@ That's it.. That was the process.
 5. Open a browser, and go to [http://localhost:5173/](http://localhost:5173/) - to run the app locally.
 
 ## 🍿 Preview :
-1.Video: **Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code** :
+1. Video: **Creating a new question from the admin page (also shows role based authorization) by randomly selecting it from leetcode, then solving the question using solution code** :
 
 
 
