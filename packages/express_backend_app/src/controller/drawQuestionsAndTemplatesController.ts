@@ -54,7 +54,6 @@ export async function questionsDbGet(req: Request, res: Response, next: NextFunc
 
     const page = Number(req.query.page ?? "0");
     const limit = Number(req.query.limit ?? "10");
-    console.log(page, limit);
     // get a list of objects
     let questionsList: IQuestionsList[];
     try {

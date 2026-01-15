@@ -14,7 +14,6 @@ async function updatePicture(userPayload) {
   const text = "UPDATE users SET picture = $1 WHERE userid = $2";
   const values = [userPayload.picture, userPayload.sub];
   const res = await pool.query(text, values);
-  console.log(`Updated ${res.rowCount} row. Should only be 1 row.`);
 }
 
 /**

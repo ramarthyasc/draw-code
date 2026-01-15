@@ -2,7 +2,6 @@ const { questionsList, questionDetailsList } = require("../model/drawQuestionsIn
 
 exports.questionsGet = (req, res, next) => {
 
-    console.log(JSON.stringify(req.params))
 
     const params = req.params;
 
@@ -24,7 +23,6 @@ exports.questionsGet = (req, res, next) => {
         // construction end
 
         const qDetailsQNextPrev = { questionDetails, prevNextQuestionsArray}
-        console.log(qDetailsQNextPrev);
         return res.json(qDetailsQNextPrev);
 
     }

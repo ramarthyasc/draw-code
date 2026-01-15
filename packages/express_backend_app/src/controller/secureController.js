@@ -11,7 +11,6 @@ exports.jwtVerification = (req, res, next) => {
   try {
     decodedBody = verifyUserJwt(authJwt); //If verification = success, then returns decodedBody. Otherwise, throws error.
   } catch (err) {
-    console.log(err);
     return res.redirect('/login?error=bad_request');
   }
 

@@ -45,17 +45,13 @@ function Drawboard() {
                     setQDetailsQNextPrev(qDetails);
                     setIsLoading(false);
                 } else {
-                    console.log("HTTP Status: ", res.status);
-                    console.log("Status Text: ", res.statusText);
                     setError(new Error(`Request failed with status: ${res.status}`));
                     return;
                 }
             } catch (err) {
                 if (err.name === "AbortError") {
-                    console.log("Fetch aborted");
                     // Intentional error. So don't setError here
                 } else {
-                    console.log(err);
                     setError(err);
                 }
             }

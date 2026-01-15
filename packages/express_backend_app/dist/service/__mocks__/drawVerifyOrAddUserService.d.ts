@@ -1,0 +1,2 @@
+export function verifyOrAddUserService(userPayload: any, searchUser: any, userAddReturn: any, updatePicture: any, fs: any, path: any): Promise<any>;
+//# sourceMappingURL=drawVerifyOrAddUserService.d.ts.map

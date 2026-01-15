@@ -91,7 +91,6 @@ function AdminQuestionDetail() {
         if (params.qname === "create") {
             if (window.localStorage.getItem("lastqid")) {
                 const nextqid = Number(window.localStorage.getItem("lastqid")) + 1;
-                console.log("NEXT QID", nextqid)
                 createqDetail.id = nextqid;
                 createqDetail.name = Math.random().toString();
                 setData({ ...createqDetail }); // qDetail will be set automatically be the next UseEffect
@@ -114,7 +113,6 @@ function AdminQuestionDetail() {
 
             } catch (err) {
                 setError(true);
-                console.log(err);
             }
         }
 
@@ -171,7 +169,6 @@ function AdminQuestionDetail() {
 
         } catch (err) {
             setError(true);
-            console.log(err);
         }
         setIsButtonLoading(false);
     }
@@ -198,12 +195,10 @@ function AdminQuestionDetail() {
             );
 
             // Update the last question id to the current qdetail id - which is the new question
-            console.log("NEXT ID HERERERE", qdetail.id);
             window.localStorage.setItem("lastqid", `${qdetail.id}`)
 
         } catch (err) {
             setError(true);
-            console.log(err);
         }
         setCreated(true);
         setIsButtonLoading(false);
@@ -246,7 +241,6 @@ function AdminQuestionDetail() {
             try {
                 value = JSON.parse(stringvalue);
             } catch (err) {
-                console.log(err);
                 if (id === "examples" || id === "constraints" || id === "tips") {
                     value = qdetail[id];
                 }

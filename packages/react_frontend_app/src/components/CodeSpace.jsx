@@ -66,7 +66,6 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
             );
         } catch (err) {
             setError(true);
-            console.log(err);
         }
         setIsButtonLoading(false);
 
@@ -115,7 +114,6 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
         // only on the first fetch of a qtemplate is this function executed
         async function fetcher() {
             try {
-                console.log(params.qname);
                 const res = await fetch(`/docs/template/${params.qname}?language=${language}`, {
                     method: "GET",
                     signal: controller.signal,
@@ -140,19 +138,15 @@ export const CodeSpace = forwardRef((props, codespaceRef) => {
                     qTemplatesRef.current[params.qname][language] = qtemplate;
                     window.localStorage.setItem("qTemplates", JSON.stringify(qTemplatesRef.current));
 
-                    console.log(qtemplate);
 
                 } else {
-                    console.log("HTTP error: ", res.status);
                     setError(true);
                 }
 
             } catch (err) {
                 if (err.name === "AbortError") {
-                    console.log("AbortError: ", err);
                     return;
                 } else {
-                    console.log("Network/Fetch or parsing error", err);
                     setError(true);
                 }
             }

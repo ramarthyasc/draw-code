@@ -7,7 +7,7 @@ import { refreshTokenJwtGen } from '../controller/drawAuthMiddleware';
 
 export const drawSecureRouter: Router = Router();
 
-drawSecureRouter.use(corsAllowResponseSetter)
+// drawSecureRouter.use(corsAllowResponseSetter)
 
 // auth middleware - refresh-auth for generating RT & JWT - For SECURITY
 drawSecureRouter.use('/refresh-auth', refreshTokenJwtGen)

@@ -33,7 +33,6 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     { cwd: cDockerDir }
                 );
                 dockercomposeProcess.on('error', (err) => {
-                    console.log("dockercomposeProcess failed to start");
                     rej(err);
                 })
                 dockercomposeProcess.stderr.on('data', (data) => {
@@ -56,16 +55,13 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                             data = Buffer.from(chunk, 'utf-8');
                         }
 
-                        console.log("docker cli's stderr being collected ...");
                         stderrChunks.push(data);
                         return;
                     }
-                    console.log("docker cli's stderr not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
                     // container process is piped to docker cli 
-                    console.log("docker cli's stdout being collected ... ");
                     stdoutChunks.push(data);
                 })
                 dockercomposeProcess.on('close', (code) => {
@@ -76,21 +72,18 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                         if (code === 1) {
                             //compile error 
                             //so copy the err.txt from container fs
-                            console.log("compilation error");
                             // cli outs would be encoded in utf-8
                             stderr = Buffer.concat(stderrChunks).toString('utf-8');
                             res(stderr);
                         } else if (code === 2) {
                             //user's code runtime error
                             //so copy the cApp from container fs
-                            console.log("user's code runtime error");
                             stderr = Buffer.concat(stderrChunks).toString('utf-8');
                             res(stderr);
                         }
                     } else {
                         //user's code ran good
                         //so copy the cApp from container fs
-                        console.log("Good code");
                         // warnings which are stderr chunks are ignored
                         stdout = Buffer.concat(stdoutChunks).toString('utf-8');
                         res(stdout);
@@ -106,7 +99,6 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     { cwd: jsDockerDir }
                 );
                 dockercomposeProcess.on('error', (err) => {
-                    console.log("dockercomposeProcess failed to start");
                     rej(err);
                 })
                 dockercomposeProcess.stderr.on('data', (data) => {
@@ -129,16 +121,13 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                             data = Buffer.from(chunk, 'utf-8');
                         }
 
-                        console.log("docker cli's stderr (piped from the container) being collected ...");
                         stderrChunks.push(data);
                         return;
                     }
-                    console.log("docker cli's stderr ie; docker warnings not collected ...");
                 })
                 dockercomposeProcess.stdout.on('data', (data) => {
                     //get piped from docker cli, because, the stdout in the docker 
                     // container process is piped to docker cli 
-                    console.log("docker cli's stdout being collected ... ");
                     stdoutChunks.push(data);
                 })
                 dockercomposeProcess.on('close', (code) => {
@@ -146,27 +135,23 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     if (code !== 0) {
                         // The process inside the container ran with error
                         //user's code runtime error
-                        console.log("user's code runtime error");
                         stderr = Buffer.concat(stderrChunks).toString('utf-8');
                         res(stderr);
                     } else {
                         //user's code ran good
                         //so copy the cApp from container fs
-                        console.log("Good code");
                         // warnings which are stderr chunks are ignored
                         stdout = Buffer.concat(stdoutChunks).toString('utf-8');
 
                         // stdout will contain a \n string too as we are doing console.log from container which 
                         // outputs a \n automatically. So split using \n
                         //Make it into an array, then send - then we get array of Objects
-                        console.log(stdout);
                         // casestringArray contains strings - where each contains the userlogs & our resultobject log
                         const casestringArray: string[] = stdout
                             .split("_&&_@849\n") // random splitter - so that user logs can't split the string NOTE: BREAKPOINT
                             .filter((item) => {
                                 return item !== "";
                             });
-                        console.log(casestringArray);
                         // Make array of Arrays, where each array is a case - where we have userlogs and our resultobject
                         const caseArrayArray: EachCaseResult = casestringArray
                             .map((string: string) => {
@@ -185,8 +170,6 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
 
                                     })
                             })
-                        console.log("HEYY", caseArrayArray);
-                        console.log([{hey: "hello"}])
 
                         res(caseArrayArray);
                     }
@@ -197,7 +180,6 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
         })
 
     } catch (err) {
-        console.log("Docker compose error: ", err);
         throw err;
     }
 

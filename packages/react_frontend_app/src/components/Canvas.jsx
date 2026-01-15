@@ -199,7 +199,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
                     y0: buttonCoordRef.current[button].y0, y1: buttonCoordRef.current[button].y1
                 }, { offsetX, offsetY })) {
 
-                    console.log("hello")
                     buttonRender(contextRef.current, style, buttonsImgDataRef.current, { highlight: true }, colorPaletteImgDataRef.current,
                         colorsRef.current[0], button);
 
@@ -281,7 +280,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
     }
     useEffect(() => {
         function shortcutShapeSelector(button) {
-            console.log("EHYYLLLOOOOO");
             const style = getComputedStyle(canvasRef.current);
             buttonRender(contextRef.current, style, buttonsImgDataRef.current, { normal: true }, colorPaletteImgDataRef.current, colorsRef.current[0]);
 
@@ -301,7 +299,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
             })
         }
         function shortcutUndo() {
-            console.log("EHYYLLLOOOOO");
             const style = getComputedStyle(canvasRef.current);
 
             clearCanvas(offContextRef.current, offCanvasRef.current);
@@ -457,7 +454,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
                 undoRedoArrayPusher(shapePrototypesRef.current, "pencilDot");
                 //
 
-                console.log(JSON.parse(window.localStorage.getItem("undoRedoArray")));
             }
         }
 
@@ -511,7 +507,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
                                 window.localStorage.setItem("xPreviousPosition", undoRedoArrayPointer);
 
 
-                                console.log(JSON.parse(window.localStorage.getItem("undoRedoArray")));
                             }
                         }
                         // To avoid pasteDrawableCanvas happening - when i click X, and click on any shape , the previous drawing comes into display.
@@ -904,7 +899,6 @@ export const Canvas = forwardRef((props, canvasRef) => {
                     })
                 }
 
-                console.log(JSON.parse(window.localStorage.getItem("undoRedoArray")));
             }
 
             mouseUpRef.current = true;

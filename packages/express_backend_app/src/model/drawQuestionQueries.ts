@@ -41,7 +41,6 @@ export async function getPrevNextCurrentQuestionsQuery(qname: string) {
         const { rows } = await pool.query(text, values);
         return rows;
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -57,7 +56,6 @@ export async function getQuestionsQuery(offset: number, limit: number) {
         const { rows } = await pool.query(text, values);
         return rows;
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 
@@ -73,7 +71,6 @@ export async function getQuestionDetail(qname: string) {
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -91,7 +88,6 @@ export async function updateQuestion(changedDetail: IQuestionDetail,
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -106,7 +102,6 @@ export async function createQuestion(newQDetail: IQuestionDetail, newQName: stri
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -125,7 +120,6 @@ export async function deleteLastQuestionQuery() {
         const { rows } = await pool.query(text);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
     
@@ -144,7 +138,6 @@ export async function getQTemplate(qname: string) {
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -162,7 +155,6 @@ export async function updateQTemplate(changedQmeta: IQuestionMeta,
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }
@@ -180,7 +172,6 @@ export async function createQTemplate(newQmeta: IQuestionMeta, newLangtemplates:
         const { rows } = await pool.query(text, values);
         return rows[0];
     } catch (err) {
-        console.log("DB error: ", err);
         throw err;
     }
 }

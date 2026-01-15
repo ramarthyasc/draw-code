@@ -11,7 +11,6 @@ exports.submitPost = async (req, res, next) => {
     const codeData = req.body.code;
     const FILENAME = "main";
     const { qname } = req.params;
-    console.log(codeData);
     // test cases write for that question ; ie; the arguments that we will be giving to the function
 
     // create a separate container for solving the questions so that even if the answer is malignant, then it wouldn't affect the server application
@@ -43,13 +42,7 @@ exports.submitPost = async (req, res, next) => {
             }
         })
         .catch((error) => {
-            console.log("Logging docker compose error: ", error);
             next(err);
-        })
-        .finally(() => {
-            console.log("Child process' Promise settled");
-            // delete the user code file
-            // fs.rmSync(codeFilePath);
         })
 
     //then send the answer cases in a json file to the client

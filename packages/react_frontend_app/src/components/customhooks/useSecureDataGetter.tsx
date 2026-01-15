@@ -93,7 +93,6 @@ export function useSecureDataGetter<T = string, K = FormData>() {
             } else if (res.status === 401) {
                 // jwt is expired or none is there, so get the jwt & refresh token using the current RT
                 const { code } = await res.json();
-                console.log(code)
                 // now fetch the RT & JWT
                 //
                 const jwtFetch = await fetch("/api/refresh-auth", {
@@ -125,13 +124,11 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                             }, path);
                         }
                     } catch (err) {
-                        console.log(err);
                         throw err;
                     }
                 } else if (jwtFetch.status === 401) {
                     //RT is invalid
                     const { code } = await jwtFetch.json();
-                    console.log(code);
                     // Show in the ResultBox that You have to signin to submit (Instead of throwing Error)
                     setData("signin");
                     authState.setJsonWebToken(null);
@@ -140,19 +137,15 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                 } else if (jwtFetch.status === 500) {
                     //any server error
                     const defaultServerError = await jwtFetch.text();
-                    console.log("HTTP error: ", jwtFetch.status);
-                    console.log(defaultServerError);
                     throw new Error(defaultServerError);
                 } else {
                     // unknown error from server (someone changed statuscode from serverside)
-                    console.log("HTTP error: ", jwtFetch.status);
                     throw new Error(jwtFetch.status.toString());
                 }
 
             } else if (res.status === 403) {
                 /// ADMIN NON AUTHORIZATION - FORBIDDEN IF ROLE IS USER
                 const { code } = await res.json();
-                console.log(code);
                 setData("not-admin"); // Say forbidden when we get "not-admin" as the setData - but don't logout
                 return;
 
@@ -160,17 +153,14 @@ export function useSecureDataGetter<T = string, K = FormData>() {
                 // Path not found
 
                 const resText = await res.text();
-                console.log(resText);
                 throw new Error(resText);
 
             } else {
                 // unknown error from server (someone changed statuscode from serverside)
-                console.log("HTTP error: ", res.status);
                 throw new Error(res.status.toString());
             }
 
         } catch (err) {
-            console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
             throw err;
         }
 

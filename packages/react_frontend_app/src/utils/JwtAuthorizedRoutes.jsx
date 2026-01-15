@@ -9,7 +9,6 @@ import { ErrorContext } from "../context/ErrorContext";
 // This component is only reached after JwtFetcher. So if isLoggedIn==true, then all other states will be true( jsonWebToken, etc..)
 function JwtAuthorizedRoutes() {
 
-    console.log("JwtAuthorizedRoutes");
     const [isLoggedIn, setIsLoggedIn, jsonWebToken, setJsonWebToken, setUser, user] = useOutletContext();
     const setRtError = useContext(ErrorContext);
 
@@ -79,7 +78,6 @@ function JwtAuthorizedRoutes() {
 
                             } else {
 
-                                console.log("HTTP response error: ", res.status);
                                 const { code } = await res.json();
 
                                 if (code === "NO_REFRESH_TOKEN" || code === "INVALID_REFRESH_TOKEN") {
@@ -96,7 +94,6 @@ function JwtAuthorizedRoutes() {
 
 
                 } catch (err) {
-                    console.log("Fetch/Network error: ", err);
                     return;
                 }
 

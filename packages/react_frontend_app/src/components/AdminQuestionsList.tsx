@@ -44,7 +44,6 @@ function AdminQuestionsList() {
     useEffect(() => {
 
         async function fetcher() {
-            console.log(searchParams.get("page"))
             const page = searchParams.get("page") ?? "0";
             const limit = searchParams.get("limit") ?? "10";
             const path = `/admin/questions?page=${page}&limit=${limit}`;
@@ -60,7 +59,6 @@ function AdminQuestionsList() {
 
             } catch (err) {
                 setError(true);
-                console.log(err);
             }
         }
 
@@ -74,7 +72,6 @@ function AdminQuestionsList() {
 
     useEffect(() => {
         if (jsonWebToken && user.role === "admin") {
-            console.log(data)
             setIsAdmin(true);
 
             const lastqid = Number(searchParams.get("page")) * Number(searchParams.get("limit")) + data.length - 1;
@@ -158,7 +155,6 @@ function AdminQuestionsList() {
 
             } catch (err) {
                 setError(true);
-                console.log(err);
             }
             setIsButtonLoading(false);
         }

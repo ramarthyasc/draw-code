@@ -12,7 +12,6 @@ const crypto = require('crypto');
 exports.rotatingRefreshTokenAndJwt = async (req, res, next) => {
 
 
-  // console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
   const refreshToken = req.cookies.refreshToken;
 

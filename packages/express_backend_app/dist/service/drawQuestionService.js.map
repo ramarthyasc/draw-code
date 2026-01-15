@@ -1,0 +1,1 @@
+{"version":3,"file":"drawQuestionService.js","sourceRoot":"","sources":["../../src/service/drawQuestionService.ts"],"names":[],"mappings":";;AAMA,sDAQC;AARM,KAAK,UAAU,qBAAqB,CAAC,IAAY,EAAE,KAAa,EAAE,GAAiB;IAEtF,gCAAgC;IAChC,EAAE;IACF,MAAM,MAAM,GAAG,IAAI,GAAG,KAAK,CAAC;IAC5B,MAAM,IAAI,GAAG,MAAM,GAAG,CAAC,iBAAiB,CAAC,MAAM,EAAE,KAAK,CAAC,CAAC;IACxD,OAAO,IAAI,CAAC;AAEhB,CAAC"}

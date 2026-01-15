@@ -56,7 +56,6 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
         return res.status(response.status).json(response)
     }
 
-    console.log(accessToken)
 
 
     // Invalid/expired jwt
@@ -80,7 +79,6 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 export const refreshTokenJwtGen = async (req: Request, res: Response, next: NextFunction) => {
 
     const refreshToken: string | undefined = req.cookies?.refreshToken;
-    console.log(refreshToken);
 
 
     try {
@@ -93,7 +91,6 @@ export const refreshTokenJwtGen = async (req: Request, res: Response, next: Next
             return res.status(response.status).json(response);
         } else {
             // There is refresh token
-            console.log(refreshToken, "helooooo");
 
             const detailRefreshToken: RefreshTokenDetail | undefined = await verifyValidityExpiryRevokeRTService(
                 refreshToken,
@@ -144,7 +141,6 @@ export const refreshTokenJwtGen = async (req: Request, res: Response, next: Next
                     rotated_from: detailRefreshToken.id,
                 }, revokeRefreshToken, detailRefreshToken);
 
-                console.log(refreshToken, "TWOOOOOO");
 
                 // Set new RT in cookie & Send new JWT  
                 res.cookie('refreshToken', refreshToken, {

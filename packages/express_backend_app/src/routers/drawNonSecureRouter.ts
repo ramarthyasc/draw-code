@@ -4,7 +4,7 @@ import { questionsDbGet, questionDetailUserDbGet, qTemplateUserDbGet } from '../
 
 export const drawNonSecureRouter = Router();
 
-drawNonSecureRouter.use(corsAllowResponseSetter);
+// drawNonSecureRouter.use(corsAllowResponseSetter);
 
 drawNonSecureRouter.get('/template/:qname', qTemplateUserDbGet);
 

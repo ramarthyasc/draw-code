@@ -1,0 +1,1 @@
+{"version":3,"file":"drawpool.js","sourceRoot":"","sources":["../../../src/model/__mocks__/drawpool.js"],"names":[],"mappings":";AAAA,oEAAoE;AACpE,MAAM,EAAE,IAAI,EAAE,GAAG,OAAO,CAAC,IAAI,CAAC,CAAC;AAE/B,MAAM,CAAC,OAAO,GAAG,IAAI,IAAI,CAAC;IACxB,IAAI,EAAC,WAAW;IAChB,IAAI,EAAC,MAAM;IACX,QAAQ,EAAC,MAAM;IACf,QAAQ,EAAC,MAAM;IACf,IAAI,EAAC,IAAI;CACV,CAAC,CAAA"}

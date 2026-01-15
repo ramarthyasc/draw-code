@@ -58,7 +58,6 @@ function AdminQuestionTemplate() {
 
             } catch (err) {
                 setError(true);
-                console.log(err);
             }
         }
 
@@ -108,7 +107,6 @@ function AdminQuestionTemplate() {
 
         } catch (err) {
             setError(true);
-            console.log(err);
         }
         setIsButtonLoading(false);
     }
@@ -137,7 +135,6 @@ function AdminQuestionTemplate() {
 
         } catch (err) {
             setError(true);
-            console.log(err);
         }
         setCreated(true);
         setIsButtonLoading(false);
@@ -170,7 +167,6 @@ function AdminQuestionTemplate() {
                 try {
                     value = JSON.parse(stringvalue);
                 } catch (err) {
-                    console.log(err);
                     value = qtemplate.qmeta[id];
                 }
                 return {

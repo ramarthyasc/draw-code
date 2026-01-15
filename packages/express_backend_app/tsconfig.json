@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "./dist",
     "module": "CommonJs",
     "esModuleInterop": true,
     "declaration": true,
@@ -8,5 +9,5 @@
     "types": [ "jest"]
   },
   "exclude": ["./public", "./assets", "./view", "dist"],
-  "include": ["./**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.js"]
 }

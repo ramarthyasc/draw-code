@@ -5,7 +5,6 @@ function Signin({ setIsLoggedIn, setJsonWebToken, setUser }) {
     const navId = useId();
 
     async function handleCredentialResponse(response) {
-        //console.log(response.credential);
 
         try {
             const loginRes = await fetch("/draw-login", {
@@ -28,18 +27,14 @@ function Signin({ setIsLoggedIn, setJsonWebToken, setUser }) {
                 if (loginRes.status === 500) {
                     // Error handler default server Error
                     const defaultServerError = await res.text();
-                    console.log("HTTP response error: ", res.status);
-                    console.log(defaultServerError);
                     return;
                 } else {
                     //unknown server send errors (if someone changed the status from the server)
-                    console.log("HTTP response error: ", res.status);
                 }
             }
 
 
         } catch (err) {
-            console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
             return;
         }
 

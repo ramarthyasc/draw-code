@@ -22,7 +22,7 @@ function App() {
 
 
     return (
-        <ErrorBoundary fallback={<p>Something went wrong !!</p>}>
+        <ErrorBoundary fallback={<p className="text-center">Something went wrong !!</p>}>
 
             <JwtFetcher setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}
                 jsonWebToken={jsonWebToken} setJsonWebToken={setJsonWebToken} setUser={setUser}>

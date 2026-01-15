@@ -7,5 +7,5 @@
     "types": ["jest", "react"],
     "lib": ["es2020", "dom", "DOM.Iterable"]
   },
-  "include": ["./**/*.ts" ]
+  "include": ["./**/*.tsx", "./**/*.jsx" ]
 }

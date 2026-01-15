@@ -56,6 +56,12 @@ const routes = [
                         ]
                     },
                 ]
+            },
+            {
+                path: "*",
+                element: <div className="text-center">
+                Page not found !
+                </div>
             }
         ]
     },

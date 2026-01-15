@@ -73,19 +73,11 @@ exports.verifyValidityExpiryRevokeRTService = async (token, searchRefreshToken, 
   if (now > expires_at || now > absolute_expires_at) {
     //Expired. ie; REPLAY ATTACK
 
-      console.log("expired ?")
     // Revoke refresh token of the user ie; Logout the user/hacker from the browser. So that he 
     // have to create new Refresh token from start - from the entry point ie; Signin through google.
     await revokeOneRefreshTokenChain(detailRefreshToken[0])
 
 
-    if (now > expires_at) {
-      console.log(`Revoked user's or hacker's current browser Refresh token by Relative Expiry`);
-
-    }
-    if (now > absolute_expires_at) {
-      console.log(`Revoked user's or hacker's current browser Refresh token by ABSOLUTE Expiry`);
-    }
     return;
 
   }

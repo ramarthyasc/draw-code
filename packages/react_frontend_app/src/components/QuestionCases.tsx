@@ -44,7 +44,6 @@ export interface IQuestionContext {
 }
 
 function inputSanitize(input: IExample["input"]) {
-    console.log(input);
     if (typeof input === "number") {return input.toString()};
     return input.replace(/.*=\s?/, "");
 }

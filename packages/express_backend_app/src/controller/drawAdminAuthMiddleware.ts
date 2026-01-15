@@ -20,7 +20,6 @@ export const jwtAuthAdmin = (req: Request, res: Response, next: NextFunction) =>
         return res.status(response.status).json(response)
 
     }
-    console.log(accessToken)
 
 
     // Invalid/expired jwt

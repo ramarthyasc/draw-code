@@ -34,6 +34,5 @@ export function templateGet(req: Request, res: Response, next: NextFunction) {
 
     const qtemplate:string = generateTemplate(qname, language);
 
-    console.log(qtemplate);
     return res.send(qtemplate);
 }

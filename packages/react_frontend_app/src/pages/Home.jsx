@@ -33,8 +33,6 @@ function Home() {
                     setIsLoading(false);
                     setQuestionsList(questionsList);
                 } else {
-                    console.log("HTTP Status: ", res.status);
-                    console.log("Status Text: ", res.statusText);
                     // don't need Error handling as it's a developer error
                     setError(new Error(`Request failed with status: ${res.status}`));
                     return;
@@ -42,10 +40,8 @@ function Home() {
 
             } catch (err) {
                 if (err.name === "AbortError") {
-                    console.log("Abort Error: ", err);
                     return;
                 } else {
-                    console.log(err);
                     // user's network error. So need error handler
                     setError(err);
                     return;

@@ -35,7 +35,6 @@ exports.googleJwtVerifyPost = async (req, res, next) => {
 
     //userdetail : userid, name, email, picture
     req.userDetail = userDetail;
-    console.log(userDetail);
     next();
 }
 

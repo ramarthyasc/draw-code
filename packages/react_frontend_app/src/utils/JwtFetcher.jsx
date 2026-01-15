@@ -7,7 +7,6 @@ import { useEffect, useState, useRef } from 'react';
 //
 
 function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
-    console.log("Jwtfetcher")
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState();
@@ -38,24 +37,18 @@ function JwtFetcher({ children, setIsLoggedIn, setJsonWebToken, setUser }) {
 
                     if (res.status === 401) {
                         const { code } = await res.json();
-                        console.log("HTTP response error: ", res.status);
-                        console.log(code);
 
                     } else if (res.status === 500) {
                         // Error handler default server Error
                         const defaultServerError = await res.text();
-                        console.log("HTTP response error: ", res.status);
-                        console.log(defaultServerError);
                         setError(new Error("Server default error"));
                     } else {
                         // unknown server send error
-                        console.log("HTTP response error: ", res.status);
                         setError(new Error("Server unknown status error"));
                     }
                 }
 
             } catch (err) {
-                    console.log("Network(Fetch) error or Parsing (text/json) error: ", err);
                     setError(new Error("Network error"));
 
             }

@@ -272,7 +272,6 @@ int main(void) {
     try {
         fs.writeFileSync(codeFilePath, transformedCode);
     } catch (err) {
-        console.log(err);
         throw err;
     }
 

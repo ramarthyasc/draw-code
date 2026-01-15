@@ -31,7 +31,6 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
     } else if (props.result === "signin") {
         // When i get refresh token error (ie' Not logged in), then did setData as "signin" in custom hook. 
         // Displays - signin to submit
-        console.log("signin")
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
                 <div className="px-2 mx-3 my-3 py-1 border border-yellow-600 rounded-md bg-yellow-300 text-black"
@@ -42,7 +41,6 @@ export const ResultBox = forwardRef((props, resultBoxRef) => {
 
     } else if (props.result === "Coming soon ...") {
         // Coming soon ... is the output from GNU C COMPILER
-        console.log("coming soon")
         return (
             <div ref={resultBoxRef} className="h-81 text-left overflow-auto">
                 <div className="px-2 mx-3 my-3 py-1 border border-blue-600 rounded-md bg-blue-200 text-black"

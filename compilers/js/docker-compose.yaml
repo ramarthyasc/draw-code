@@ -10,7 +10,7 @@ services:
       - /tmp:size=32m,noexec,nosuid,nodev
     volumes: 
       - type: bind
-        source: /home/r-amarthya-sreechand/Web_Dev/leetcode_project/packages/express_backend_app/src/model/sandbox/js/
+        source: /home/r-amarthya-sreechand/Web_Dev/leetcode_project/packages/express_backend_app/dist/model/sandbox/js/
         target: /usr/src/code/js/usercode/
         read_only: true
 
