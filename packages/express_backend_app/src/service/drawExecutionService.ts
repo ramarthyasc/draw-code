@@ -44,7 +44,10 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     if (
                         !(chunk.includes('Container') ||
                             chunk.includes('Creating') ||
-                            chunk.includes('Created'))
+                            chunk.includes('Created') ||
+                            chunk.includes('time="') ||
+                            chunk.includes('level=') ||
+                            chunk.includes('msg="'))
                     ) {
                         chunk = chunk.replace(/\sat/g, "<br> at");
                         data = Buffer.from(chunk, 'utf-8');
@@ -110,7 +113,10 @@ exports.executeCodeContainer = async (spawn: Spawn, path: PathModule, codeLangua
                     if (
                         !(chunk.includes('Container') ||
                             chunk.includes('Creating') ||
-                            chunk.includes('Created'))
+                            chunk.includes('Created') ||
+                            chunk.includes('time="') ||
+                            chunk.includes('level=') ||
+                            chunk.includes('msg="'))
                     ) {
                         chunk = chunk.replace(/\sat/g, "<br> at");
                         data = Buffer.from(chunk, 'utf-8');
