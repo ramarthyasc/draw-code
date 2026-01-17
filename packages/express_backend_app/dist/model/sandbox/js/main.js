@@ -7,7 +7,8 @@ class Solution {
     * @return {number[][]}
     */
     threeSum(nums) {
-jhg
+
+      while(true) {} 
     }
 }
 
