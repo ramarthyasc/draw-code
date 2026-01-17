@@ -61,10 +61,16 @@ exports.jwtRefreshTokenCreatorPost = async (req, res) => {
             rotated_from: null
         });
 
+    let secure;
+    if (process.env.NODE_ENV === "development") {
+        secure = false;
+    } else {
+        secure = true;
+    }
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         maxAge: Number(process.env.RT_EXPIRES_IN),
-        secure: false, // As the localserver is not https. Change it to secure when in Production.
+        secure: secure, // As the localserver is not https. Change it to secure when in Production.
         sameSite: "lax",
         path: "/api/refresh-auth",
     });

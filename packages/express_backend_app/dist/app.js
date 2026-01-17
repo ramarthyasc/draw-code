@@ -66,7 +66,7 @@ app.use('/admin', drawAdminRouter);
 //// For after React build
 /// for all the routes other than that of the backend api - home "/", "/drawcode" ie; Frontend urls
 app.get('/*splat', (req, res) => {
-    return res.sendFile(path.join(__dirname, "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 //For logging the errors in Production into the terminal(And importantly when testing) 
 //& Most importantly streamlining the server error flow using next(err) & then handle from Frontend too the 

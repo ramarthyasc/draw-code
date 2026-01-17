@@ -61,7 +61,7 @@ app.use(cookieParser()); //cookieParser() returns a middleware.
 app.use(express.json());
 
 // The dist is of the React - so This app.js should be in the build folder ie; dist of the Express
-app.use(express.static(path.join(__dirname, "dist")), {index: false});
+app.use(express.static(path.join(__dirname, "dist")));
 app.use('/proPic', express.static(path.join(__dirname, "./public/proPic/")));
 
 // Lightweight session check for the frontend (not for security) = UI HELPER- DON'T NEED - CONFUSING
