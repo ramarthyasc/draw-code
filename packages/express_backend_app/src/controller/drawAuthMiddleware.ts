@@ -142,7 +142,7 @@ export const refreshTokenJwtGen = async (req: Request, res: Response, next: Next
                 }, revokeRefreshToken, detailRefreshToken);
 
                 let secure: boolean;
-                if (process.env.NODE_ENV === "development") {
+                if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === undefined) {
                     secure = false;
                 } else {
                     secure = true;

@@ -95,7 +95,7 @@ const refreshTokenJwtGen = async (req, res, next) => {
                     rotated_from: detailRefreshToken.id,
                 }, drawRefresh_tokensQueries_1.revokeRefreshToken, detailRefreshToken);
                 let secure;
-                if (process.env.NODE_ENV === "development") {
+                if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === undefined) {
                     secure = false;
                 }
                 else {
