@@ -2,8 +2,7 @@
   "name": "drawcode_project",
   "private": true,
   "workspaces": [
-    "packages/express_backend_app/",
-    "packages/react_frontend_app/"
+    "packages/express_backend_app/"
   ],
   "devDependencies": {
     "@types/jest": "^30.0.0",
