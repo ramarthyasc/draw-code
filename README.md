@@ -108,9 +108,10 @@ _**Note** : Everything is handcrafted (for learning purposes) - no AI code cut &
   - **Learnings :**
     1. Giving compile time typesafety for JS functions using JSDocs (When importing functions from JS modules into TS)
 - **Self-Hosting** :
-  1. Rented a VPS, used a reverse proxy (Caddy) to direct requests to the drawcode app.
+  1. Rented a VPS, used a Reverse proxy (Caddy) to direct requests to the drawcode app.
   2. Deployed Postgresql container and Code judge containers onto the VPS.
   3. Used pm2 for keeping the drawcode server as a long running process.
+  4. Semi-automated CI/CD by manually pulling updated code from GitHub to the VPS.
   - **Learnings :**
     1. SSH, DNS, Name servers.
     2. Reverse proxy config (Caddy)
