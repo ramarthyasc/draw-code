@@ -107,7 +107,15 @@ _**Note** : Everything is handcrafted (for learning purposes) - no AI code cut &
   2. Configured Jest, Typescript (tsconfig -> allowJs allows Js modules to be imported inside TS modules)
   - **Learnings :**
     1. Giving compile time typesafety for JS functions using JSDocs (When importing functions from JS modules into TS)
-    
+- **Self-Hosting** :
+  1. Rented a VPS, used a reverse proxy (Caddy) to direct requests to the drawcode app.
+  2. Deployed Postgresql container and Code judge containers onto the VPS.
+  3. Used pm2 for keeping the drawcode server as a long running process.
+  - **Learnings :**
+    1. SSH, DNS, Name servers.
+    2. Reverse proxy config (Caddy)
+    3. Working of TLS certificates and the TLS handshake used to establish HTTPS.  
+
 That's it.. That was the process.
 
 ## 🔨 How can this be improved 
