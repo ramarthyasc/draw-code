@@ -160,6 +160,6 @@ https://github.com/user-attachments/assets/750b2f56-c543-4d06-a1ad-6b1ce6f25822
 For more videos (errors & fix videos) on draw-code app, visit [my X profile](https://x.com/r_amarthya_sc)
 
 ## What next ? 
-Deployment of Draw-Code app.
+Just let me know if there are any bugs.. And Contributions are welcome. 
 
 
