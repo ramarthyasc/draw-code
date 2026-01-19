@@ -3,12 +3,25 @@
 class Solution {
 
     /**
-    * @param {number[]} nums
-    * @return {number[][]}
-    */
-    threeSum(nums) {
+     * @param {{nums: number[], target: number}} param0
+     * @return {number}
+     */
+    search({nums, target}) {
+let left = 0;
+        let right = nums.length-1;
 
-      while(true) {} 
+        while (left <= right) {
+            const mid = left + Math.floor((right - left)/2);
+            console.log("hello")
+            if (nums[mid] === target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            }
+        }
+        return 82;
     }
 }
 
@@ -103,13 +116,17 @@ function stringify(input) {
 
 
 function stringLogger(input) {
-    if ( typeof input === "boolean" ||
+    if (typeof input === "boolean" ||
         typeof input === "number" ||
-        typeof input === "undefined" ||
-        typeof input === "string" ||
         Object.prototype.toString.call(input) === "[object Null]"
     ) {
         return `${input}`;
+    } else if (typeof input === "undefined") {
+        return `"undefined"`;
+    } else if (typeof input === "function") {
+        return `"function"`;
+    } else if (typeof input === "string") {
+        return `"${input}"`;
     } else if (
         Object.prototype.toString.call(input) === "[object Array]" ||
         Object.prototype.toString.call(input) === "[object Object]"
@@ -124,14 +141,14 @@ function stringLogger(input) {
 
 let res0;
 try {
-     res0 = solution.threeSum([-1,0,1,2,-1,-4]);
+     res0 = solution.search({"nums":[-1,0,2,4,6,8],"target":4});
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer([[-1,-1,2],[-1,0,1]], res0) ? 
+//     comparer(3, res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -139,10 +156,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer([[-1,-1,2],[-1,0,1]], res0)},` +
-`"input": "[-1,0,1,2,-1,-4]",` +
-`"userOutput": "${stringLogger(res0)}",` + 
-`"expOutput": "[[-1,-1,2],[-1,0,1]]" }`);
+`"pass": ${comparer(3, res0)},` +
+`"input": {"nums":[-1,0,2,4,6,8],"target":4},` +
+`"userOutput": ${stringLogger(res0)},` + 
+`"expOutput": 3 }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
@@ -155,14 +172,14 @@ try {
 
 let res1;
 try {
-     res1 = solution.threeSum([0,1,1]);
+     res1 = solution.search({"nums":[-1,0,2,4,6,8],"target":3});
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer([], res1) ? 
+//     comparer(-1, res1) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -170,10 +187,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 1,` + 
-`"pass": ${comparer([], res1)},` +
-`"input": "[0,1,1]",` +
-`"userOutput": "${stringLogger(res1)}",` + 
-`"expOutput": "[]" }`);
+`"pass": ${comparer(-1, res1)},` +
+`"input": {"nums":[-1,0,2,4,6,8],"target":3},` +
+`"userOutput": ${stringLogger(res1)},` + 
+`"expOutput": -1 }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.

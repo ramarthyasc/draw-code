@@ -98,11 +98,15 @@ export function stringify(input: unknown) {
 export function stringLogger(input: unknown) {
     if (typeof input === "boolean" ||
         typeof input === "number" ||
-        typeof input === "undefined" ||
-        typeof input === "string" ||
         Object.prototype.toString.call(input) === "[object Null]"
     ) {
         return `${input}`;
+    } else if (typeof input === "undefined") {
+        return `"undefined"`;
+    } else if (typeof input === "function") {
+        return `"function"`;
+    } else if (typeof input === "string") {
+        return `"${input}"`;
     } else if (
         Object.prototype.toString.call(input) === "[object Array]" ||
         Object.prototype.toString.call(input) === "[object Object]"
@@ -143,13 +147,17 @@ function stringLoggerText() {
     return `
 
 function stringLogger(input) {
-    if ( typeof input === "boolean" ||
+    if (typeof input === "boolean" ||
         typeof input === "number" ||
-        typeof input === "undefined" ||
-        typeof input === "string" ||
         Object.prototype.toString.call(input) === "[object Null]"
     ) {
         return \`\${input}\`;
+    } else if (typeof input === "undefined") {
+        return \`"undefined"\`;
+    } else if (typeof input === "function") {
+        return \`"function"\`;
+    } else if (typeof input === "string") {
+        return \`"\${input}"\`;
     } else if (
         Object.prototype.toString.call(input) === "[object Array]" ||
         Object.prototype.toString.call(input) === "[object Object]"
@@ -184,9 +192,9 @@ try {
 // Make a JSON format
     console.log(\`{ "id": ${testCaseNum},\` + 
 \`"pass": \${comparer(${stringify(caseAndMethod.caseAndOutput[testCaseNum]?.output)}, ${resName})},\` +
-\`"input": "${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.case)}",\` +
-\`"userOutput": "\${stringLogger(${resName})}",\` + 
-\`"expOutput": "${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.output)}" }\`);
+\`"input": ${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.case)},\` +
+\`"userOutput": \${stringLogger(${resName})},\` + 
+\`"expOutput": ${stringLogger(caseAndMethod.caseAndOutput[testCaseNum]?.output)} }\`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
