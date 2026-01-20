@@ -26,7 +26,8 @@ I frequently draw out the solution before coding it - when doing dsa or developi
   - Undo, Redo : Undo or Redo the changes
   - X : Clear the canvas
   - Canvas vim : Keep your Left hand on the keyboard to switch between the shapes on the go (fasttt) using Keyboard shortcuts. Right hand to draw using Mouse.
-  <img width="534" height="43" alt="image" src="https://github.com/user-attachments/assets/a22acbe8-d394-4b8d-a884-93eec07884f4" />
+ 
+  <img width="538" height="44" alt="image" src="https://github.com/user-attachments/assets/de0a0d1c-405f-4cb0-8e59-2502fcc051c2" />
 
 - **Drawboard resizer, Codespace resizer** : Resize the drawboard horizontally if you need more space for drawing. Resize the Result box in the Codespace vertically to view the Test case results without scrolling. Resize the Codespace horizontally to code with a wider view.
 - **Coding space**
