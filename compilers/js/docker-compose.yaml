@@ -11,7 +11,7 @@ services:
       - /tmp:size=32m,noexec,nosuid,nodev
     volumes: 
       - type: bind
-        source: /home/rasc/hosts/draw-code/packages/express_backend_app/dist/model/sandbox/js/
+        source: /home/rasc/hosts/draw-code/packages/express_backend_app/dist/model/sandbox/js/ #for Local dev - give your /sandbox/js directory
         target: /usr/src/code/js/usercode/
         read_only: true
 
