@@ -2,26 +2,9 @@
 
 class Solution {
 
-    /**
-     * @param {{nums: number[], target: number}} param0
-     * @return {number}
-     */
-    search({nums, target}) {
-let left = 0;
-        let right = nums.length-1;
-
-        while (left <= right) {
-            const mid = left + Math.floor((right - left)/2);
-            console.log("hello")
-            if (nums[mid] === target) {
-                return mid;
-            } else if (nums[mid] < target) {
-                left = mid + 1;
-            } else if (nums[mid] > target) {
-                right = mid - 1;
-            }
-        }
-        return 82;
+  
+    grambu() {
+console.log("heyyy")
     }
 }
 
@@ -141,14 +124,14 @@ function stringLogger(input) {
 
 let res0;
 try {
-     res0 = solution.search({"nums":[-1,0,2,4,6,8],"target":4});
+     res0 = solution.grambu("do you want to play a game ?");
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(3, res0) ? 
+//     comparer(false, res0) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -156,10 +139,10 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 0,` + 
-`"pass": ${comparer(3, res0)},` +
-`"input": {"nums":[-1,0,2,4,6,8],"target":4},` +
+`"pass": ${comparer(false, res0)},` +
+`"input": "do you want to play a game ?",` +
 `"userOutput": ${stringLogger(res0)},` + 
-`"expOutput": 3 }`);
+`"expOutput": false }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
@@ -172,14 +155,14 @@ try {
 
 let res1;
 try {
-     res1 = solution.search({"nums":[-1,0,2,4,6,8],"target":3});
+     res1 = solution.grambu("is it a good game ?");
 } catch(err) {
     // to be written to FD2
     throw err;
 }
 
 // try {
-//     comparer(-1, res1) ? 
+//     comparer(true, res1) ? 
 //         console.log("PASS<br>") : console.log("FAIL<br>");
 // } catch(err) {
 //     throw err;
@@ -187,10 +170,568 @@ try {
 
 // Make a JSON format
     console.log(`{ "id": 1,` + 
-`"pass": ${comparer(-1, res1)},` +
-`"input": {"nums":[-1,0,2,4,6,8],"target":3},` +
+`"pass": ${comparer(true, res1)},` +
+`"input": "is it a good game ?",` +
 `"userOutput": ${stringLogger(res1)},` + 
-`"expOutput": -1 }`);
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res2;
+try {
+     res2 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res2) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 2,` + 
+`"pass": ${comparer(true, res2)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res2)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res3;
+try {
+     res3 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res3) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 3,` + 
+`"pass": ${comparer(true, res3)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res3)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res4;
+try {
+     res4 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res4) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 4,` + 
+`"pass": ${comparer(true, res4)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res4)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res5;
+try {
+     res5 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res5) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 5,` + 
+`"pass": ${comparer(true, res5)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res5)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res6;
+try {
+     res6 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res6) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 6,` + 
+`"pass": ${comparer(true, res6)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res6)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res7;
+try {
+     res7 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res7) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 7,` + 
+`"pass": ${comparer(true, res7)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res7)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res8;
+try {
+     res8 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res8) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 8,` + 
+`"pass": ${comparer(true, res8)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res8)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res9;
+try {
+     res9 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res9) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 9,` + 
+`"pass": ${comparer(true, res9)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res9)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res10;
+try {
+     res10 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res10) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 10,` + 
+`"pass": ${comparer(true, res10)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res10)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res11;
+try {
+     res11 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res11) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 11,` + 
+`"pass": ${comparer(true, res11)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res11)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res12;
+try {
+     res12 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res12) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 12,` + 
+`"pass": ${comparer(true, res12)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res12)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res13;
+try {
+     res13 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res13) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 13,` + 
+`"pass": ${comparer(true, res13)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res13)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res14;
+try {
+     res14 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res14) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 14,` + 
+`"pass": ${comparer(true, res14)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res14)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res15;
+try {
+     res15 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res15) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 15,` + 
+`"pass": ${comparer(true, res15)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res15)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res16;
+try {
+     res16 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res16) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 16,` + 
+`"pass": ${comparer(true, res16)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res16)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res17;
+try {
+     res17 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res17) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 17,` + 
+`"pass": ${comparer(true, res17)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res17)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res18;
+try {
+     res18 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res18) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 18,` + 
+`"pass": ${comparer(true, res18)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res18)},` + 
+`"expOutput": true }`);
+
+// "userOutput", "input", "expOutput" is made with "" characters. 
+// So that JSON.parse can be done safely even if the value is undefined or a function.
+    
+    console.log("_&&_@849"); //problem case separator =  _&&_@849\n
+
+
+
+
+
+let res19;
+try {
+     res19 = solution.grambu("is it a good game ?");
+} catch(err) {
+    // to be written to FD2
+    throw err;
+}
+
+// try {
+//     comparer(true, res19) ? 
+//         console.log("PASS<br>") : console.log("FAIL<br>");
+// } catch(err) {
+//     throw err;
+// }
+
+// Make a JSON format
+    console.log(`{ "id": 19,` + 
+`"pass": ${comparer(true, res19)},` +
+`"input": "is it a good game ?",` +
+`"userOutput": ${stringLogger(res19)},` + 
+`"expOutput": true }`);
 
 // "userOutput", "input", "expOutput" is made with "" characters. 
 // So that JSON.parse can be done safely even if the value is undefined or a function.
